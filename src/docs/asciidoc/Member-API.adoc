@@ -1,0 +1,340 @@
+[[Member-API]]
+= Member-API
+회원 정보를 조회 및 관리할 수 있는 api 입니다.
+
+[[Member-Add]]
+== POST : /mms/api/v1/member
+=== 다수 Member를 등록
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+operation::member-add[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
+
+[[Member-Register]]
+== POST : /mms/api/v1/member/register
+=== 신규 Member을 가입
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|x
+
+|add user info
+|false
+|===
+
+=== Query Params
+
+[cols="1,1,1"]
+|===
+|param name|options|description
+
+|isNew
+|true,false (기본 값 true)
+|신규 학회원(가두 모집 등)인지 아니면, 기존 학회원인지 여부
+|===
+
+새로운 Member을 가입할 때 사용하는 API 입니다. 위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.
+
+만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며
+
+만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.
+
+해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role과 rank를 임시로 갖게 됩니다.
+
+operation::member-register[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
+
+[[Member-Get-Single]]
+== GET : /mms/api/v1/member/{memberID}
+=== 단일 Member를 조회
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+operation::member-get-single[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+[[Member-Get-Multiple]]
+== GET : /mms/api/v1/member/
+=== 다수 Member를 조회
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+
+Query Options, 혹은 Page Options 등을 사용하여 attendance를 조회하거나, pagination 작업을 수행할 수 있습니다.
+
+*주의!* 모든 option들은 단 한개의 인자만 수용가능합니다!
+
+* (O) "?memberID=456465456&timeTableID=1"
+* (X) "?memberID=456465456,456456456465&timeTableID=1,123123"
+
+또한 모든 Option들은 And로 동작합니다.
+
+만약 "?memberID=456465456&timeTableID=1"라는 인자가 있다면, memberID가 "456465456"이고, timeTableID가 1인 Attendance를 찾습니다.
+
+
+=== Equal Query Options
+해당 옵션들은 입력된 값과 완전히 일치 되는 경우를 탐색합니다.
+예를들어 "timeTableID = 1" 옵션을 제공하면, TimeTable(Object)의 ID가 1인 attendance들을 조회합니다.
+[cols="10,10,10"]
+|===
+|param name|type|description
+
+|majorID
+|Integer
+|해당 Member의  전공정보,Major(Object)의 ID
+
+|rankID
+|Integer
+|해당 Member의 Rank(Object)의 ID
+
+|roleID
+|Integer
+|해당 Member의 Role(Object)의 ID
+
+|leaveAbsence
+|Bool
+|해당 Member의 휴학여부
+
+|modifiedBy
+|String
+|해당 Member를 마지막으로 수정한 사람
+
+|createBy
+|String
+|해당 Member를 생성한 사람
+|===
+
+=== Range Query Options
+해당 옵션들을 사용하여 범위를 검색할 수 있습니다.
+
+예를들어, "createdDateTime" 옵션을 검색하고 싶다면,
+"startCreatedDateTime"으로 시작 범위를 설정하고 "endCreatedDateTime"으로 종료 범위를 설정하여 검색할 수 있습니다.
+
+* 시작 범위와 종료 범위가 모두 입력되었다면, 해당 범위를 탐색합니다.
+* 시작 범위만 입력됬을 경우, 해당 시작범위에서 최대 범위(9999-12-31 59:59:59)에 해당하는 범위를 탐색합니다.
+* 종료 범위만 입력됬을 경우, 최소 범위("1000-01-01 00:00:00")에서 종료 범위까지에 해당하는 범위를 탐색합니다.
+
+[cols="10,10,10,10,10"]
+|===
+|name|type|start range param|end range param|description
+
+|CreatedDateTime
+|DateTime(yyyy-MM-dd HH:mm:ss)
+|startCreatedDateTime
+|endCreatedDateTime
+|해당 Member가 생성된 시간
+
+|ModifiedDateTime
+|DateTime(yyyy-MM-dd HH:mm:ss)
+|startModifiedDateTime
+|endModifiedDateTime
+|해당 Member가 마지막으로 수정된 시간
+
+|DateOfBirth
+|Date(yyyy-MM-dd)
+|startDateOfBirth
+|endDateOfBirth
+|해당 Member의 생년월일
+|===
+
+=== Like Query Options
+해당 옵션들을 사용하면, 해당 문자열을 포함하는 Member를 조회합니다.
+
+예를 들어 "출결코드에 의해 자동으로 생성된 Attendance입니다."라는 index가 있다고 가정합시다.
+
+"index" 인자로 "출결" 이라는 값을 주었다면, index에 "출결"이라는 글자가 들어가는 Attendance들을 찾습니다.
+
+[cols="10,10,10"]
+|===
+|param name|type|description
+
+|email
+|String
+|해당 Member의 이메일 주소
+
+|name
+|String
+|해당 Member의 실명
+
+|phoneNumber
+|String
+|해당 Member의 휴대폰 번호
+
+|studentID
+|String
+|해당 Member의 학번
+|===
+
+=== Pagination Options
+해당 인자를 통해 pagination처리를 할 수 있습니다. Sort Option은 아래 파트를 참고하세요.
+
+*주의!* pagination을 설정하지 않더라도, 모든 request는 1000의 Size로 자동으로 pagination처리가 됩니다!
+만약 1000건 보다 많은 양의 데이터가 필요하다면, size를 지정해주어야합니다.
+[cols="10,10,10"]
+|===
+|param name|description
+
+|size
+|Page의 크기
+
+|page
+|Page의 위치
+|===
+
+=== Sort Options
+Sort Option은 "sort" 인자에 제공해야합니다. 위 옵션들과 다르게 Sort Option은 여러 인자들을 입력해도 됩니다.
+
+sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방향을 지정해주여야 합니다. ASC(오름 차순), DESC(내립차순) 2가지 옵션이 있습니다.
+만약 옵션을 지정해주지 않았다면, DESC로 동작합니다.
+
+사용예시 "sort=member,asc", "sort=member,timeTable,desc"
+
+*주의!* Sort Option을 지정해주지 않더라도, 기본적으로 Id에 대하여 DESC 방향으로 정렬을 진행합니다!
+[cols="10,10"]
+|===
+|param name|description
+
+|id
+|member의 uid
+
+|email
+|member의 이메일 주소
+
+|name
+|member의 실명
+
+|phoneNumber
+|member의 휴대폰 번호
+
+|studentID
+|member의 학번
+
+|major
+|member의 전공
+
+|rank
+|member의 회원 등급
+
+|role
+|member의 role
+
+|year
+|member의 기수
+
+|leaveAbsence
+|member의 기수
+
+|dateOfBirth
+|member의 생년월일
+
+|createdDateTime
+|생성된 시간순으로 정렬합니다.
+
+|modifiedDateTime
+|마지막으로 수정된 시간 순으로 정렬합니다.
+
+|createBy
+|생성자에 대하여 정렬합니다.
+
+|modifiedBy
+|마지막으로 수정한자에 대하여 정렬합니다.
+|===
+
+operation::member-get-multiple[snippets='response-fields,response-body,http-request,http-response,']
+
+[[Member-Del-Single]]
+== DELETE : /mms/api/v1/member/{memberID}
+=== 단일 Member를 제거
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+operation::member-del-single[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+[[Member-Del-Bulk]]
+== DELETE : /mms/api/v1/member/
+=== 다중 Member를 제거
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+operation::member-del-bulk[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
+
+[[Member-Update-Single]]
+== PUT : /mms/api/v1/member/{memberID}
+=== 단일 Member를 업데이트
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+operation::member-update-single[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
+
+[[Member-Update-Bulk]]
+== PUT : /mms/api/v1/member
+=== 다중 Member를 업데이트
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+operation::member-update-bulk[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']

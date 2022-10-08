@@ -1,0 +1,256 @@
+[[Objects]]
+= Objects
+해당 API들에서 사용되는 Object들
+
+해당 API 문서에서는 (Object)로 명세된 경우들이 있습니다.
+
+ex)
+
+[cols="1,1,1,1,1"]
+|===
+|필드명|타입|필수여부|제약요건|설명
+
+|attendance_type_id
+|Number
+|true
+|AttendanceType (object)의 ID(PK)
+|대상 attendance의 attendance_type id
+|===
+
+해당 파트에서는 각각의 Object가 어떤 것을 의미하는지 어떤 value들을 가지고 있는지 서술합니다.
+
+__Tip 1. 보통 ID(=PK) 만 사용하기 때문에, 모든 Value들을 숙지하고 있을 필요는 없습니다. 참고 정도로만 보면 좋습니다.__
+
+__Tip 2. 모든 Object들은 가급적이면 ID를 통해 다룹니다. 모든 값은 정적이지 않으며, 언제든 변경이 가능합니다. __
+__ 그러니 가급적 ID를 통해 데이터를 다루면 좋습니다. __
+
+__Tip 3. Object들의 ID 값을 알수가 없다고요? 아래 대부분의 API들은 전체 조회를 지원합니다! name을 통해 하드코딩을 하는 것이 아닌, 전체 조회를 통해 ID를 가져와 사용하는걸 권장합니다!__
+
+[[Major]]
+== Major(전공 정보)
+Major는 전공 정보를 담고 있는 Object입니다.
+[cols="1,1,1"]
+|===
+|필드명|설명|타입
+
+|id
+|major의 ID(PK)입니다.
+|Intger
+
+|name
+|전공 명칭입니다.
+|String
+|===
+
+ex)
+
+----
+{
+    "id" : 1,
+    "name" : "인공지능학과"
+}
+----
+
+주로 Member API에서 전공정보를 다루기 위해 사용합니다.
+
+따라서 위 예시의 Major을 갖는 Member의 전공은 인공지능학과라고 표현할 수 있습니다.
+
+=== 연관 API
+
+*주요 API*
+
+Major API : <<Major-API>>
+
+*관련 API*
+
+Member API : <<Member-API>>
+
+[[Role]]
+== Role(권한 레벨)
+Role은 권한 레벨에 대한 정보를 담고 있는 Object입니다.
+[cols="1,1,1"]
+|===
+|필드명|설명|타입
+
+|id
+|Role의 ID(PK)입니다.
+|Intger
+
+|name
+|권한 레벨의 명칭입니다. "ROLE_" 시작하는 대문자입니다.
+|String
+|===
+
+ex)
+
+----
+{
+    "id" : 1,
+    "name" : "ROLE_GUEST"
+}
+----
+
+주로 Member API에서 권한 레벨을 다루기 위해 사용합니다.
+
+또한 Gateway에서 인가 처리를 위한 주요 식별자로 사용합니다.
+
+따라서 위 예시의 Role을 가지고 있는 Member의 권한 레벨은 ROLE_GUEST라고 표현할 수 있습니다.
+
+__주의! Rank는 회원 등급, Role은 권한 레벨을 나타내고 있습니다. Role은 실제 서비스에서 접근권한 처리를 위해 사용하는 식별자이지만, Rank는 단순히 학회 내부의 회원 등급을 표현하기 위해 사용하며 해당 Rank를 통해 인가 및 인증처리를 하지는 않습니다! 혼동하지 않도록 주의하세요!__
+
+=== 연관 API
+
+*주요 API*
+
+Major API : <<Role-API>>
+
+*관련 API*
+
+Member API : <<Member-API>>
+
+[[Rank]]
+== Rank(회원 등급)
+Rank는 회원 등급에 대한 정보를 담고 있는 Object입니다.
+[cols="1,1,1"]
+|===
+|필드명|설명|타입
+
+|id
+|Rank의 ID(PK)입니다.
+|Intger
+
+|name
+|회원 등급의 명칭입니다.
+|String
+|===
+
+ex)
+
+----
+{
+    "id" : 1,
+    "name" : "정회원"
+}
+----
+
+주로 Member API에서 회원 등급을 다루기 위해 사용합니다. 위 예시의 Rank를 가지는 Member은 회원 등급이 정회원이라고 표현할 수 있습니다.
+
+__주의! Rank는 회원 등급, Role은 권한 레벨을 나타내고 있습니다. Role은 실제 서비스에서 접근권한 처리를 위해 사용하는 식별자이지만, Rank는 단순히 학회 내부의 회원 등급을 표현하기 위해 사용하며 해당 Rank를 통해 인가 및 인증처리를 하지는 않습니다! 혼동하지 않도록 주의하세요!__
+
+=== 연관 API
+
+*주요 API*
+
+Major API : <<Rank-API>>
+
+*관련 API*
+
+Member API : <<Member-API>>
+
+[[Member]]
+== Member(회원 정보)
+Member는 회원 정보에 대한 정보를 담고 있는 Object입니다.
+[cols="1,1,1"]
+|===
+|필드명|설명|타입
+
+|id
+|해당 회원의 UID(FireBase UID)입니다.
+|String
+
+|name
+|회원의 실명입니다.
+|String
+
+|email
+|회원의 이메일입니다.
+|String
+
+|phoneNumber
+|회원의 휴대폰번호입니다.
+|String
+
+|studentID
+|회원의 studentID(학번)입니다.
+|String
+
+|major
+|회원의 전공입니다.
+|<<Major>>(Object)
+
+|rank
+|회원의 회원 등급입니다.
+|<<Rank>>(Object)
+
+|role
+|회원의 권한 레벨입니다.
+|<<Role>>(Object)
+
+|year
+|회원의 기수입니다.
+|Integer
+
+|leaveAbsence
+|회원의 휴학 여부입니다.
+|boolean
+
+|dateOfBirth
+|회원의 생년월일입니다.
+|Date(yyyy-MM-dd)
+
+|createdDateTime
+|해당 object를 생성한 시간입니다.
+|DateTime
+
+|modifiedDateTime
+|해당 object를 마지막으로 수정한 시간입니다.
+|DateTime
+
+|createBy
+|해당 object를 생성한 자입니다.
+|String
+
+|modifiedBy
+|해당 object를 마지막으로 수정한 자입니다.
+|String
+|===
+
+ex)
+
+----
+{
+    "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+    "name" : "홍길동",
+    "email": "test@test.com",
+    "phoneNumber":"01000000000",
+    "studentID":"2022000004",
+    "major" : {
+        "id" : 1,
+        "name" : "인공지능학과"
+    },
+    "role":{
+        "id" : 1,
+        "name" : "ROLE_GUEST"
+    },
+    "rank":{
+        "id" : 1,
+        "name" : "정회원"
+    },
+    "year": 38,
+    "leaveAbsence": false,
+    "dateOfBirth": "2022-01-22",
+    "createdDateTime":"2022-03-01 00:00:00",
+    "modifiedDateTime":"2022-03-01 00:00:00",
+    "createBy":"system",
+    "modifiedBy":"system"
+}
+----
+
+모든 API에서 핵심적으로 사용하는 Member Object입니다. MMS 는 firebase를 사용하고 있기 때문에, 멤버 uid로 firebase uid를 제공해야합니다.
+
+
+=== 연관 API
+
+*주요 API*
+
+Member API : <<Member-API>>

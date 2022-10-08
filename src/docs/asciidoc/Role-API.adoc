@@ -1,0 +1,37 @@
+[[Role-API]]
+= Role-API
+회원의 시스템 접근 관한인 Role을 조회 및 관리할 수 있는 api 입니다.
+
+[[Role-Get-Single]]
+== GET : /mms/api/v1/role/{roleID}
+=== 단일 role를 조회
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|false
+
+|Role
+|x
+
+|add user info
+|false
+|===
+operation::role-get-single[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+[[Role-Get-Multiple]]
+== GET : /mms/api/v1/role/
+=== 다수 role를 조회
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|false
+
+|Role
+|x
+
+|add user info
+|false
+|===
+operation::role-get-multiple[snippets='response-fields,response-body,http-request,http-response,']

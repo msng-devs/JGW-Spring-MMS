@@ -1,0 +1,102 @@
+[[Major-API]]
+= Major-API
+전공 정보를 조회 및 관리할 수 있는 api 입니다.
+
+[[Major-Get-Single]]
+== GET : /mms/api/v1/major/{majorID}
+=== 단일 major를 조회
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|false
+
+|Role
+|x
+
+|add user info
+|false
+|===
+operation::major-get-single[snippets='path-parameters,response-fields,response-body,http-request,http-response,']
+
+[[Major-Get-Multiple]]
+== GET : /mms/api/v1/major/
+=== 다수 major를 조회
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|false
+
+|Role
+|x
+
+|add user info
+|false
+|===
+
+Query Options, 혹은 Page Options 등을 사용하여 attendance를 조회하거나, pagination 작업을 수행할 수 있습니다.
+
+*주의!* 모든 option들은 단 한개의 인자만 수용가능합니다!
+
+* (O) "?memberID=456465456&timeTableID=1"
+* (X) "?memberID=456465456,456456456465&timeTableID=1,123123"
+
+또한 모든 Option들은 And로 동작합니다.
+
+만약 "?memberID=456465456&timeTableID=1"라는 인자가 있다면, memberID가 "456465456"이고, timeTableID가 1인 Attendance를 찾습니다.
+
+
+=== Like Query Options
+해당 옵션들을 사용하면, 해당 문자열을 포함하는 major를 조회합니다.
+
+예를 들어 "인공지능학과"라는 "name" 있다고 가정합시다.
+
+"name" 인자로 "인공" 이라는 값을 주었다면, "name"에 "인공"이라는 글자가 들어가는 major들을 찾습니다.
+
+[cols="10,10,10"]
+|===
+|param name|type|description
+
+|name
+|String
+|해당 major의 이름입니다.
+
+|===
+
+=== Pagination Options
+해당 인자를 통해 pagination처리를 할 수 있습니다. Sort Option은 아래 파트를 참고하세요.
+
+*주의!* pagination을 설정하지 않더라도, 모든 request는 1000의 Size로 자동으로 pagination처리가 됩니다!
+만약 1000건 보다 많은 양의 데이터가 필요하다면, size를 지정해주어야합니다.
+[cols="10,10,10"]
+|===
+|param name|description
+
+|size
+|Page의 크기
+
+|page
+|Page의 위치
+|===
+
+=== Sort Options
+Sort Option은 "sort" 인자에 제공해야합니다. 위 옵션들과 다르게 Sort Option은 여러 인자들을 입력해도 됩니다.
+
+sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방향을 지정해주여야 합니다. ASC(오름 차순), DESC(내립차순) 2가지 옵션이 있습니다.
+만약 옵션을 지정해주지 않았다면, DESC로 동작합니다.
+
+사용예시 "sort=member,asc", "sort=member,timeTable,desc"
+
+*주의!* Sort Option을 지정해주지 않더라도, 기본적으로 id에 대하여 DESC 방향으로 정렬을 진행합니다!
+[cols="10,10"]
+|===
+|param name|description
+
+|id
+|major의 ID에 대하여 정렬합니다.
+
+|name
+|major의 이름에 대하여 정렬합니다.
+|===
+operation::major-get-multiple[snippets='response-fields,response-body,http-request,http-response,']

@@ -1,0 +1,14 @@
+= JGW Member Management System
+Rest Api Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 1
+:sectlinks:
+
+include::Objects.adoc[]
+include::Rank-API.adoc[]
+include::Role-API.adoc[]
+include::Major-API.adoc[]
+include::Member-API.adoc[]

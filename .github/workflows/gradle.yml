@@ -1,0 +1,57 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - uses: actions/checkout@v3
+      - name: get tableBuild.sql,testDataSet.sql
+        uses: actions/checkout@v3
+        with:
+          repository: msng-devs/JGW-Secret
+          ref: mms
+          path: "./src/test/resources"
+          token: ${{ secrets.TOKEN }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build&Test with Gradle
+        run: ./gradlew clean build
+
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+            status: ${{ job.status }}
+            author_name: JGW-MMS main build
+            fields: repo,commit,message,author
+            mention: here
+            if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
