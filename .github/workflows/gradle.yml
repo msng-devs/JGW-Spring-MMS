@@ -43,15 +43,3 @@ jobs:
 
       - name: Build&Test with Gradle
         run: ./gradlew clean build
-
-      - name: action-slack
-        uses: 8398a7/action-slack@v3
-        with:
-            status: ${{ job.status }}
-            author_name: JGW-MMS main build
-            fields: repo,commit,message,author
-            mention: here
-            if_mention: failure,cancelled
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-        if: always()
