@@ -48,8 +48,8 @@ public class MemberApiController {
     private final Role defaultMemberRole = Role.builder().id(1).build();
     private final Role defaultNewMemberRole = Role.builder().id(0).build();
 
-    private final Rank defaultRank = Rank.builder().id(1).build();
-    private final Rank defaultNewRank = Rank.builder().id(2).build();
+    private final Rank defaultRank = Rank.builder().id(2).build();
+    private final Rank defaultNewRank = Rank.builder().id(1).build();
 
     private final Role adminRole = Role.builder().id(4).build();
 
@@ -58,7 +58,7 @@ public class MemberApiController {
     public ResponseEntity<MemberIdResponseControllerDto> registerMember(
             @RequestParam(defaultValue = "true",name = "isNew") Boolean isNew,
             @RequestBody @Valid MemberRegisterRequestControllerDto memberRegisterRequestControllerDto,
-            @RequestHeader("user_uid") String uid){
+            @RequestHeader("user_pk") String uid){
 
         String id;
         if(isNew){
@@ -73,7 +73,7 @@ public class MemberApiController {
     @PostMapping
     public ResponseEntity<MessageDto> addMember(
             @RequestBody @NotNull @BulkAddMemberValid Set<@Valid MemberAddRequestControllerDto> memberAddRequestControllerDto,
-            @RequestHeader("user_uid") String uid){
+            @RequestHeader("user_pk") String uid){
 
         memberService.add(
                 memberAddRequestControllerDto.stream()
@@ -86,8 +86,8 @@ public class MemberApiController {
     @GetMapping("{memberId}")
     public ResponseEntity<?> getMemberById(
             @PathVariable String memberId,
-            @RequestHeader("user_uid") String uid,
-            @RequestHeader("user_role_id") Integer roleID){
+            @RequestHeader("user_pk") String uid,
+            @RequestHeader("role_pk") Integer roleID){
 
         MemberFullResponseControllerDto result = memberService.findById(memberId).toControllerDto();
         if(roleID >= adminRole.getId() || uid.equals(memberId)) return ResponseEntity.ok(result);
@@ -103,7 +103,7 @@ public class MemberApiController {
             ) Pageable pageable,
             @RequestParam(required = false) MultiValueMap<String, String> queryParam,
             @RequestParam(required = false,defaultValue = "false") Boolean includeGuest,
-            @RequestHeader("user_uid") String uid){
+            @RequestHeader("user_pk") String uid){
 
         logger.debug("includeGuest {}", includeGuest);
 
@@ -137,7 +137,7 @@ public class MemberApiController {
     @DeleteMapping("{memberID}")
     public ResponseEntity<MemberIdResponseControllerDto> delMember(
             @PathVariable String memberID,
-            @RequestHeader("user_uid") String uid){
+            @RequestHeader("user_pk") String uid){
 
         memberService.delete(memberID);
 
@@ -147,7 +147,7 @@ public class MemberApiController {
     @DeleteMapping
     public ResponseEntity<MessageDto> bulkDelMember(
             @RequestBody @Valid MemberBulkDeleteRequestControllerDto dto,
-            @RequestHeader("user_uid") String uid){
+            @RequestHeader("user_pk") String uid){
 
         memberService.delete(dto.getMemberIDs());
 
@@ -158,7 +158,7 @@ public class MemberApiController {
     public ResponseEntity<MemberFullResponseControllerDto> updateMember(
             @PathVariable String memberID,
             @RequestBody @Valid MemberUpdateRequestControllerDto memberUpdateRequestControllerDto,
-            @RequestHeader("user_uid") String uid){
+            @RequestHeader("user_pk") String uid){
 
         MemberFullResponseControllerDto result = memberService.update(memberID,
                 memberUpdateRequestControllerDto.toServiceDto(
@@ -173,7 +173,7 @@ public class MemberApiController {
     @PutMapping
     public ResponseEntity<MessageDto> bulkUpdateMember(
             @RequestBody @Valid @BulkUpdateMemberValid Set<MemberBulkUpdateRequestControllerDto> dtos,
-            @RequestHeader("user_uid") String uid){
+            @RequestHeader("user_pk") String uid){
 
         memberService.update(dtos.stream()
                                 .map(MemberBulkUpdateRequestControllerDto::toServiceDto)
