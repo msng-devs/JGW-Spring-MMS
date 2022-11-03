@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -116,7 +117,7 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.post("/api/v1/member/register")
-                        .header("user_uid",testUtils.getTestUid())
+                        .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberRegisterRequestControllerDto))
                         .accept(MediaType.APPLICATION_JSON))
@@ -168,7 +169,7 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.post("/api/v1/member")
-                        .header("user_uid",testUtils.getTestUid())
+                        .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
                         .accept(MediaType.APPLICATION_JSON))
@@ -211,8 +212,8 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_uid",testUtils.getTestUid())
-                        .header("user_role_id",4)
+                        .header("user_pk",testUtils.getTestUid())
+                        .header("role_pk",4)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -259,8 +260,8 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_uid",testUtils.getTestMember2().getId())
-                        .header("user_role_id",4)
+                        .header("user_pk",testUtils.getTestMember2().getId())
+                        .header("role_pk",4)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
@@ -284,8 +285,8 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_uid",testUtils.getTestUid())
-                        .header("user_role_id",3)
+                        .header("user_pk",testUtils.getTestUid())
+                        .header("role_pk",3)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
@@ -310,8 +311,8 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_uid",testUtils.getTestMember2().getId())
-                        .header("user_role_id",3)
+                        .header("user_pk",testUtils.getTestMember2().getId())
+                        .header("role_pk",3)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -356,7 +357,7 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/member/")
-                        .header("user_uid",testUtils.getTestUid())
+                        .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -398,7 +399,7 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.delete("/api/v1/member/{memberID}",memberID)
-                        .header("user_uid",testUtils.getTestUid())
+                        .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -427,7 +428,7 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.delete("/api/v1/member")
-                        .header("user_uid",testUtils.getTestUid())
+                        .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(MemberBulkDeleteRequestControllerDto.builder().MemberIDs(ids).build())))
@@ -478,7 +479,7 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.put("/api/v1/member/{memberID}",memberID)
-                        .header("user_uid",testUtils.getTestUid())
+                        .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(testMemberDto))
                         .accept(MediaType.APPLICATION_JSON))
@@ -572,7 +573,7 @@ class MemberApiControllerTest {
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.put("/api/v1/member")
-                        .header("user_uid",testUtils.getTestUid())
+                        .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dtos))
                         .accept(MediaType.APPLICATION_JSON))
