@@ -17,14 +17,12 @@ import java.util.Set;
 public interface MemberRepository extends JpaRepository<Member,String>, JpaSpecificationExecutor<Member>,MemberCustomRepository{
     Optional<Member> findMemberById(String id);
     Optional<List<Member>> findAllBy();
+    boolean existsByEmail(String email);
 
-    @Query("SELECT m FROM MEMBER m JOIN FETCH m.major JOIN FETCH m.rank JOIN FETCH m.role WHERE m.id IN :ids")
+    @Query("SELECT m FROM MEMBER m JOIN FETCH m.role WHERE m.id IN :ids")
     List<Member> findAllByIdIn(@Param("ids") Set<String> ids);
 
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM MEMBER m WHERE m.id IN :ids")
     int deleteAllByIdInQuery(@Param("ids") Set<String> ids);
-
-    @Query("SELECT m FROM MEMBER m JOIN FETCH m.major JOIN FETCH m.rank JOIN FETCH m.role WHERE (m.rank IN :ranks AND m.leaveAbsence = false )")
-    Optional<List<Member>> findTargetMember(@Param("ranks") Set<Rank> ranks);
 }
