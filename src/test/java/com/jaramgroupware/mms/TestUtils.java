@@ -4,6 +4,7 @@ import com.jaramgroupware.mms.domain.BaseEntity;
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import lombok.Getter;
@@ -45,6 +46,10 @@ public class TestUtils {
     private final Member testMember2;
     private final MemberInfo testMemberInfo;
     private final MemberInfo testMemberInfo2;
+    private final MemberLeaveAbsence testMemberLeaveAbsence;
+    private final MemberLeaveAbsence testMemberLeaveAbsence2;
+    private final LocalDate testReturnDate;
+    private final LocalDate testReturnDate2;
     public final String testUid;
 
     public boolean isListSame(List<?> targetListA , List<?> targetListB){
@@ -65,6 +70,8 @@ public class TestUtils {
 
         testDate = LocalDate.of(2022,1,22);
         testDate2 = LocalDate.of(2022,8,28);
+        testReturnDate = LocalDate.of(2024,3,2);
+        testReturnDate2 = LocalDate.of(2024,9,1);
         testMajor = Major.builder()
                 .id(1)
                 .name("인공지능학과")
@@ -131,6 +138,18 @@ public class TestUtils {
         testMemberInfo2.setCreatedDateTime(testDateTime2);
         testMemberInfo2.setModifiedBy("system2");
         testMemberInfo2.setCreateBy("system2");
+        testMemberLeaveAbsence = MemberLeaveAbsence.builder()
+                .id(testMember.getId())
+                .member(testMember)
+                .status(true)
+                .expectedDateReturnSchool(testReturnDate)
+                .build();
+        testMemberLeaveAbsence2 = MemberLeaveAbsence.builder()
+                .id(testMember2.getId())
+                .member(testMember2)
+                .status(true)
+                .expectedDateReturnSchool(testReturnDate2)
+                .build();
         testUid = testMember.getId();
     }
     public HttpEntity<?> createHttpEntity(Object dto,String userUid){

@@ -19,12 +19,14 @@ public enum ErrorCode {
     INVALID_RANK_ID(HttpStatus.NOT_FOUND,"INVALID_ROLE_ID","해당 rankId 을 찾을 수 없습니다!",20114),
     INVALID_MAJOR_ID(HttpStatus.NOT_FOUND,"INVALID_MAJOR_ID","해당 majorId 을 찾을 수 없습니다!",20116),
     INVALID_PENALTY_ID(HttpStatus.NOT_FOUND,"INVALID_PENALTY_ID","해당 penalty를 찾을 수 없습니다!",20118),
+    INVALID_MEMBER_LEAVE_ABSENCE_ID(HttpStatus.NOT_FOUND,"INVALID_MEMBER_LEAVE_ABSENCE_ID","해당 memberLeaveAbsenceId 을 찾을 수 없습니다!",20119),
 
 
     EMPTY_TIMETABLE(HttpStatus.NOT_FOUND,"EMPTY_TIMETABLE","timetable이 존재하지 않습니다.",20105),
     EMPTY_ATTENDANCE(HttpStatus.NOT_FOUND,"EMPTY_ATTENDANCE","ATTENDANCE가 존재하지 않습니다.",20109),
     EMPTY_EVENT(HttpStatus.NOT_FOUND,"EMPTY_EVENT","event가 존재하지 않습니다.",20104),
     EMPTY_MEMBER(HttpStatus.NOT_FOUND,"EMPTY_MEMBER","member가 존재하지 않습니다.",20111),
+    EMPTY_MEMBER_LEAVE_ABSENCE(HttpStatus.NOT_FOUND,"EMPTY_MEMBER_LEAVE_ABSENCE","member leave absence가 존재하지 않습니다.",20120),
     EMPTY_ROLE(HttpStatus.NOT_FOUND,"EMPTY_ROLE","role이 존재하지 않습니다.",20113),
     EMPTY_RANK(HttpStatus.NOT_FOUND,"EMPTY_RANK","rank가 존재하지 않습니다.",20115),
     EMPTY_MAJOR(HttpStatus.NOT_FOUND,"EMPTY_MAJOR","major가 존재하지 않습니다.",20117),
