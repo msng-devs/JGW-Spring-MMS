@@ -22,7 +22,7 @@ public class MemberLeaveAbsence {
     @Column(name = "MEMBER_LEAVE_ABSENCE_PK", nullable = false, length = 28)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "MEMBER_LEAVE_ABSENCE_PK",nullable = false)
     private Member member;

@@ -9,6 +9,7 @@ import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
+import com.jaramgroupware.mms.utils.exception.CustomException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -57,16 +59,11 @@ class MemberServiceTest {
         //given
         MemberAddRequestServiceDto testServiceDto = MemberAddRequestServiceDto
                 .builder()
-                .leaveAbsence(testUtils.getTestMember().isLeaveAbsence())
-                .year(testUtils.getTestMember().getYear())
-                .role(testUtils.getTestMember().getRole())
-                .rank(testUtils.getTestMember().getRank())
-                .major(testUtils.getTestMember().getMajor())
-                .studentID(testUtils.getTestMember().getStudentID())
-                .phoneNumber(testUtils.getTestMember().getPhoneNumber())
-                .email(testUtils.getTestMember().getEmail())
                 .id(testUtils.getTestMember().getId())
-                .dateOfBirth(testUtils.getTestDate())
+                .name(testUtils.getTestMember().getName())
+                .role(testUtils.getTestMember().getRole())
+                .email(testUtils.getTestMember().getEmail())
+                .status(testUtils.getTestMember().isStatus())
                 .build();
 
         Member testEntity = testServiceDto.toEntity();
@@ -75,7 +72,7 @@ class MemberServiceTest {
         doReturn(testEntity).when(memberRepository).save(any());
 
         //when
-        String resultID = memberService.add(testServiceDto,"system");
+        String resultID = memberService.add(testServiceDto);
 
         //then
         Assertions.assertNotNull(resultID);
@@ -88,30 +85,20 @@ class MemberServiceTest {
         //given
         MemberAddRequestServiceDto testServiceDto = MemberAddRequestServiceDto
                 .builder()
-                .leaveAbsence(testUtils.getTestMember().isLeaveAbsence())
-                .year(testUtils.getTestMember().getYear())
-                .role(testUtils.getTestMember().getRole())
-                .rank(testUtils.getTestMember().getRank())
-                .major(testUtils.getTestMember().getMajor())
-                .studentID(testUtils.getTestMember().getStudentID())
-                .phoneNumber(testUtils.getTestMember().getPhoneNumber())
-                .email(testUtils.getTestMember().getEmail())
                 .id(testUtils.getTestMember().getId())
-                .dateOfBirth(testUtils.getTestDate())
+                .name(testUtils.getTestMember().getName())
+                .role(testUtils.getTestMember().getRole())
+                .email(testUtils.getTestMember().getEmail())
+                .status(testUtils.getTestMember().isStatus())
                 .build();
 
         MemberAddRequestServiceDto testServiceDto2 = MemberAddRequestServiceDto
                 .builder()
-                .leaveAbsence(testUtils.getTestMember2().isLeaveAbsence())
-                .year(testUtils.getTestMember2().getYear())
-                .role(testUtils.getTestMember2().getRole())
-                .rank(testUtils.getTestMember2().getRank())
-                .major(testUtils.getTestMember2().getMajor())
-                .studentID(testUtils.getTestMember2().getStudentID())
-                .phoneNumber(testUtils.getTestMember2().getPhoneNumber())
-                .email(testUtils.getTestMember2().getEmail())
                 .id(testUtils.getTestMember2().getId())
-                .dateOfBirth(testUtils.getTestDate2())
+                .name(testUtils.getTestMember2().getName())
+                .role(testUtils.getTestMember2().getRole())
+                .email(testUtils.getTestMember2().getEmail())
+                .status(testUtils.getTestMember2().isStatus())
                 .build();
 
         Member testEntity = testServiceDto.toEntity();
@@ -121,10 +108,10 @@ class MemberServiceTest {
         testEntity2.setId(testUtils.getTestMember2().getId());
 
         //when
-        memberService.add(Arrays.asList(testServiceDto,testServiceDto2), testUtils.getTestUid());
+        memberService.add(Arrays.asList(testServiceDto,testServiceDto2));
 
         //then
-        verify(memberRepository).bulkInsert(any(), any());
+        verify(memberRepository).bulkInsert(any());
     }
 
     @Test
@@ -217,30 +204,30 @@ class MemberServiceTest {
         verify(memberRepository).findAll(testSpec,testPage);
     }
 
-    @Test
-    void findAllRank() {
-        //given
-        List<Member> testList = new ArrayList<Member>();
-
-        Member testEntity1 = testUtils.getTestMember();
-        testList.add(testEntity1);
-
-        Member testEntity2 = testUtils.getTestMember2();
-        testList.add(testEntity2);
-
-        Set<Rank> testRank = testList.stream().map(Member::getRank).collect(Collectors.toSet());
-
-        doReturn(Optional.of(testList)).when(memberRepository).findTargetMember(testRank);
-
-        //when
-        List<MemberResponseServiceDto> results = memberService.findAll(testRank);
-
-        //then
-        Assertions.assertNotNull(results);
-        Assertions.assertEquals(testList.stream().map(MemberResponseServiceDto::new).collect(Collectors.toList()).toString(), Objects.requireNonNull(results).toString());
-        verify(memberRepository).findTargetMember(testRank);
-    }
-
+//    @Test
+//    void findAllRank() {
+//        //given
+//        List<Member> testList = new ArrayList<Member>();
+//
+//        Member testEntity1 = testUtils.getTestMember();
+//        testList.add(testEntity1);
+//
+//        Member testEntity2 = testUtils.getTestMember2();
+//        testList.add(testEntity2);
+//
+//        Set<Rank> testRank = testList.stream().map(Member::getRank).collect(Collectors.toSet());
+//
+//        doReturn(Optional.of(testList)).when(memberRepository).findTargetMember(testRank);
+//
+//        //when
+//        List<MemberResponseServiceDto> results = memberService.findAll(testRank);
+//
+//        //then
+//        Assertions.assertNotNull(results);
+//        Assertions.assertEquals(testList.stream().map(MemberResponseServiceDto::new).collect(Collectors.toList()).toString(), Objects.requireNonNull(results).toString());
+//        verify(memberRepository).findTargetMember(testRank);
+//    }
+//
     @Test
     void delete() {
 
@@ -289,15 +276,10 @@ class MemberServiceTest {
         //given
         String testID = testUtils.getTestMember().getId();
         MemberUpdateRequestServiceDto testDto = MemberUpdateRequestServiceDto.builder()
-                .leaveAbsence(testUtils.getTestMember().isLeaveAbsence())
-                .year(testUtils.getTestMember().getYear())
+                .name(testUtils.getTestMember().getName())
                 .role(testUtils.getTestMember().getRole())
-                .rank(testUtils.getTestMember().getRank())
-                .major(testUtils.getTestMember().getMajor())
-                .studentID(testUtils.getTestMember().getStudentID())
-                .phoneNumber(testUtils.getTestMember().getPhoneNumber())
                 .email(testUtils.getTestMember().getEmail())
-                .dateOfBirth(testUtils.getTestDate())
+                .status(testUtils.getTestMember().isStatus())
                 .build();
 
         Member targetEntity = testUtils.getTestMember();
@@ -305,18 +287,13 @@ class MemberServiceTest {
         doReturn(Optional.of(targetEntity)).when(memberRepository).findById(testID);
 
         //when
-        MemberResponseServiceDto result = memberService.update(testID,testDto,testUtils.getTestUid());
+        MemberResponseServiceDto result = memberService.update(testID,testDto);
 
         //then
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(testDto.isLeaveAbsence(),Objects.requireNonNull(result).isLeaveAbsence());
-        Assertions.assertEquals(testDto.getYear(),Objects.requireNonNull(result).getYear());
         Assertions.assertEquals(testDto.getRole().getId(),Objects.requireNonNull(result).getRoleID());
-        Assertions.assertEquals(testDto.getRank().getId(),Objects.requireNonNull(result).getRankID());
-        Assertions.assertEquals(testDto.getMajor().getId(),Objects.requireNonNull(result).getMajorID());
-        Assertions.assertEquals(testDto.getStudentID(),Objects.requireNonNull(result).getStudentID());
-        Assertions.assertEquals(testDto.getPhoneNumber(),Objects.requireNonNull(result).getPhoneNumber());
         Assertions.assertEquals(testDto.getEmail(),Objects.requireNonNull(result).getEmail());
+        Assertions.assertEquals(testDto.isStatus(),Objects.requireNonNull(result).isStatus());
         verify(memberRepository).findById(testID);
         verify(memberRepository).save(any());
 
@@ -331,37 +308,78 @@ class MemberServiceTest {
 
         MemberBulkUpdateRequestServiceDto testDto = MemberBulkUpdateRequestServiceDto.builder()
                 .id(testEntity.getId())
-                .leaveAbsence(testUtils.getTestMember().isLeaveAbsence())
-                .year(testUtils.getTestMember().getYear())
+                .name(testUtils.getTestMember().getName())
                 .role(testUtils.getTestMember().getRole())
-                .rank(testUtils.getTestMember().getRank())
-                .major(testUtils.getTestMember().getMajor())
-                .studentID(testUtils.getTestMember().getStudentID())
-                .phoneNumber(testUtils.getTestMember().getPhoneNumber())
                 .email(testUtils.getTestMember().getEmail())
-                .dateOfBirth(testUtils.getTestDate())
+                .status(testUtils.getTestMember().isStatus())
                 .build();
 
         MemberBulkUpdateRequestServiceDto testDto2 = MemberBulkUpdateRequestServiceDto.builder()
                 .id(testEntity2.getId())
-                .leaveAbsence(testUtils.getTestMember2().isLeaveAbsence())
-                .year(testUtils.getTestMember2().getYear())
+                .name(testUtils.getTestMember2().getName())
                 .role(testUtils.getTestMember2().getRole())
-                .rank(testUtils.getTestMember2().getRank())
-                .major(testUtils.getTestMember2().getMajor())
-                .studentID(testUtils.getTestMember2().getStudentID())
-                .phoneNumber(testUtils.getTestMember2().getPhoneNumber())
                 .email(testUtils.getTestMember2().getEmail())
-                .dateOfBirth(testUtils.getTestDate2())
+                .status(testUtils.getTestMember2().isStatus())
                 .build();
 
         doReturn(Arrays.asList(testEntity,testEntity2)).when(memberRepository).findAllByIdIn(any());
 
         //when
-        memberService.update(Arrays.asList(testDto,testDto2),testUtils.getTestUid());
+        memberService.update(Arrays.asList(testDto,testDto2));
 
         //then
         verify(memberRepository).findAllByIdIn(any());
-        verify(memberRepository).bulkUpdate(anyList(),anyString());
+        verify(memberRepository).bulkUpdate(anyList());
     }
+
+    @Test
+    void DuplicatedEmailErrorWhenAddMember() {
+        //given
+        Member testEntity = testUtils.getTestMember();
+        MemberAddRequestServiceDto testDto = MemberAddRequestServiceDto.builder()
+                .id(testUtils.getTestMember3().getId())
+                .name(testUtils.getTestMember3().getName())
+                .role(testUtils.getTestMember3().getRole())
+                .email(testUtils.getTestMember().getEmail())
+                .status(testUtils.getTestMember3().isStatus())
+                .build();
+
+        doReturn(true).when(memberRepository).existsByEmail(testEntity.getEmail());
+
+        //when then
+        assertThrows(CustomException.class, () -> {
+            memberService.add(testDto);
+        });
+    }
+
+//    @Test
+//    void DuplicatedEmailErrorWhenAddMemberAll() {
+//        //given
+//        MemberAddRequestServiceDto testServiceDto = MemberAddRequestServiceDto
+//                .builder()
+//                .id(testUtils.getTestMember().getId())
+//                .name(testUtils.getTestMember().getName())
+//                .role(testUtils.getTestMember().getRole())
+//                .email(testUtils.getTestMember().getEmail())
+//                .status(testUtils.getTestMember().isStatus())
+//                .build();
+//
+//        MemberAddRequestServiceDto testServiceDto2 = MemberAddRequestServiceDto
+//                .builder()
+//                .id(testUtils.getTestMember2().getId())
+//                .name(testUtils.getTestMember2().getName())
+//                .role(testUtils.getTestMember2().getRole())
+//                .email(testUtils.getTestMember2().getEmail())
+//                .status(testUtils.getTestMember2().isStatus())
+//                .build();
+//
+//        Member testEntity = testServiceDto.toEntity();
+//
+//        doReturn(true).when(memberRepository).existsByEmail(testEntity.getEmail());
+//
+//        //when then
+//        assertThrows(CustomException.class, () -> {
+//            memberService.add(Arrays.asList(testServiceDto,testServiceDto2));
+//        });
+//    }
 }

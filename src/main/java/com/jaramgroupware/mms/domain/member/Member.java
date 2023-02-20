@@ -45,7 +45,7 @@ public class Member {
     @Column(name="MEMBER_STATUS",nullable = false)
     private boolean status;
 
-    public void update(Member member,String who){
+    public void update(Member member){
         name = member.getName();
         role = member.getRole();
         status = member.isStatus();

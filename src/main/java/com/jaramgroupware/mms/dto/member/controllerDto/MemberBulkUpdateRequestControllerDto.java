@@ -6,7 +6,7 @@ import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoBulkUpdateRequestServiceDto;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberBulkUpdateRequestControllerDto {
-
 
     @NotEmpty(message = "UID가 비여있습니다!")
     @Size(max = 28,min=28,message = "UID는 28자리여야 합니다.")
@@ -58,18 +57,27 @@ public class MemberBulkUpdateRequestControllerDto {
     @NotNull(message = "생년 월일이 비여있습니다!")
     private LocalDate dateOfBirth;
 
-    public MemberBulkUpdateRequestServiceDto toServiceDto(){
+    @NotNull(message = "계정 활성 상태 여부가 비여있습니다!")
+    private boolean status;
+
+    public MemberBulkUpdateRequestServiceDto toMemberServiceDto(){
         return MemberBulkUpdateRequestServiceDto.builder()
                 .id(id)
                 .email(email)
                 .name(name)
+                .role(Role.builder().id(roleId).build())
+                .status(status)
+                .build();
+    }
+
+    public MemberInfoBulkUpdateRequestServiceDto toMemberInfoServiceDto(){
+        return MemberInfoBulkUpdateRequestServiceDto.builder()
+                .id(id)
                 .phoneNumber(phoneNumber)
                 .studentID(studentID)
                 .major(Major.builder().id(majorId).build())
                 .rank(Rank.builder().id(rankId).build())
-                .role(Role.builder().id(roleId).build())
                 .year(year)
-                .leaveAbsence(leaveAbsence)
                 .dateOfBirth(dateOfBirth)
                 .build();
     }

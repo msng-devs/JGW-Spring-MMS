@@ -33,7 +33,7 @@ public class MemberInfo extends BaseEntity {
     @Column(name = "MEMBER_INFO_PK", nullable = false, length = 28)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "MEMBER_INFO_PK",nullable = false)
     private Member member;
@@ -63,7 +63,7 @@ public class MemberInfo extends BaseEntity {
         phoneNumber = memberInfo.getPhoneNumber();
         major = memberInfo.getMajor();
         rank = memberInfo.getRank();
-        year = memberInfo.year;
+        year = memberInfo.getYear();
         modifiedDateTime = LocalDateTime.now();
         modifiedBy = who;
     }

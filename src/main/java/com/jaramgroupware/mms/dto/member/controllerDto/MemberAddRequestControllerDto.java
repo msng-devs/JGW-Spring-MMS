@@ -3,9 +3,12 @@ package com.jaramgroupware.mms.dto.member.controllerDto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.jaramgroupware.mms.domain.major.Major;
+import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceAddRequestServiceDto;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -59,19 +62,37 @@ public class MemberAddRequestControllerDto {
     @NotNull(message = "생년 월일이 비여있습니다!")
     private LocalDate dateOfBirth;
 
-    public MemberAddRequestServiceDto toServiceDto(){
+    @NotNull(message = "계정 활성 상태 여부가 비여있습니다!")
+    private boolean status;
+
+    public MemberAddRequestServiceDto toMemberAddServiceDto(){
         return MemberAddRequestServiceDto.builder()
                 .name(name)
                 .id(id)
                 .email(email)
+                .role(Role.builder().id(roleId).build())
+                .status(status)
+                .build();
+    }
+
+    public MemberInfoAddRequestServiceDto toMemberInfoAddServiceDto(){
+        return MemberInfoAddRequestServiceDto.builder()
+                .id(id)
                 .phoneNumber(phoneNumber)
-                .studentID(studentID)
+                .studentId(studentID)
                 .major(Major.builder().id(majorId).build())
                 .rank(Rank.builder().id(rankId).build())
-                .role(Role.builder().id(roleId).build())
                 .year(year)
-                .leaveAbsence(leaveAbsence)
                 .dateOfBirth(dateOfBirth)
                 .build();
     }
+
+    public MemberLeaveAbsenceAddRequestServiceDto toMemberLeaveAbsenceAddServiceDto(){
+        return MemberLeaveAbsenceAddRequestServiceDto.builder()
+                .id(id)
+                .member(Member.builder().id(id).build())
+                .status(leaveAbsence)
+                .build();
+    }
+
 }

@@ -6,12 +6,11 @@ import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
-import com.jaramgroupware.mms.utils.validation.DateTimeCheck;
+import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoUpdateRequestServiceDto;
 import lombok.*;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @ToString
 @Getter
@@ -20,7 +19,6 @@ import java.util.Date;
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberUpdateRequestControllerDto {
-
 
     @NotEmpty(message = "Email이 비여있습니다!")
     @Email(message = "email 형식이 잘못되었습니다!")
@@ -49,23 +47,28 @@ public class MemberUpdateRequestControllerDto {
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;
 
-    @NotNull(message = "휴학 여부가 비여있습니다!")
-    private boolean leaveAbsence;
-
     @NotNull(message = "생년 월일이 비여있습니다!")
     private LocalDate dateOfBirth;
 
-    public MemberUpdateRequestServiceDto toServiceDto(Major major,Rank rank,Role role){
+    @NotNull(message = "계정 활성 상태 여부가 비여있습니다!")
+    private boolean status;
+
+    public MemberUpdateRequestServiceDto toMemberServiceDto(Role role){
         return MemberUpdateRequestServiceDto.builder()
                 .email(email)
                 .name(name)
+                .role(role)
+                .status(status)
+                .build();
+    }
+
+    public MemberInfoUpdateRequestServiceDto toMemberInfoServiceDto(Major major, Rank rank){
+        return MemberInfoUpdateRequestServiceDto.builder()
                 .phoneNumber(phoneNumber)
-                .studentID(studentID)
                 .major(major)
                 .rank(rank)
-                .role(role)
                 .year(year)
-                .leaveAbsence(leaveAbsence)
+                .studentID(studentID)
                 .dateOfBirth(dateOfBirth)
                 .build();
     }

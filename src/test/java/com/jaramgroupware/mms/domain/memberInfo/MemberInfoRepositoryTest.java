@@ -25,8 +25,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -125,6 +125,33 @@ public class MemberInfoRepositoryTest {
     }
 
     @Test
+    void findAllByIdIn(){
+        //given
+        List<MemberInfo> testMemberInfos = Arrays.asList(testUtils.getTestMemberInfo(),testUtils.getTestMemberInfo2());
+        Set<String> testIds = testMemberInfos.stream().map(MemberInfo::getId).collect(Collectors.toSet());
+
+        //when
+        List<MemberInfo> res = memberInfoRepository.findAllByIdIn(testIds);
+
+        //then
+        assertThat(res,is(notNullValue()));
+        assertTrue(testUtils.isListSame(res,testMemberInfos));
+    }
+
+    @Test
+    void deleteAllByIdInQuery(){
+        //given
+        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMemberInfo().getId(),testUtils.getTestMemberInfo2().getId())){};
+
+        //when
+        memberInfoRepository.deleteAllByIdInQuery(testIds);
+
+        //then
+        assertThat(testEntityManager.find(MemberInfo.class,testUtils.getTestMemberInfo().getId()),is(nullValue()));
+        assertThat(testEntityManager.find(MemberInfo.class,testUtils.getTestMemberInfo2().getId()),is(nullValue()));
+    }
+
+    @Test
     void existsByStudentID() {
         //given
         MemberInfo testGoal = testUtils.getTestMemberInfo();
@@ -153,32 +180,14 @@ public class MemberInfoRepositoryTest {
     void bulkInsert() {
         //given
         MemberInfo testGoal = testUtils.getTestMemberInfo();
-        testGoal.setId("AASDFGHJKLZXCVBNMQWERTYUIOPS");
+        testGoal.setId(testUtils.getTestMember3().getId());
         testGoal.setStudentID("2023000000");
-        testGoal.setMember(Member.builder()
-                        .id("AASDFGHJKLZXCVBNMQWERTYUIOPS")
-                        .name("이테스트")
-                        .email("lee@test.com")
-                        .status(false)
-                        .role(Role.builder()
-                                .id(1)
-                                .name("ROLE_ADMIN")
-                                .build())
-                .build());
+        testGoal.setMember(testUtils.getTestMember3());
 
         MemberInfo testGoal2 = testUtils.getTestMemberInfo2();
-        testGoal2.setId("QWERTYUIOPASDFGHJKLZXCVBNMQQ");
+        testGoal2.setId(testUtils.getTestMember4().getId());
         testGoal2.setStudentID("2023000001");
-        testGoal2.setMember(Member.builder()
-                        .id("QWERTYUIOPASDFGHJKLZXCVBNMQQ")
-                        .name("희테스트")
-                        .email("hee@test.com")
-                        .status(true)
-                        .role(Role.builder()
-                                .id(2)
-                                .name("ROLE_DEV")
-                                .build())
-                .build());
+        testGoal2.setMember(testUtils.getTestMember4());
 
         List<MemberInfo> testMemberInfos = new ArrayList<>();
         testMemberInfos.add(testGoal);

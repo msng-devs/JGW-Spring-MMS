@@ -1,11 +1,8 @@
-package com.jaramgroupware.mms.dto.member.controllerDto;
+package com.jaramgroupware.mms.dto.memberInfo.controllerDto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @ToString
 @Getter
@@ -13,16 +10,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class MemberResponseControllerDto {
+public class MemberInfoResponseControllerDto {
 
     private String email;
     private String name;
-    private String entStudentID;
+    private String studentID;
     private Integer majorID;
     private String majorName;
     private Integer rankID;
     private String rankName;
     private Integer year;
     private boolean leaveAbsence;
-
 }

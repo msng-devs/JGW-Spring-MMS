@@ -2,7 +2,6 @@ package com.jaramgroupware.mms.service;
 
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
-import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
@@ -13,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -75,40 +73,36 @@ public class MemberService {
 
     }
 
-    @Transactional(readOnly = true)
-    public List<MemberResponseServiceDto> findAll(Set<Rank> ranks){
-
-        return memberRepository.findTargetMember(ranks)
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RANK_ID))
-                .stream()
-                .map(MemberResponseServiceDto::new)
-                .collect(Collectors.toList());
-
-    }
     @Transactional
-    public String add(MemberAddRequestServiceDto memberAddRequestServiceDto,String who){
+    public String add(MemberAddRequestServiceDto memberAddRequestServiceDto){
+
+        if(memberRepository.existsByEmail(memberAddRequestServiceDto.getEmail())) {
+            throw  new CustomException(ErrorCode.DUPLICATED_EMAIL);
+        }
+
         Member targetMember = memberAddRequestServiceDto.toEntity();
-        targetMember.setCreateBy(who);
-        targetMember.setModifiedBy(who);
         return memberRepository.save(targetMember).getId();
     }
 
     @Transactional
-    public void add(List<MemberAddRequestServiceDto> memberAddRequestServiceDto,String who){
+    public void add(List<MemberAddRequestServiceDto> memberAddRequestServiceDto){
         List<MemberAddRequestServiceDto> batchDto = new ArrayList<>();
         for (MemberAddRequestServiceDto dto:memberAddRequestServiceDto) {
+            if(memberRepository.existsByEmail(dto.getEmail())) {
+                throw  new CustomException(ErrorCode.DUPLICATED_EMAIL);
+            }
             batchDto.add(dto);
             if(batchDto.size() == batchSize){
-                batchAdd(batchDto,who);
+                batchAdd(batchDto);
             }
         }
         if(!batchDto.isEmpty()) {
-            batchAdd(batchDto,who);
+            batchAdd(batchDto);
         }
     }
 
-    public void batchAdd(List<MemberAddRequestServiceDto> batchDto,String who){
-        memberRepository.bulkInsert(batchDto.stream().map(MemberAddRequestServiceDto::toEntity).collect(Collectors.toList()),who);
+    public void batchAdd(List<MemberAddRequestServiceDto> batchDto){
+        memberRepository.bulkInsert(batchDto.stream().map(MemberAddRequestServiceDto::toEntity).collect(Collectors.toList()));
         batchDto.clear();
     }
 
@@ -137,6 +131,7 @@ public class MemberService {
 
         return ids;
     }
+
     private void batchDelete(Set<String> batchDto){
         if(memberRepository.findAllByIdIn(batchDto).size() != batchDto.size())
             throw new IllegalArgumentException("찾을 수 없는 ID가 들어있습니다.");
@@ -144,13 +139,14 @@ public class MemberService {
         memberRepository.deleteAllByIdInQuery(batchDto);
         batchDto.clear();
     }
+
     @Transactional
-    public MemberResponseServiceDto update(String id, MemberUpdateRequestServiceDto memberUpdateRequestServiceDto,String who){
+    public MemberResponseServiceDto update(String id, MemberUpdateRequestServiceDto memberUpdateRequestServiceDto){
 
         Member targetMember = memberRepository.findById(id)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_ID));
 
-        targetMember.update(memberUpdateRequestServiceDto.toEntity(),who);
+        targetMember.update(memberUpdateRequestServiceDto.toEntity());
 
         memberRepository.save(targetMember);
 
@@ -158,24 +154,24 @@ public class MemberService {
     }
 
     @Transactional
-    public void update(List<MemberBulkUpdateRequestServiceDto> updateDtos, String who){
+    public void update(List<MemberBulkUpdateRequestServiceDto> updateDtos){
         List<MemberBulkUpdateRequestServiceDto> batchDto = new ArrayList<>();
         for (MemberBulkUpdateRequestServiceDto dto:updateDtos) {
             batchDto.add(dto);
             if(batchDto.size() == batchSize){
-                batchUpdate(batchDto,who);
+                batchUpdate(batchDto);
             }
         }
         if(!batchDto.isEmpty()) {
-            batchUpdate(batchDto,who);
+            batchUpdate(batchDto);
         }
     }
 
-    private void batchUpdate(List<MemberBulkUpdateRequestServiceDto> batchDto,String who){
+    private void batchUpdate(List<MemberBulkUpdateRequestServiceDto> batchDto){
         Set<String> ids = batchDto.stream().map(MemberBulkUpdateRequestServiceDto::getId).collect(Collectors.toSet());
         if(memberRepository.findAllByIdIn(ids).size() != ids.size())
             throw new IllegalArgumentException("찾을 수 없는 ID가 들어있습니다.");
-        memberRepository.bulkUpdate(batchDto.stream().map(MemberBulkUpdateRequestServiceDto::toEntity).collect(Collectors.toList()),who);
+        memberRepository.bulkUpdate(batchDto.stream().map(MemberBulkUpdateRequestServiceDto::toEntity).collect(Collectors.toList()));
         batchDto.clear();
         ids.clear();
     }

@@ -28,7 +28,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     //https://gksdudrb922.tistory.com/154
 
     @Override
-    public void bulkInsert(List<Member> members,String who) {
+    public void bulkInsert(List<Member> members) {
         String sql = "INSERT INTO `MEMBER` (`MEMBER_PK`, `MEMBER_NM`, `MEMBER_EMAIL`, `ROLE_ROLE_PK`, `MEMBER_STATUS`) VALUES (?,?,?,?,?)";
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
@@ -49,7 +49,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         });
         members.clear();
     }
-    public void bulkUpdate(List<Member> members,String who) {
+    public void bulkUpdate(List<Member> members) {
         String sql = "UPDATE `MEMBER`"
                 + " SET `MEMBER_NM` = (?), `ROLE_ROLE_PK` = (?),`MEMBER_STATUS` = (?) "
                 + " WHERE `MEMBER_PK` = (?)";

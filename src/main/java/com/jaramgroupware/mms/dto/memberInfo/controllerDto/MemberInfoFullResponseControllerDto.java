@@ -1,16 +1,11 @@
-package com.jaramgroupware.mms.dto.member.controllerDto;
+package com.jaramgroupware.mms.dto.memberInfo.controllerDto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.jaramgroupware.mms.domain.BaseEntity;
-import com.jaramgroupware.mms.domain.major.Major;
-import com.jaramgroupware.mms.domain.rank.Rank;
-import com.jaramgroupware.mms.domain.role.Role;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @ToString
 @Getter
@@ -19,8 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class MemberFullResponseControllerDto{
-
+public class MemberInfoFullResponseControllerDto {
     private String id;
     private String email;
     private String name;
@@ -34,20 +28,21 @@ public class MemberFullResponseControllerDto{
     private String roleName;
     private Integer year;
     private boolean leaveAbsence;
-    private LocalDate dateofbirth;
+    private LocalDate dateOfBirth;
     private LocalDateTime createdDateTime;
 
-    public MemberResponseControllerDto toTiny(){
-        return MemberResponseControllerDto
+    public MemberInfoResponseControllerDto toTiny() {
+        return MemberInfoResponseControllerDto
                 .builder()
-                .rankName(rankName)
-                .rankID(rankID)
-                .majorName(majorName)
-                .leaveAbsence(leaveAbsence)
-                .majorID(majorID)
-                .year(year)
                 .email(email)
-                .entStudentID(studentID.substring(2,4))
+                .name(name)
+                .studentID(studentID.substring(2,4))
+                .majorID(majorID)
+                .majorName(majorName)
+                .rankID(rankID)
+                .rankName(rankName)
+                .year(year)
+                .leaveAbsence(leaveAbsence)
                 .build();
     }
 }

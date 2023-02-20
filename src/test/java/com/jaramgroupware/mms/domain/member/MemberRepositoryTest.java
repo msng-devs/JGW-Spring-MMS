@@ -122,14 +122,14 @@ class MemberRepositoryTest {
 //    @Test
 //    void deleteAllByIdInQuery(){
 //        //given
-//        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMember2().toId(),testUtils.getTestMember().toId())){};
+//        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMember().getId(),testUtils.getTestMember2().getId())){};
 //
 //        //when
 //        memberRepository.deleteAllByIdInQuery(testIds);
 //
 //        //then
-//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember().toId()),is(nullValue()));
-//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember2().toId()),is(nullValue()));
+//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember().getId()),is(nullValue()));
+//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember2().getId()),is(nullValue()));
 //    }
 
     @Test
@@ -148,7 +148,7 @@ class MemberRepositoryTest {
         testMembers.add(testGoal2);
 
         //when
-        memberRepository.bulkInsert(testMembers, testUtils.testUid);
+        memberRepository.bulkInsert(testMembers);
 
         //then
         assertEquals(testEntityManager.find(Member.class,testGoal.getId()).toString(),testGoal.toString());
@@ -169,7 +169,7 @@ class MemberRepositoryTest {
         testMembers.add(testGoal2);
 
         //when
-        memberRepository.bulkUpdate(testMembers, testUtils.testUid);
+        memberRepository.bulkUpdate(testMembers);
 
         //then
         assertEquals(testEntityManager.find(Member.class,testGoal.getId()).toString(),testGoal.toString());

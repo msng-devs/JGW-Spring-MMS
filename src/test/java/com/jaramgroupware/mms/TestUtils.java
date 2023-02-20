@@ -44,6 +44,8 @@ public class TestUtils {
     private final LocalDateTime testDateTime2 = LocalDateTime.parse("2022-08-28 04:16:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     private final Member testMember;
     private final Member testMember2;
+    private final Member testMember3;
+    private final Member testMember4;
     private final MemberInfo testMemberInfo;
     private final MemberInfo testMemberInfo2;
     private final MemberLeaveAbsence testMemberLeaveAbsence;
@@ -107,6 +109,20 @@ public class TestUtils {
                 .id("ThiS1SNotRea1U1DDOY0UKNOWHoS")
                 .name("김테스트")
                 .email("kimTest@test.com")
+                .role(testRole2)
+                .status(true)
+                .build();
+        testMember3 = Member.builder()
+                .id("AASDFGHJKLZXCVBNMQWERTYUIOPS")
+                .name("이테스트")
+                .email("lee@test.com")
+                .role(testRole)
+                .status(false)
+                .build();
+        testMember4 = Member.builder()
+                .id("QWERTYUIOPASDFGHJKLZXCVBNMQQ")
+                .name("희테스트")
+                .email("hee@test.com")
                 .role(testRole2)
                 .status(true)
                 .build();

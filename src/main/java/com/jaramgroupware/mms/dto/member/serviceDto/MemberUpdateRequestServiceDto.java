@@ -20,28 +20,16 @@ import java.util.Date;
 public class MemberUpdateRequestServiceDto {
 
     private String name;
-    private String phoneNumber;
-    private Major major;
-    private Rank rank;
     private Role role;
-    private Integer year;
     private String email;
-    private String studentID;
-    private boolean leaveAbsence;
-    private LocalDate dateOfBirth;
+    private boolean status;
 
     public Member toEntity(){
         return Member.builder()
                 .email(email)
                 .name(name)
-                .phoneNumber(phoneNumber)
-                .studentID(studentID)
-                .major(major)
-                .rank(rank)
                 .role(role)
-                .year(year)
-                .leaveAbsence(leaveAbsence)
-                .dateOfBirth(dateOfBirth)
+                .status(status)
                 .build();
     }
     @Override

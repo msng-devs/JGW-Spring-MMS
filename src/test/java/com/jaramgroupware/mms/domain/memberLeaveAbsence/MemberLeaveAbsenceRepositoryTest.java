@@ -2,6 +2,7 @@ package com.jaramgroupware.mms.domain.memberLeaveAbsence;
 
 import com.jaramgroupware.mms.TestUtils;
 import com.jaramgroupware.mms.domain.member.Member;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.role.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,13 +18,13 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles("test")
 @SqlGroup({
@@ -113,6 +114,56 @@ public class MemberLeaveAbsenceRepositoryTest {
 
         //then
         assertThat(testEntityManager.find(MemberLeaveAbsence.class,testGoal.getId()),is(nullValue()));
+    }
+
+    @Test
+    void findAllByIdIn(){
+        //given
+        List<MemberLeaveAbsence> testMemberLeaveAbsences = Arrays.asList(testUtils.getTestMemberLeaveAbsence(),testUtils.getTestMemberLeaveAbsence2());
+        Set<String> testIds = testMemberLeaveAbsences.stream().map(MemberLeaveAbsence::getId).collect(Collectors.toSet());
+
+        //when
+        List<MemberLeaveAbsence> res = memberLeaveAbsenceRepository.findAllByIdIn(testIds);
+
+        //then
+        assertThat(res,is(notNullValue()));
+        assertTrue(testUtils.isListSame(res,testMemberLeaveAbsences));
+    }
+
+//    @Test
+//    void deleteAllByIdInQuery(){
+//        //given
+//        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMemberLeaveAbsence().getId(),testUtils.getTestMemberLeaveAbsence2().getId())){};
+//
+//        //when
+//        memberLeaveAbsenceRepository.deleteAllByIdInQuery(testIds);
+//
+//        //then
+//        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence().getId()),is(nullValue()));
+//        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence2().getId()),is(nullValue()));
+//    }
+
+    @Test
+    void bulkInsert(){
+        //given
+        MemberLeaveAbsence testGoal = testUtils.getTestMemberLeaveAbsence();
+        testGoal.setId(testUtils.getTestMember3().getId());
+        testGoal.setMember(testUtils.getTestMember3());
+
+        MemberLeaveAbsence testGoal2 = testUtils.getTestMemberLeaveAbsence2();
+        testGoal2.setId(testUtils.getTestMember4().getId());
+        testGoal2.setMember(testUtils.getTestMember4());
+
+        List<MemberLeaveAbsence> testMemberLeaveAbsences = new ArrayList<>();
+        testMemberLeaveAbsences.add(testGoal);
+        testMemberLeaveAbsences.add(testGoal2);
+
+        //when
+        memberLeaveAbsenceRepository.bulkInsert(testMemberLeaveAbsences);
+
+        //then
+        assertEquals(testEntityManager.find(MemberLeaveAbsence.class,testGoal.getId()).toString(),testGoal.toString());
+        assertEquals(testEntityManager.find(MemberLeaveAbsence.class,testGoal2.getId()).toString(),testGoal2.toString());
     }
 
 }

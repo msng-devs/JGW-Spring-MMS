@@ -1,8 +1,11 @@
 package com.jaramgroupware.mms.service;
 
 import com.jaramgroupware.mms.TestUtils;
+import com.jaramgroupware.mms.domain.member.Member;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsenceRepository;
+import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceUpdateRequestServiceDto;
@@ -17,13 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 
@@ -70,6 +71,38 @@ public class MemberLeaveAbsenceServiceTest {
         Assertions.assertNotNull(resultID);
         Assertions.assertEquals(resultID, Objects.requireNonNull(resultID));
         verify(memberLeaveAbsenceRepository).save(any());
+    }
+
+    @Test
+    void addAll() {
+        //given
+        MemberLeaveAbsenceAddRequestServiceDto testServiceDto = MemberLeaveAbsenceAddRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMemberLeaveAbsence().getId())
+                .member(testUtils.getTestMemberLeaveAbsence().getMember())
+                .status(testUtils.getTestMemberLeaveAbsence().isStatus())
+                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence().getExpectedDateReturnSchool())
+                .build();
+
+        MemberLeaveAbsenceAddRequestServiceDto testServiceDto2 = MemberLeaveAbsenceAddRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMemberLeaveAbsence2().getId())
+                .member(testUtils.getTestMemberLeaveAbsence2().getMember())
+                .status(testUtils.getTestMemberLeaveAbsence2().isStatus())
+                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence2().getExpectedDateReturnSchool())
+                .build();
+
+        MemberLeaveAbsence testEntity = testServiceDto.toEntity();
+        testEntity.setId(testUtils.getTestMemberLeaveAbsence().getId());
+
+        MemberLeaveAbsence testEntity2 = testServiceDto.toEntity();
+        testEntity2.setId(testUtils.getTestMemberLeaveAbsence().getId());
+
+        //when
+        memberLeaveAbsenceService.add(Arrays.asList(testServiceDto,testServiceDto2));
+
+        //then
+        verify(memberLeaveAbsenceRepository).bulkInsert(any());
     }
 
     @Test
@@ -126,6 +159,30 @@ public class MemberLeaveAbsenceServiceTest {
         Assertions.assertEquals(testID, Objects.requireNonNull(resultID));
         verify(memberLeaveAbsenceRepository).findMemberLeaveAbsenceById(testID);
         verify(memberLeaveAbsenceRepository).delete(any());
+    }
+
+    @Test
+    void deleteAll() {
+        //given
+        Set<String> ids = new HashSet<>();
+
+        String testID = testUtils.getTestMemberLeaveAbsence().getId();
+        ids.add(testID);
+
+        String testID2 = testUtils.getTestMemberLeaveAbsence2().getId();
+        ids.add(testID2);
+
+        MemberLeaveAbsence testEntity = testUtils.getTestMemberLeaveAbsence();
+        MemberLeaveAbsence testEntity2 = testUtils.getTestMemberLeaveAbsence2();
+
+        doReturn(Arrays.asList(testEntity,testEntity2)).when(memberLeaveAbsenceRepository).findAllByIdIn(ids);
+
+        //when
+        memberLeaveAbsenceService.delete(ids);
+
+        //then
+        verify(memberLeaveAbsenceRepository).findAllByIdIn(anySet());
+        verify(memberLeaveAbsenceRepository).deleteAllByIdInQuery(anySet());
     }
 
     @Test
