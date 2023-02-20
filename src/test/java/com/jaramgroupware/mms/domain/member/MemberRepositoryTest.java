@@ -73,6 +73,8 @@ class MemberRepositoryTest {
         List<Member> testGoal = new ArrayList<Member>();
         testGoal.add(testUtils.getTestMember());
         testGoal.add(testUtils.getTestMember2());
+        testGoal.add(testUtils.getTestMember3());
+        testGoal.add(testUtils.getTestMember4());
         //when
         List<Member> results = memberRepository.findAllBy()
                 .orElseThrow(IllegalArgumentException::new);
@@ -136,11 +138,11 @@ class MemberRepositoryTest {
     void bulkInsert(){
         //given
         Member testGoal = testUtils.getTestMember();
-        testGoal.setId("AASDFGHJKLZXCVBNMQWERTYUIOP");
+        testGoal.setId("QWASZXERDFCVTYGHBNUIJKMLOPQQ");
         testGoal.setEmail("test1@test.com");
 
         Member testGoal2 = testUtils.getTestMember2();
-        testGoal2.setId("QWERTYUIOPASDFGHJKLZXCVBNMQQ");
+        testGoal2.setId("ZXASQWCVDFERBNGHTYMJKLUIOPIS");
         testGoal2.setEmail("test2@test.com");
 
         List<Member> testMembers = new ArrayList<>();
@@ -235,7 +237,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(1L,res.getTotalElements());
+        assertEquals(2L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
 
@@ -253,7 +255,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(1L,res.getTotalElements());
+        assertEquals(2L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
 
@@ -348,7 +350,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(1L,res.getTotalElements());
+        assertEquals(2L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
 
@@ -367,7 +369,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(1L,res.getTotalElements());
+        assertEquals(2L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
 
@@ -386,7 +388,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(1L,res.getTotalElements());
+        assertEquals(2L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
 
@@ -405,7 +407,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(1L,res.getTotalElements());
+        assertEquals(2L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
     

@@ -85,17 +85,7 @@ public class MemberLeaveAbsenceRepositoryTest {
     void save() {
         //given
         MemberLeaveAbsence testGoal = testUtils.getTestMemberLeaveAbsence();
-        testGoal.setId("AASDFGHJKLZXCVBNMQWERTYUIOPS");
-        testGoal.setMember(Member.builder()
-                .id("AASDFGHJKLZXCVBNMQWERTYUIOPS")
-                .name("이테스트")
-                .email("lee@test.com")
-                .status(false)
-                .role(Role.builder()
-                        .id(1)
-                        .name("ROLE_ADMIN")
-                        .build())
-                .build());
+        testGoal.setMember(testUtils.getTestMember3());
 
         //when
         memberLeaveAbsenceRepository.save(testGoal);

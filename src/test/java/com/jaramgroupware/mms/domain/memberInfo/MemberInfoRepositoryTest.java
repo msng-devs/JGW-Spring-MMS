@@ -1,8 +1,6 @@
 package com.jaramgroupware.mms.domain.memberInfo;
 
 import com.jaramgroupware.mms.TestUtils;
-import com.jaramgroupware.mms.domain.member.Member;
-import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.utils.parse.ParseByNameBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,18 +90,6 @@ public class MemberInfoRepositoryTest {
     void save() {
         //given
         MemberInfo testGoal = testUtils.getTestMemberInfo();
-        testGoal.setId("AASDFGHJKLZXCVBNMQWERTYUIOPS");
-        testGoal.setStudentID("2023000000");
-        testGoal.setMember(Member.builder()
-                .id("AASDFGHJKLZXCVBNMQWERTYUIOPS")
-                .name("이테스트")
-                .email("lee@test.com")
-                .status(false)
-                .role(Role.builder()
-                        .id(1)
-                        .name("ROLE_ADMIN")
-                        .build())
-                .build());
 
         //when
         memberInfoRepository.save(testGoal);

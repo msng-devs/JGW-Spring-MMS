@@ -337,11 +337,11 @@ class MemberServiceTest {
         //given
         Member testEntity = testUtils.getTestMember();
         MemberAddRequestServiceDto testDto = MemberAddRequestServiceDto.builder()
-                .id(testUtils.getTestMember3().getId())
-                .name(testUtils.getTestMember3().getName())
-                .role(testUtils.getTestMember3().getRole())
+                .id(testUtils.getTestMember2().getId())
+                .name(testUtils.getTestMember2().getName())
+                .role(testUtils.getTestMember2().getRole())
                 .email(testUtils.getTestMember().getEmail())
-                .status(testUtils.getTestMember3().isStatus())
+                .status(testUtils.getTestMember2().isStatus())
                 .build();
 
         doReturn(true).when(memberRepository).existsByEmail(testEntity.getEmail());
