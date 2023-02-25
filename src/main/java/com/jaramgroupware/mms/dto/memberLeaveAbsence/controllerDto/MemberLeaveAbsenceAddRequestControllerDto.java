@@ -18,9 +18,10 @@ import java.time.LocalDate;
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberLeaveAbsenceAddRequestControllerDto {
+
     @NotEmpty(message = "UID가 비여있습니다!")
     @Size(max = 28,min=28,message = "UID는 28자리여야 합니다.")
-    private String id;
+    private String memberId;
 
     @NotNull(message = "휴학 여부가 비여있습니다!")
     private boolean status;
@@ -29,8 +30,7 @@ public class MemberLeaveAbsenceAddRequestControllerDto {
 
     public MemberLeaveAbsenceAddRequestServiceDto toServiceDto(){
         return MemberLeaveAbsenceAddRequestServiceDto.builder()
-                .id(id)
-                .member(Member.builder().id(id).build())
+                .member(Member.builder().id(memberId).build())
                 .status(status)
                 .expectedDateReturnSchool(expectedDateReturnSchool)
                 .build();

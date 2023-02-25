@@ -37,7 +37,7 @@ public class MemberService {
     public MemberResponseServiceDto findById(String uid){
 
         Member targetMember = memberRepository.findMemberById(uid)
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_TIMETABLE_ID));
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_ID));
 
         return new MemberResponseServiceDto(targetMember);
     }

@@ -3,6 +3,7 @@ package com.jaramgroupware.mms.dto.member.controllerDto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.jaramgroupware.mms.domain.major.Major;
+import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
@@ -54,30 +55,25 @@ public class MemberBulkUpdateRequestControllerDto {
     @NotNull(message = "휴학 여부가 비여있습니다!")
     private boolean leaveAbsence;
 
-    @NotNull(message = "생년 월일이 비여있습니다!")
     private LocalDate dateOfBirth;
-
-    @NotNull(message = "계정 활성 상태 여부가 비여있습니다!")
-    private boolean status;
 
     public MemberBulkUpdateRequestServiceDto toMemberServiceDto(){
         return MemberBulkUpdateRequestServiceDto.builder()
                 .id(id)
-                .email(email)
                 .name(name)
+                .email(email)
                 .role(Role.builder().id(roleId).build())
-                .status(status)
                 .build();
     }
 
     public MemberInfoBulkUpdateRequestServiceDto toMemberInfoServiceDto(){
         return MemberInfoBulkUpdateRequestServiceDto.builder()
-                .id(id)
+                .member(Member.builder().id(id).build())
                 .phoneNumber(phoneNumber)
                 .studentID(studentID)
-                .major(Major.builder().id(majorId).build())
-                .rank(Rank.builder().id(rankId).build())
                 .year(year)
+                .rank(Rank.builder().id(rankId).build())
+                .major(Major.builder().id(majorId).build())
                 .dateOfBirth(dateOfBirth)
                 .build();
     }

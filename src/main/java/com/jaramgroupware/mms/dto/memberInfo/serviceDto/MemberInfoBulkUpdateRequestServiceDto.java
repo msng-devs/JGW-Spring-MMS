@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 public class MemberInfoBulkUpdateRequestServiceDto {
 
-    private String id;
+    private Integer id;
     private Member member;
     private String phoneNumber;
     private Major major;

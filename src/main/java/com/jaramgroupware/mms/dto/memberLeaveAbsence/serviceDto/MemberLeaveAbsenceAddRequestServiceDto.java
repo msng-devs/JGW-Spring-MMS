@@ -13,14 +13,12 @@ import java.time.LocalDate;
 @Builder
 public class MemberLeaveAbsenceAddRequestServiceDto {
 
-    private String id;
     private Member member;
     private boolean status;
     private LocalDate expectedDateReturnSchool;
 
     public MemberLeaveAbsence toEntity(){
         return MemberLeaveAbsence.builder()
-                .id(id)
                 .member(member)
                 .status(status)
                 .expectedDateReturnSchool(expectedDateReturnSchool)

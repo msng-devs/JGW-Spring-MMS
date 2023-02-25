@@ -19,19 +19,19 @@ import java.time.LocalDate;
 public class MemberLeaveAbsence {
 
     @Id
-    @Column(name = "MEMBER_LEAVE_ABSENCE_PK", nullable = false, length = 28)
-    private String id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "MEMBER_LEAVE_ABSENCE_PK",nullable = false)
-    private Member member;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MEMBER_LEAVE_ABSENCE_PK")
+    private Integer id;
 
     @Column(name="MEMBER_LEAVE_ABSENCE_STATUS",nullable = false)
     private boolean status;
 
     @Column(name="MEMBER_LEAVE_ABSENCE_EXPECTED_DATE_RETURN_SCHOOL")
     private LocalDate expectedDateReturnSchool;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_MEMBER_PK",nullable = false)
+    private Member member;
 
 
     public void update(MemberLeaveAbsence memberLeaveAbsence){

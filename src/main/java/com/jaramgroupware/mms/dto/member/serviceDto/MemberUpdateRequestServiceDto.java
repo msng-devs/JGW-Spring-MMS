@@ -22,14 +22,12 @@ public class MemberUpdateRequestServiceDto {
     private String name;
     private Role role;
     private String email;
-    private boolean status;
 
     public Member toEntity(){
         return Member.builder()
                 .email(email)
                 .name(name)
                 .role(role)
-                .status(status)
                 .build();
     }
     @Override

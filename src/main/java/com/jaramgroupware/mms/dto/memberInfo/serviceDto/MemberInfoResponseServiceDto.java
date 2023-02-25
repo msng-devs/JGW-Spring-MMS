@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberInfoResponseServiceDto {
 
-    private String id;
+    private Integer id;
+    private String memberID;
     private String email;
     private String name;
     private String phoneNumber;
@@ -30,12 +31,13 @@ public class MemberInfoResponseServiceDto {
     private Integer roleID;
     private String roleName;
     private Integer year;
-    private boolean leaveAbsence;
+    private boolean status;
     private LocalDate dateOfBirth;
     private LocalDateTime createdDateTime;
 
     public MemberInfoResponseServiceDto(MemberInfo memberInfo) {
         id = memberInfo.getId();
+        memberID = memberInfo.getMember().getId();
         email = memberInfo.getMember().getEmail();
         name = memberInfo.getMember().getName();
         phoneNumber = memberInfo.getPhoneNumber();
@@ -47,6 +49,7 @@ public class MemberInfoResponseServiceDto {
         roleID = memberInfo.getMember().getRole().getId();
         roleName = memberInfo.getMember().getRole().getName();
         year = memberInfo.getYear();
+        status = memberInfo.getMember().isStatus();
         dateOfBirth = memberInfo.getDateOfBirth();
         createdDateTime = memberInfo.getCreatedDateTime();
     }
@@ -56,7 +59,7 @@ public class MemberInfoResponseServiceDto {
                 .id(id)
                 .member(
                         Member.builder()
-                                .id(id)
+                                .id(memberID)
                                 .email(email)
                                 .name(name)
                                 .role(Role.builder()
@@ -86,6 +89,7 @@ public class MemberInfoResponseServiceDto {
         return MemberInfoFullResponseControllerDto
                 .builder()
                 .id(id)
+                .memberID(memberID)
                 .email(email)
                 .name(name)
                 .phoneNumber(phoneNumber)
@@ -97,7 +101,7 @@ public class MemberInfoResponseServiceDto {
                 .roleID(roleID)
                 .roleName(roleName)
                 .year(year)
-                .leaveAbsence(leaveAbsence)
+                .status(status)
                 .dateOfBirth(dateOfBirth)
                 .createdDateTime(createdDateTime)
                 .build();

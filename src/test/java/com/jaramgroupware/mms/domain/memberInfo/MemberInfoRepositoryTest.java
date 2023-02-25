@@ -1,6 +1,7 @@
 package com.jaramgroupware.mms.domain.memberInfo;
 
 import com.jaramgroupware.mms.TestUtils;
+import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.utils.parse.ParseByNameBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,6 +73,45 @@ public class MemberInfoRepositoryTest {
     }
 
     @Test
+    void findMemberInfoByMember() {
+        //given
+        MemberInfo testGoal = testUtils.getTestMemberInfo();
+
+        //when
+        MemberInfo result = memberInfoRepository.findMemberInfoByMember(testGoal.getMember())
+                .orElseThrow(IllegalArgumentException::new);
+
+        //then
+        assertEquals(result.toString(),testGoal.toString());
+
+    }
+
+    @Test
+    void existsByStudentID() {
+        //given
+        MemberInfo testGoal = testUtils.getTestMemberInfo();
+
+        //when
+        boolean result = memberInfoRepository.existsByStudentID(testGoal.getStudentID());
+
+        //then
+        assertTrue(result);
+    }
+
+    @Test
+    void existsByStudentID2() {
+        //given
+        MemberInfo testGoal = testUtils.getTestMemberInfo();
+        testGoal.setStudentID("2023000000");
+
+        //when
+        boolean result = memberInfoRepository.existsByStudentID(testGoal.getStudentID());
+
+        //then
+        assertFalse(result);
+    }
+
+    @Test
     void findAllBy() {
         //given
         List<MemberInfo> testGoal = new ArrayList<>();
@@ -114,7 +154,7 @@ public class MemberInfoRepositoryTest {
     void findAllByIdIn(){
         //given
         List<MemberInfo> testMemberInfos = Arrays.asList(testUtils.getTestMemberInfo(),testUtils.getTestMemberInfo2());
-        Set<String> testIds = testMemberInfos.stream().map(MemberInfo::getId).collect(Collectors.toSet());
+        Set<Integer> testIds = testMemberInfos.stream().map(MemberInfo::getId).collect(Collectors.toSet());
 
         //when
         List<MemberInfo> res = memberInfoRepository.findAllByIdIn(testIds);
@@ -127,7 +167,7 @@ public class MemberInfoRepositoryTest {
     @Test
     void deleteAllByIdInQuery(){
         //given
-        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMemberInfo().getId(),testUtils.getTestMemberInfo2().getId())){};
+        Set<Integer> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMemberInfo().getId(),testUtils.getTestMemberInfo2().getId())){};
 
         //when
         memberInfoRepository.deleteAllByIdInQuery(testIds);
@@ -135,77 +175,6 @@ public class MemberInfoRepositoryTest {
         //then
         assertThat(testEntityManager.find(MemberInfo.class,testUtils.getTestMemberInfo().getId()),is(nullValue()));
         assertThat(testEntityManager.find(MemberInfo.class,testUtils.getTestMemberInfo2().getId()),is(nullValue()));
-    }
-
-    @Test
-    void existsByStudentID() {
-        //given
-        MemberInfo testGoal = testUtils.getTestMemberInfo();
-
-        //when
-        boolean result = memberInfoRepository.existsByStudentID(testGoal.getStudentID());
-
-        //then
-        assertTrue(result);
-    }
-
-    @Test
-    void existsByStudentID2() {
-        //given
-        MemberInfo testGoal = testUtils.getTestMemberInfo();
-        testGoal.setStudentID("2023000000");
-
-        //when
-        boolean result = memberInfoRepository.existsByStudentID(testGoal.getStudentID());
-
-        //then
-        assertFalse(result);
-    }
-
-    @Test
-    void bulkInsert() {
-        //given
-        MemberInfo testGoal = testUtils.getTestMemberInfo();
-        testGoal.setId(testUtils.getTestMember3().getId());
-        testGoal.setStudentID("2023000000");
-        testGoal.setMember(testUtils.getTestMember3());
-
-        MemberInfo testGoal2 = testUtils.getTestMemberInfo2();
-        testGoal2.setId(testUtils.getTestMember4().getId());
-        testGoal2.setStudentID("2023000001");
-        testGoal2.setMember(testUtils.getTestMember4());
-
-        List<MemberInfo> testMemberInfos = new ArrayList<>();
-        testMemberInfos.add(testGoal);
-        testMemberInfos.add(testGoal2);
-
-        //when
-        memberInfoRepository.bulkInsert(testMemberInfos, testUtils.testUid);
-
-        //then
-        assertEquals(testEntityManager.find(MemberInfo.class,testGoal.getId()).toString(),testGoal.toString());
-        assertEquals(testEntityManager.find(MemberInfo.class,testGoal2.getId()).toString(),testGoal2.toString());
-    }
-
-    @Test
-    void bulkUpdate() {
-        //given
-        MemberInfo testGoal = testUtils.getTestMemberInfo();
-        testGoal.setPhoneNumber("01011110000");
-
-        MemberInfo testGoal2 = testUtils.getTestMemberInfo2();
-        testGoal2.setPhoneNumber("01000001111");
-
-        List<MemberInfo> testMemberInfos = new ArrayList<>();
-        testMemberInfos.add(testGoal);
-        testMemberInfos.add(testGoal2);
-
-        //when
-        memberInfoRepository.bulkUpdate(testMemberInfos, testUtils.testUid);
-
-        //then
-        assertEquals(testEntityManager.find(MemberInfo.class,testGoal.getId()).toString(),testGoal.toString());
-        assertEquals(testEntityManager.find(MemberInfo.class,testGoal2.getId()).toString(),testGoal2.toString());
     }
 
     @Test

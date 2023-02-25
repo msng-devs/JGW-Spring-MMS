@@ -30,12 +30,12 @@ import java.time.LocalDateTime;
 public class MemberInfo extends BaseEntity {
 
     @Id
-    @Column(name = "MEMBER_INFO_PK", nullable = false, length = 28)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MEMBER_INFO_PK")
+    private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    @JoinColumn(name = "MEMBER_INFO_PK",nullable = false)
+    @JoinColumn(name = "MEMBER_MEMBER_PK",nullable = false)
     private Member member;
 
     @Column(name="MEMBER_INFO_CELL_PHONE_NUMBER",length =15)

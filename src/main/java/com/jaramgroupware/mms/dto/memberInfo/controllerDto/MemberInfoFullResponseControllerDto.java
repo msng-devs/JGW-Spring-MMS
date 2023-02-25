@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberInfoFullResponseControllerDto {
-    private String id;
+
+    private Integer id;
+    private String memberID;
     private String email;
     private String name;
     private String phoneNumber;
@@ -27,13 +29,14 @@ public class MemberInfoFullResponseControllerDto {
     private Integer roleID;
     private String roleName;
     private Integer year;
-    private boolean leaveAbsence;
     private LocalDate dateOfBirth;
     private LocalDateTime createdDateTime;
+    private boolean status;
 
     public MemberInfoResponseControllerDto toTiny() {
         return MemberInfoResponseControllerDto
                 .builder()
+                .memberID(memberID)
                 .email(email)
                 .name(name)
                 .studentID(studentID.substring(2,4))
@@ -42,7 +45,7 @@ public class MemberInfoFullResponseControllerDto {
                 .rankID(rankID)
                 .rankName(rankName)
                 .year(year)
-                .leaveAbsence(leaveAbsence)
+                .status(status)
                 .build();
     }
 }

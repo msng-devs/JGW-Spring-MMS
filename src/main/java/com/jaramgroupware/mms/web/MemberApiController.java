@@ -2,6 +2,7 @@ package com.jaramgroupware.mms.web;
 
 
 import com.jaramgroupware.mms.domain.member.MemberSpecificationBuilder;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.general.controllerDto.MessageDto;
@@ -76,15 +77,10 @@ public class MemberApiController {
                         .map(MemberAddRequestControllerDto::toMemberAddServiceDto)
                         .collect(Collectors.toList()));
 
-        memberInfoService.add(
+        memberInfoService.addAll(
                 memberAddRequestControllerDto.stream()
                         .map(MemberAddRequestControllerDto::toMemberInfoAddServiceDto)
                         .collect(Collectors.toList()), uid);
-
-        memberLeaveAbsenceService.add(
-                memberAddRequestControllerDto.stream()
-                        .map(MemberAddRequestControllerDto::toMemberLeaveAbsenceAddServiceDto)
-                        .collect(Collectors.toList()));
 
         return ResponseEntity.ok(new MessageDto("총 ("+memberAddRequestControllerDto.size()+")개의 Member를 성공적으로 추가했습니다!"));
     }
@@ -96,9 +92,8 @@ public class MemberApiController {
             @RequestHeader("user_pk") String uid,
             @RequestHeader("role_pk") Integer roleID){
 
-        MemberInfoFullResponseControllerDto result = memberInfoService.findById(memberId).toControllerDto();
-        MemberLeaveAbsenceResponseControllerDto memberLeaveAbsenceResponseControllerDto = memberLeaveAbsenceService.findById(memberId).toControllerDto();
-        result.setLeaveAbsence(memberLeaveAbsenceResponseControllerDto.isStatus());
+        MemberInfoFullResponseControllerDto result = memberInfoService.findByMember(memberService.findById(memberId).toEntity()).toControllerDto();
+        result.setStatus(memberService.findById(memberId).toEntity().isStatus());
 
         if(roleID >= adminRole.getId() || uid.equals(memberId)) return ResponseEntity.ok(result);
 
@@ -150,8 +145,8 @@ public class MemberApiController {
             @PathVariable String memberID,
             @RequestHeader("user_pk") String uid){
 
-        memberInfoService.delete(memberID);
-        memberLeaveAbsenceService.delete(memberID);
+        memberInfoService.delete(memberService.findById(memberID).toEntity());
+        memberLeaveAbsenceService.delete(memberLeaveAbsenceService.findByMember(memberService.findById(memberID).toEntity()).getId());
         memberService.delete(memberID);
 
         return ResponseEntity.ok(new MemberIdResponseControllerDto(memberID));
@@ -162,8 +157,22 @@ public class MemberApiController {
             @RequestBody @Valid MemberBulkDeleteRequestControllerDto dto,
             @RequestHeader("user_pk") String uid){
 
-        memberInfoService.delete(dto.getMemberIDs());
-        memberLeaveAbsenceService.delete(dto.getMemberIDs());
+        Set<String> memberIDs = dto.getMemberIDs();
+        Set<Integer> memberInfoIDs = memberIDs.stream()
+                .map(memberID -> {
+                    return memberInfoService.findByMember(memberService.findById(memberID).toEntity()).toControllerDto().getId();
+                })
+                .collect(Collectors.toSet());
+
+        Set<Integer> memberLeaveAbsenceIDs = memberIDs.stream()
+                .map(memberID -> {
+                    return memberLeaveAbsenceService.findByMember(memberService.findById(memberID).toEntity()).toControllerDto().getId();
+                })
+                .collect(Collectors.toSet());
+
+
+        memberInfoService.delete(memberInfoIDs);
+        memberLeaveAbsenceService.delete(memberLeaveAbsenceIDs);
         memberService.delete(dto.getMemberIDs());
 
         return ResponseEntity.ok(new MessageDto("총 ("+dto.getMemberIDs().size()+")개의 Member를 성공적으로 삭제했습니다!"));
@@ -178,13 +187,12 @@ public class MemberApiController {
         memberService.update(memberID, memberUpdateRequestControllerDto.toMemberServiceDto(
                 roleService.findById(memberUpdateRequestControllerDto.getRoleId()).toEntity()));
 
-        MemberInfoFullResponseControllerDto result = memberInfoService.update(memberID, memberUpdateRequestControllerDto.toMemberInfoServiceDto(
+        MemberInfoFullResponseControllerDto result = memberInfoService.update(memberService.findById(memberID).toEntity(), memberUpdateRequestControllerDto.toMemberInfoServiceDto(
+                memberService.findById(memberID).toEntity(),
                 majorService.findById(memberUpdateRequestControllerDto.getMajorId()).toEntity(),
                 rankService.findById(memberUpdateRequestControllerDto.getRankId()).toEntity()),uid).toControllerDto();
 
-        MemberLeaveAbsenceResponseControllerDto memberLeaveAbsenceResponseControllerDto = memberLeaveAbsenceService.findById(memberID).toControllerDto();
-
-        result.setLeaveAbsence(memberLeaveAbsenceResponseControllerDto.isStatus());
+        result.setStatus(memberService.findById(memberID).toEntity().isStatus());
 
         return ResponseEntity.ok(result);
     }
@@ -198,7 +206,7 @@ public class MemberApiController {
                                 .map(MemberBulkUpdateRequestControllerDto::toMemberServiceDto)
                                 .collect(Collectors.toList()));
 
-        memberInfoService.update(dtos.stream()
+        memberInfoService.updateAll(dtos.stream()
                 .map(MemberBulkUpdateRequestControllerDto::toMemberInfoServiceDto)
                 .collect(Collectors.toList()), uid);
 

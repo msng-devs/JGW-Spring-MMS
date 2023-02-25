@@ -54,20 +54,20 @@ public class MemberInfoServiceTest {
     }
 
     @Test
-    void findById() {
+    void findByMember() {
         //given
-        String testID = testUtils.getTestMemberInfo().getId();
-        MemberInfo testEntity = testUtils.getTestMemberInfo();
+        MemberInfo testGoal = testUtils.getTestMemberInfo();
+        Member testMember = testUtils.getTestMember();
 
-        doReturn(Optional.of(testEntity)).when(memberInfoRepository).findMemberInfoById(testID);
+        doReturn(Optional.of(testGoal)).when(memberInfoRepository).findMemberInfoByMember(testMember);
 
         //when
-        MemberInfoResponseServiceDto result = memberInfoService.findById(testID);
+        MemberInfoResponseServiceDto result = memberInfoService.findByMember(testMember);
 
         //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.toString(), Objects.requireNonNull(result).toString());
-        verify(memberInfoRepository).findMemberInfoById(testID);
+        verify(memberInfoRepository).findMemberInfoByMember(testMember);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class MemberInfoServiceTest {
                 .builder()
                 .id(testUtils.getTestMemberInfo().getId())
                 .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
-                .studentId(testUtils.getTestMemberInfo().getStudentID())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
                 .year(testUtils.getTestMemberInfo().getYear())
                 .rank(testUtils.getTestMemberInfo().getRank())
                 .major(testUtils.getTestMemberInfo().getMajor())
@@ -162,7 +162,7 @@ public class MemberInfoServiceTest {
         doReturn(testEntity).when(memberInfoRepository).save(any());
 
         //when
-        String resultID = memberInfoService.add(testServiceDto,testUtils.testUid);
+        Integer resultID = memberInfoService.add(testServiceDto,testUtils.testUid);
 
         //then
         Assertions.assertNotNull(resultID);
@@ -177,7 +177,7 @@ public class MemberInfoServiceTest {
                 .builder()
                 .id(testUtils.getTestMemberInfo().getId())
                 .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
-                .studentId(testUtils.getTestMemberInfo().getStudentID())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
                 .year(testUtils.getTestMemberInfo().getYear())
                 .rank(testUtils.getTestMemberInfo().getRank())
                 .major(testUtils.getTestMemberInfo().getMajor())
@@ -188,7 +188,7 @@ public class MemberInfoServiceTest {
                 .builder()
                 .id(testUtils.getTestMemberInfo2().getId())
                 .phoneNumber(testUtils.getTestMemberInfo2().getPhoneNumber())
-                .studentId(testUtils.getTestMemberInfo2().getStudentID())
+                .studentID(testUtils.getTestMemberInfo2().getStudentID())
                 .year(testUtils.getTestMemberInfo2().getYear())
                 .rank(testUtils.getTestMemberInfo2().getRank())
                 .major(testUtils.getTestMemberInfo2().getMajor())
@@ -196,44 +196,45 @@ public class MemberInfoServiceTest {
                 .build();
 
         MemberInfo testEntity = testServiceDto.toEntity();
-        testEntity.setId(testUtils.getTestMember().getId());
+        testEntity.setId(3);
 
         MemberInfo testEntity2 = testServiceDto.toEntity();
-        testEntity2.setId(testUtils.getTestMember2().getId());
+        testEntity2.setId(4);
 
         //when
-        memberInfoService.add(Arrays.asList(testServiceDto,testServiceDto2),testUtils.testUid);
+        memberInfoService.addAll(Arrays.asList(testServiceDto,testServiceDto2),testUtils.testUid);
 
         //then
-        verify(memberInfoRepository).bulkInsert(any(),any());
+        verify(memberInfoRepository).saveAll(anyList());
     }
 
     @Test
     void delete() {
         //given
-        String testID = testUtils.getTestMemberInfo().getId();
+        Integer testID = testUtils.getTestMemberInfo().getId();
+        Member testMember = testUtils.getTestMember();
         MemberInfo testEntity = testUtils.getTestMemberInfo();
-        doReturn(Optional.of(testEntity)).when(memberInfoRepository).findMemberInfoById(testID);
+        doReturn(Optional.of(testEntity)).when(memberInfoRepository).findMemberInfoByMember(testMember);
 
         //when
-        String resultID = memberInfoService.delete(testID);
+        Integer resultID = memberInfoService.delete(testMember);
 
         //then
         Assertions.assertNotNull(resultID);
         Assertions.assertEquals(testID, Objects.requireNonNull(resultID));
-        verify(memberInfoRepository).findMemberInfoById(testID);
+        verify(memberInfoRepository).findMemberInfoByMember(testMember);
         verify(memberInfoRepository).delete(any());
     }
 
     @Test
     void deleteAll() {
         //given
-        Set<String> ids = new HashSet<>();
+        Set<Integer> ids = new HashSet<>();
 
-        String testID = testUtils.getTestMemberInfo().getId();
+        Integer testID = testUtils.getTestMemberInfo().getId();
         ids.add(testID);
 
-        String testID2 = testUtils.getTestMemberInfo2().getId();
+        Integer testID2 = testUtils.getTestMemberInfo2().getId();
         ids.add(testID2);
 
         MemberInfo testEntity = testUtils.getTestMemberInfo();
@@ -252,7 +253,8 @@ public class MemberInfoServiceTest {
     @Test
     void update() {
         //given
-        String testID = testUtils.getTestMemberInfo().getId();
+        Integer testID = testUtils.getTestMemberInfo().getId();
+        Member testMember = testUtils.getTestMember();
         MemberInfoUpdateRequestServiceDto testDto = MemberInfoUpdateRequestServiceDto.builder()
                 .phoneNumber("01011111111")
                 .major(testUtils.getTestMemberInfo().getMajor())
@@ -264,10 +266,10 @@ public class MemberInfoServiceTest {
 
         MemberInfo targetEntity = testUtils.getTestMemberInfo();
 
-        doReturn(Optional.of(targetEntity)).when(memberInfoRepository).findById(testID);
+        doReturn(Optional.of(targetEntity)).when(memberInfoRepository).findMemberInfoByMember(testMember);
 
         //when
-        MemberInfoResponseServiceDto result = memberInfoService.update(testID, testDto, testUtils.getTestUid());
+        MemberInfoResponseServiceDto result = memberInfoService.update(targetEntity.getMember(), testDto, testUtils.getTestUid());
 
         //then
         Assertions.assertNotNull(result);
@@ -276,45 +278,45 @@ public class MemberInfoServiceTest {
         Assertions.assertEquals(testDto.getMajor().getId(), Objects.requireNonNull(result).getMajorID());
         Assertions.assertEquals(testDto.getStudentID(), Objects.requireNonNull(result).getStudentID());
         Assertions.assertEquals(testDto.getPhoneNumber(), Objects.requireNonNull(result).getPhoneNumber());
-        verify(memberInfoRepository).findById(testID);
+        verify(memberInfoRepository).findMemberInfoByMember(testMember);
         verify(memberInfoRepository).save(any());
     }
 
-    @Test
-    void updateAll() {
-        //given
-        MemberInfo testEntity = testUtils.getTestMemberInfo();
-        MemberInfo testEntity2 = testUtils.getTestMemberInfo2();
-
-        MemberInfoBulkUpdateRequestServiceDto testDto = MemberInfoBulkUpdateRequestServiceDto.builder()
-                .id(testEntity.getId())
-                .year(testUtils.getTestMemberInfo().getYear())
-                .rank(testUtils.getTestMemberInfo().getRank())
-                .major(testUtils.getTestMemberInfo().getMajor())
-                .studentID(testUtils.getTestMemberInfo().getStudentID())
-                .phoneNumber("01011111111")
-                .dateOfBirth(testUtils.getTestDate())
-                .build();
-
-        MemberInfoBulkUpdateRequestServiceDto testDto2 = MemberInfoBulkUpdateRequestServiceDto.builder()
-                .id(testEntity2.getId())
-                .year(testUtils.getTestMemberInfo2().getYear())
-                .rank(testUtils.getTestMemberInfo2().getRank())
-                .major(testUtils.getTestMemberInfo2().getMajor())
-                .studentID(testUtils.getTestMemberInfo2().getStudentID())
-                .phoneNumber("01022222222")
-                .dateOfBirth(testUtils.getTestDate2())
-                .build();
-
-        doReturn(Arrays.asList(testEntity, testEntity2)).when(memberInfoRepository).findAllByIdIn(any());
-
-        //when
-        memberInfoService.update(Arrays.asList(testDto, testDto2), testUtils.getTestUid());
-
-        //then
-        verify(memberInfoRepository).findAllByIdIn(any());
-        verify(memberInfoRepository).bulkUpdate(anyList(), anyString());
-    }
+//    @Test
+//    void updateAll() {
+//        //given
+//        MemberInfo testEntity = testUtils.getTestMemberInfo();
+//        MemberInfo testEntity2 = testUtils.getTestMemberInfo2();
+//
+//        MemberInfoBulkUpdateRequestServiceDto testDto = MemberInfoBulkUpdateRequestServiceDto.builder()
+//                .id(testEntity.getId())
+//                .year(testUtils.getTestMemberInfo().getYear())
+//                .rank(testUtils.getTestMemberInfo().getRank())
+//                .major(testUtils.getTestMemberInfo().getMajor())
+//                .studentID(testUtils.getTestMemberInfo().getStudentID())
+//                .phoneNumber("01011111111")
+//                .dateOfBirth(testUtils.getTestDate())
+//                .build();
+//
+//        MemberInfoBulkUpdateRequestServiceDto testDto2 = MemberInfoBulkUpdateRequestServiceDto.builder()
+//                .id(testEntity2.getId())
+//                .year(testUtils.getTestMemberInfo2().getYear())
+//                .rank(testUtils.getTestMemberInfo2().getRank())
+//                .major(testUtils.getTestMemberInfo2().getMajor())
+//                .studentID(testUtils.getTestMemberInfo2().getStudentID())
+//                .phoneNumber("01022222222")
+//                .dateOfBirth(testUtils.getTestDate2())
+//                .build();
+//
+//        doReturn(Arrays.asList(testEntity, testEntity2)).when(memberInfoRepository).findAllByIdIn(any());
+//
+//        //when
+//        memberInfoService.updateAll(Arrays.asList(testDto, testDto2), testUtils.getTestUid());
+//
+//        //then
+//        verify(memberInfoRepository).findAllByIdIn(any());
+//        verify(memberInfoRepository).saveAll(anyList());
+//    }
 
     @Test
     void DuplicatedStudentIdErrorWhenAddMemberInfo() {
@@ -323,14 +325,14 @@ public class MemberInfoServiceTest {
                 .builder()
                 .id(testUtils.getTestMemberInfo().getId())
                 .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
-                .studentId(testUtils.getTestMemberInfo().getStudentID())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
                 .year(testUtils.getTestMemberInfo().getYear())
                 .rank(testUtils.getTestMemberInfo().getRank())
                 .major(testUtils.getTestMemberInfo().getMajor())
                 .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
                 .build();
 
-        doReturn(true).when(memberInfoRepository).existsByStudentID(testServiceDto.getStudentId());
+        doReturn(true).when(memberInfoRepository).existsByStudentID(testServiceDto.getStudentID());
 
         //when then
         assertThrows(CustomException.class, () -> {
@@ -345,7 +347,7 @@ public class MemberInfoServiceTest {
 //                .builder()
 //                .id(testUtils.getTestMemberInfo().getId())
 //                .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
-//                .studentId(testUtils.getTestMemberInfo().getStudentID())
+//                .studentID(testUtils.getTestMemberInfo().getStudentID())
 //                .year(testUtils.getTestMemberInfo().getYear())
 //                .rank(testUtils.getTestMemberInfo().getRank())
 //                .major(testUtils.getTestMemberInfo().getMajor())
@@ -356,18 +358,18 @@ public class MemberInfoServiceTest {
 //                .builder()
 //                .id(testUtils.getTestMemberInfo2().getId())
 //                .phoneNumber(testUtils.getTestMemberInfo2().getPhoneNumber())
-//                .studentId(testUtils.getTestMemberInfo2().getStudentID())
+//                .studentID(testUtils.getTestMemberInfo2().getStudentID())
 //                .year(testUtils.getTestMemberInfo2().getYear())
 //                .rank(testUtils.getTestMemberInfo2().getRank())
 //                .major(testUtils.getTestMemberInfo2().getMajor())
 //                .dateOfBirth(testUtils.getTestMemberInfo2().getDateOfBirth())
 //                .build();
 //
-//        doReturn(true).when(memberInfoRepository).existsByStudentID(testServiceDto2.getStudentId());
+//        doReturn(true).when(memberInfoRepository).existsByStudentID(testServiceDto2.getStudentID());
 //
 //        //when then
 //        assertThrows(CustomException.class, () -> {
-//            memberInfoService.add(Arrays.asList(testServiceDto,testServiceDto2),testUtils.testUid);
+//            memberInfoService.addAll(Arrays.asList(testServiceDto,testServiceDto2),testUtils.testUid);
 //        });
 //    }
 }

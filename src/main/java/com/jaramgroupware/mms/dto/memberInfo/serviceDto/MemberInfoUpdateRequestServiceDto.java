@@ -19,6 +19,7 @@ import java.time.LocalDate;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberInfoUpdateRequestServiceDto {
 
+    private Member member;
     private String phoneNumber;
     private Major major;
     private Rank rank;
@@ -28,6 +29,7 @@ public class MemberInfoUpdateRequestServiceDto {
 
     public MemberInfo toEntity(){
         return MemberInfo.builder()
+                .member(member)
                 .phoneNumber(phoneNumber)
                 .studentID(studentID)
                 .major(major)

@@ -5,7 +5,7 @@ import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsenceRepository;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceUpdateRequestServiceDto;
@@ -25,8 +25,7 @@ import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anySet;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ComponentScan
 @ActiveProfiles("test")
@@ -54,18 +53,18 @@ public class MemberLeaveAbsenceServiceTest {
         //given
         MemberLeaveAbsenceAddRequestServiceDto testServiceDto = MemberLeaveAbsenceAddRequestServiceDto
                 .builder()
-                .id(testUtils.getTestMemberLeaveAbsence().getId())
-                .member(testUtils.getTestMemberLeaveAbsence().getMember())
+                .member(testUtils.getTestMember())
                 .status(testUtils.getTestMemberLeaveAbsence().isStatus())
                 .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence().getExpectedDateReturnSchool())
                 .build();
 
         MemberLeaveAbsence testEntity = testServiceDto.toEntity();
+        testEntity.setId(testUtils.getTestMemberLeaveAbsence().getId());
 
         doReturn(testEntity).when(memberLeaveAbsenceRepository).save(any());
 
         //when
-        String resultID = memberLeaveAbsenceService.add(testServiceDto);
+        Integer resultID = memberLeaveAbsenceService.add(testServiceDto);
 
         //then
         Assertions.assertNotNull(resultID);
@@ -74,41 +73,9 @@ public class MemberLeaveAbsenceServiceTest {
     }
 
     @Test
-    void addAll() {
-        //given
-        MemberLeaveAbsenceAddRequestServiceDto testServiceDto = MemberLeaveAbsenceAddRequestServiceDto
-                .builder()
-                .id(testUtils.getTestMemberLeaveAbsence().getId())
-                .member(testUtils.getTestMemberLeaveAbsence().getMember())
-                .status(testUtils.getTestMemberLeaveAbsence().isStatus())
-                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence().getExpectedDateReturnSchool())
-                .build();
-
-        MemberLeaveAbsenceAddRequestServiceDto testServiceDto2 = MemberLeaveAbsenceAddRequestServiceDto
-                .builder()
-                .id(testUtils.getTestMemberLeaveAbsence2().getId())
-                .member(testUtils.getTestMemberLeaveAbsence2().getMember())
-                .status(testUtils.getTestMemberLeaveAbsence2().isStatus())
-                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence2().getExpectedDateReturnSchool())
-                .build();
-
-        MemberLeaveAbsence testEntity = testServiceDto.toEntity();
-        testEntity.setId(testUtils.getTestMemberLeaveAbsence().getId());
-
-        MemberLeaveAbsence testEntity2 = testServiceDto.toEntity();
-        testEntity2.setId(testUtils.getTestMemberLeaveAbsence().getId());
-
-        //when
-        memberLeaveAbsenceService.add(Arrays.asList(testServiceDto,testServiceDto2));
-
-        //then
-        verify(memberLeaveAbsenceRepository).bulkInsert(any());
-    }
-
-    @Test
     void findById() {
         //given
-        String testID = testUtils.getTestMemberLeaveAbsence().getId();
+        Integer testID = testUtils.getTestMemberLeaveAbsence().getId();
         MemberLeaveAbsence testEntity = testUtils.getTestMemberLeaveAbsence();
 
         doReturn(Optional.of(testEntity)).when(memberLeaveAbsenceRepository).findMemberLeaveAbsenceById(testID);
@@ -145,14 +112,31 @@ public class MemberLeaveAbsenceServiceTest {
     }
 
     @Test
+    void findByMember() {
+        //given
+        Member testMember = testUtils.getTestMember();
+        MemberLeaveAbsence testEntity = testUtils.getTestMemberLeaveAbsence();
+
+        doReturn(Optional.of(testEntity)).when(memberLeaveAbsenceRepository).findMemberLeaveAbsenceByMember(testMember);
+
+        //when
+        MemberLeaveAbsenceResponseServiceDto result = memberLeaveAbsenceService.findByMember(testMember);
+
+        //then
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(result.toString(), Objects.requireNonNull(result).toString());
+        verify(memberLeaveAbsenceRepository).findMemberLeaveAbsenceByMember(testMember);
+    }
+
+    @Test
     void delete() {
         //given
-        String testID = testUtils.getTestMemberLeaveAbsence().getId();
+        Integer testID = 1;
         MemberLeaveAbsence testEntity = testUtils.getTestMemberLeaveAbsence();
         doReturn(Optional.of(testEntity)).when(memberLeaveAbsenceRepository).findMemberLeaveAbsenceById(testID);
 
         //when
-        String resultID = memberLeaveAbsenceService.delete(testID);
+        Integer resultID = memberLeaveAbsenceService.delete(testID);
 
         //then
         Assertions.assertNotNull(resultID);
@@ -164,12 +148,12 @@ public class MemberLeaveAbsenceServiceTest {
     @Test
     void deleteAll() {
         //given
-        Set<String> ids = new HashSet<>();
+        Set<Integer> ids = new HashSet<>();
 
-        String testID = testUtils.getTestMemberLeaveAbsence().getId();
+        Integer testID = testUtils.getTestMemberLeaveAbsence().getId();
         ids.add(testID);
 
-        String testID2 = testUtils.getTestMemberLeaveAbsence2().getId();
+        Integer testID2 = testUtils.getTestMemberLeaveAbsence2().getId();
         ids.add(testID2);
 
         MemberLeaveAbsence testEntity = testUtils.getTestMemberLeaveAbsence();
@@ -188,7 +172,7 @@ public class MemberLeaveAbsenceServiceTest {
     @Test
     void update() {
         //given
-        String testID = testUtils.getTestMemberLeaveAbsence().getId();
+        Integer testID = testUtils.getTestMemberLeaveAbsence().getId();
         MemberLeaveAbsenceUpdateRequestServiceDto testDto = MemberLeaveAbsenceUpdateRequestServiceDto.builder()
                 .status(testUtils.getTestMemberLeaveAbsence().isStatus())
                 .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence().getExpectedDateReturnSchool())

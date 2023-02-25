@@ -58,8 +58,6 @@ public class MemberAddRequestControllerDto {
     @NotNull(message = "휴학 여부가 비여있습니다!")
     private boolean leaveAbsence;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull(message = "생년 월일이 비여있습니다!")
     private LocalDate dateOfBirth;
 
     @NotNull(message = "계정 활성 상태 여부가 비여있습니다!")
@@ -67,8 +65,8 @@ public class MemberAddRequestControllerDto {
 
     public MemberAddRequestServiceDto toMemberAddServiceDto(){
         return MemberAddRequestServiceDto.builder()
-                .name(name)
                 .id(id)
+                .name(name)
                 .email(email)
                 .role(Role.builder().id(roleId).build())
                 .status(status)
@@ -77,21 +75,13 @@ public class MemberAddRequestControllerDto {
 
     public MemberInfoAddRequestServiceDto toMemberInfoAddServiceDto(){
         return MemberInfoAddRequestServiceDto.builder()
-                .id(id)
-                .phoneNumber(phoneNumber)
-                .studentId(studentID)
-                .major(Major.builder().id(majorId).build())
-                .rank(Rank.builder().id(rankId).build())
-                .year(year)
-                .dateOfBirth(dateOfBirth)
-                .build();
-    }
-
-    public MemberLeaveAbsenceAddRequestServiceDto toMemberLeaveAbsenceAddServiceDto(){
-        return MemberLeaveAbsenceAddRequestServiceDto.builder()
-                .id(id)
                 .member(Member.builder().id(id).build())
-                .status(leaveAbsence)
+                .phoneNumber(phoneNumber)
+                .studentID(studentID)
+                .year(year)
+                .rank(Rank.builder().id(rankId).build())
+                .major(Major.builder().id(majorId).build())
+                .dateOfBirth(dateOfBirth)
                 .build();
     }
 

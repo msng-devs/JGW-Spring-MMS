@@ -14,9 +14,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class MemberInfoAddRequestServiceDto {
-    private String id;
+    private Integer id;
+    private Member member;
     private String phoneNumber;
-    private String studentId;
+    private String studentID;
     private Integer year;
     private Rank rank;
     private Major major;
@@ -26,9 +27,9 @@ public class MemberInfoAddRequestServiceDto {
     public MemberInfo toEntity(){
         return MemberInfo.builder()
                 .id(id)
-                .member(Member.builder().id(id).build())
+                .member(member)
                 .phoneNumber(phoneNumber)
-                .studentID(studentId)
+                .studentID(studentID)
                 .year((year != null)? year : LocalDate.now().getYear()-1984)
                 .rank(rank)
                 .major(major)

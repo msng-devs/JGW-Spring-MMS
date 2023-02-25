@@ -12,5 +12,5 @@ import lombok.*;
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberLeaveAbsenceIdResponseControllerDto {
-    private String memberId;
+    private Integer id;
 }

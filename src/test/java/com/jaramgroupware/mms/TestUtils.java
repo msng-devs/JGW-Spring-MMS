@@ -127,7 +127,7 @@ public class TestUtils {
                 .status(true)
                 .build();
         testMemberInfo = MemberInfo.builder()
-                .id(testMember.getId())
+                .id(1)
                 .member(testMember)
                 .phoneNumber("01000000000")
                 .studentID("2022000004")
@@ -141,7 +141,7 @@ public class TestUtils {
         testMemberInfo.setModifiedBy("system");
         testMemberInfo.setCreateBy("system");
         testMemberInfo2 = MemberInfo.builder()
-                .id(testMember2.getId())
+                .id(2)
                 .member(testMember2)
                 .phoneNumber("01000000011")
                 .studentID("2022000005")
@@ -155,13 +155,13 @@ public class TestUtils {
         testMemberInfo2.setModifiedBy("system2");
         testMemberInfo2.setCreateBy("system2");
         testMemberLeaveAbsence = MemberLeaveAbsence.builder()
-                .id(testMember.getId())
+                .id(1)
                 .member(testMember)
                 .status(true)
                 .expectedDateReturnSchool(testReturnDate)
                 .build();
         testMemberLeaveAbsence2 = MemberLeaveAbsence.builder()
-                .id(testMember2.getId())
+                .id(2)
                 .member(testMember2)
                 .status(true)
                 .expectedDateReturnSchool(testReturnDate2)

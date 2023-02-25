@@ -12,12 +12,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class MemberLeaveAbsenceResponseServiceDto {
-    private String id;
+    private Integer id;
+    private String memberId;
     private boolean status;
     private LocalDate expectedDateReturnSchool;
 
     public MemberLeaveAbsenceResponseServiceDto(MemberLeaveAbsence memberLeaveAbsence) {
         id = memberLeaveAbsence.getId();
+        memberId = memberLeaveAbsence.getMember().getId();
         status = memberLeaveAbsence.isStatus();
         expectedDateReturnSchool = memberLeaveAbsence.getExpectedDateReturnSchool();
     }
@@ -25,6 +27,7 @@ public class MemberLeaveAbsenceResponseServiceDto {
     public MemberLeaveAbsenceResponseControllerDto toControllerDto() {
         return MemberLeaveAbsenceResponseControllerDto.builder()
                 .id(id)
+                .memberId(memberId)
                 .status(status)
                 .expectedDateReturnSchool(expectedDateReturnSchool)
                 .build();

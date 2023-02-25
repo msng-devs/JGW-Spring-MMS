@@ -204,30 +204,6 @@ class MemberServiceTest {
         verify(memberRepository).findAll(testSpec,testPage);
     }
 
-//    @Test
-//    void findAllRank() {
-//        //given
-//        List<Member> testList = new ArrayList<Member>();
-//
-//        Member testEntity1 = testUtils.getTestMember();
-//        testList.add(testEntity1);
-//
-//        Member testEntity2 = testUtils.getTestMember2();
-//        testList.add(testEntity2);
-//
-//        Set<Rank> testRank = testList.stream().map(Member::getRank).collect(Collectors.toSet());
-//
-//        doReturn(Optional.of(testList)).when(memberRepository).findTargetMember(testRank);
-//
-//        //when
-//        List<MemberResponseServiceDto> results = memberService.findAll(testRank);
-//
-//        //then
-//        Assertions.assertNotNull(results);
-//        Assertions.assertEquals(testList.stream().map(MemberResponseServiceDto::new).collect(Collectors.toList()).toString(), Objects.requireNonNull(results).toString());
-//        verify(memberRepository).findTargetMember(testRank);
-//    }
-//
     @Test
     void delete() {
 
@@ -279,7 +255,6 @@ class MemberServiceTest {
                 .name(testUtils.getTestMember().getName())
                 .role(testUtils.getTestMember().getRole())
                 .email(testUtils.getTestMember().getEmail())
-                .status(testUtils.getTestMember().isStatus())
                 .build();
 
         Member targetEntity = testUtils.getTestMember();
@@ -293,7 +268,6 @@ class MemberServiceTest {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(testDto.getRole().getId(),Objects.requireNonNull(result).getRoleID());
         Assertions.assertEquals(testDto.getEmail(),Objects.requireNonNull(result).getEmail());
-        Assertions.assertEquals(testDto.isStatus(),Objects.requireNonNull(result).isStatus());
         verify(memberRepository).findById(testID);
         verify(memberRepository).save(any());
 
@@ -311,7 +285,6 @@ class MemberServiceTest {
                 .name(testUtils.getTestMember().getName())
                 .role(testUtils.getTestMember().getRole())
                 .email(testUtils.getTestMember().getEmail())
-                .status(testUtils.getTestMember().isStatus())
                 .build();
 
         MemberBulkUpdateRequestServiceDto testDto2 = MemberBulkUpdateRequestServiceDto.builder()
@@ -319,7 +292,6 @@ class MemberServiceTest {
                 .name(testUtils.getTestMember2().getName())
                 .role(testUtils.getTestMember2().getRole())
                 .email(testUtils.getTestMember2().getEmail())
-                .status(testUtils.getTestMember2().isStatus())
                 .build();
 
         doReturn(Arrays.asList(testEntity,testEntity2)).when(memberRepository).findAllByIdIn(any());

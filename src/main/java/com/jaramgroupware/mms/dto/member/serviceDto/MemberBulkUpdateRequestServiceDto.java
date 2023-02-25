@@ -22,7 +22,6 @@ public class MemberBulkUpdateRequestServiceDto {
     private String name;
     private Role role;
     private String email;
-    private boolean status;
 
     public Member toEntity(){
         return Member.builder()
@@ -30,7 +29,6 @@ public class MemberBulkUpdateRequestServiceDto {
                 .email(email)
                 .name(name)
                 .role(role)
-                .status(status)
                 .build();
     }
     @Override

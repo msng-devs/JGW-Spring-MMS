@@ -1,5 +1,6 @@
 package com.jaramgroupware.mms.service;
 
+import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsenceRepository;
@@ -34,9 +35,9 @@ public class MemberLeaveAbsenceService {
     private final MemberLeaveAbsenceRepository memberLeaveAbsenceRepository;
 
     @Transactional(readOnly = true)
-    public MemberLeaveAbsenceResponseServiceDto findById(String uid){
+    public MemberLeaveAbsenceResponseServiceDto findById(Integer id){
 
-        MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceById(uid)
+        MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceById(id)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_TIMETABLE_ID));
 
         return new MemberLeaveAbsenceResponseServiceDto(targetMemberLeaveAbsence);
@@ -52,45 +53,35 @@ public class MemberLeaveAbsenceService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public MemberLeaveAbsenceResponseServiceDto findByMember(Member member){
+
+        MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceByMember(member)
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_INFO_ID));
+
+        return new MemberLeaveAbsenceResponseServiceDto(targetMemberLeaveAbsence);
+    }
+
     @Transactional
-    public String add(MemberLeaveAbsenceAddRequestServiceDto memberLeaveAbsenceAddRequestServiceDto){
+    public Integer add(MemberLeaveAbsenceAddRequestServiceDto memberLeaveAbsenceAddRequestServiceDto){
         MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceAddRequestServiceDto.toEntity();
         return memberLeaveAbsenceRepository.save(targetMemberLeaveAbsence).getId();
     }
 
     @Transactional
-    public void add(List<MemberLeaveAbsenceAddRequestServiceDto> memberLeaveAbsenceAddRequestServiceDtos){
-        List<MemberLeaveAbsenceAddRequestServiceDto> batchDto = new ArrayList<>();
-        for (MemberLeaveAbsenceAddRequestServiceDto dto:memberLeaveAbsenceAddRequestServiceDtos) {
-            batchDto.add(dto);
-            if(batchDto.size() == batchSize){
-                batchAdd(batchDto);
-            }
-        }
-        if(!batchDto.isEmpty()) {
-            batchAdd(batchDto);
-        }
-    }
-
-    public void batchAdd(List<MemberLeaveAbsenceAddRequestServiceDto> batchDto){
-        memberLeaveAbsenceRepository.bulkInsert(batchDto.stream().map(MemberLeaveAbsenceAddRequestServiceDto::toEntity).collect(Collectors.toList()));
-        batchDto.clear();
-    }
-
-    @Transactional
-    public String delete(String id){
+    public Integer delete(Integer id){
         MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceById(id)
                 .orElseThrow(()->new IllegalArgumentException(""));
 
         memberLeaveAbsenceRepository.delete(targetMemberLeaveAbsence);
 
-        return id;
+        return targetMemberLeaveAbsence.getId();
     }
 
     @Transactional
-    public Set<String> delete(Set<String> ids){
-        Set<String> batchDto = new HashSet<>();
-        for (String id : ids) {
+    public Set<Integer> delete(Set<Integer> ids){
+        Set<Integer> batchDto = new HashSet<>();
+        for (Integer id : ids) {
             batchDto.add(id);
             if(batchDto.size() == batchSize){
                 batchDelete(batchDto);
@@ -103,7 +94,7 @@ public class MemberLeaveAbsenceService {
         return ids;
     }
 
-    private void batchDelete(Set<String> batchDto){
+    private void batchDelete(Set<Integer> batchDto){
         if(memberLeaveAbsenceRepository.findAllByIdIn(batchDto).size() != batchDto.size())
             throw new IllegalArgumentException("찾을 수 없는 ID가 들어있습니다.");
 
@@ -112,7 +103,7 @@ public class MemberLeaveAbsenceService {
     }
 
     @Transactional
-    public MemberLeaveAbsenceResponseServiceDto update(String id, MemberLeaveAbsenceUpdateRequestServiceDto memberLeaveAbsenceUpdateRequestServiceDto){
+    public MemberLeaveAbsenceResponseServiceDto update(Integer id, MemberLeaveAbsenceUpdateRequestServiceDto memberLeaveAbsenceUpdateRequestServiceDto){
 
         MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceById(id)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_LEAVE_ABSENCE_ID));

@@ -12,6 +12,7 @@ import lombok.*;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberInfoResponseControllerDto {
 
+    private String memberID;
     private String email;
     private String name;
     private String studentID;
@@ -20,5 +21,5 @@ public class MemberInfoResponseControllerDto {
     private Integer rankID;
     private String rankName;
     private Integer year;
-    private boolean leaveAbsence;
+    private boolean status;
 }

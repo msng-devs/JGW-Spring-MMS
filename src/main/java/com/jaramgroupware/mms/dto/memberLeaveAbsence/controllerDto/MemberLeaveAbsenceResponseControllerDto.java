@@ -13,7 +13,8 @@ import java.time.LocalDate;
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberLeaveAbsenceResponseControllerDto {
-    private String id;
+    private Integer id;
+    private String memberId;
     private boolean status;
     private LocalDate expectedDateReturnSchool;
 }

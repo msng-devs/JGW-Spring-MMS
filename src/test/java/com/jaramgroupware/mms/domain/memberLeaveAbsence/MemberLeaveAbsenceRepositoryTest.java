@@ -54,12 +54,25 @@ public class MemberLeaveAbsenceRepositoryTest {
     }
 
     @Test
-    void findMemberAbsenceById() {
+    void findMemberLeaveAbsenceById() {
         //given
         MemberLeaveAbsence testGoal = testUtils.getTestMemberLeaveAbsence();
 
         //when
         MemberLeaveAbsence result = memberLeaveAbsenceRepository.findMemberLeaveAbsenceById(testGoal.getId())
+                .orElseThrow(IllegalArgumentException::new);
+
+        //then
+        assertEquals(result.toString(),testGoal.toString());
+    }
+
+    @Test
+    void findMemberLeaveAbsenceByMember() {
+        //given
+        MemberLeaveAbsence testGoal = testUtils.getTestMemberLeaveAbsence();
+
+        //when
+        MemberLeaveAbsence result = memberLeaveAbsenceRepository.findMemberLeaveAbsenceByMember(testGoal.getMember())
                 .orElseThrow(IllegalArgumentException::new);
 
         //then
@@ -110,7 +123,7 @@ public class MemberLeaveAbsenceRepositoryTest {
     void findAllByIdIn(){
         //given
         List<MemberLeaveAbsence> testMemberLeaveAbsences = Arrays.asList(testUtils.getTestMemberLeaveAbsence(),testUtils.getTestMemberLeaveAbsence2());
-        Set<String> testIds = testMemberLeaveAbsences.stream().map(MemberLeaveAbsence::getId).collect(Collectors.toSet());
+        Set<Integer> testIds = testMemberLeaveAbsences.stream().map(MemberLeaveAbsence::getId).collect(Collectors.toSet());
 
         //when
         List<MemberLeaveAbsence> res = memberLeaveAbsenceRepository.findAllByIdIn(testIds);
@@ -132,29 +145,6 @@ public class MemberLeaveAbsenceRepositoryTest {
 //        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence().getId()),is(nullValue()));
 //        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence2().getId()),is(nullValue()));
 //    }
-
-    @Test
-    void bulkInsert(){
-        //given
-        MemberLeaveAbsence testGoal = testUtils.getTestMemberLeaveAbsence();
-        testGoal.setId(testUtils.getTestMember3().getId());
-        testGoal.setMember(testUtils.getTestMember3());
-
-        MemberLeaveAbsence testGoal2 = testUtils.getTestMemberLeaveAbsence2();
-        testGoal2.setId(testUtils.getTestMember4().getId());
-        testGoal2.setMember(testUtils.getTestMember4());
-
-        List<MemberLeaveAbsence> testMemberLeaveAbsences = new ArrayList<>();
-        testMemberLeaveAbsences.add(testGoal);
-        testMemberLeaveAbsences.add(testGoal2);
-
-        //when
-        memberLeaveAbsenceRepository.bulkInsert(testMemberLeaveAbsences);
-
-        //then
-        assertEquals(testEntityManager.find(MemberLeaveAbsence.class,testGoal.getId()).toString(),testGoal.toString());
-        assertEquals(testEntityManager.find(MemberLeaveAbsence.class,testGoal2.getId()).toString(),testGoal2.toString());
-    }
 
 }
 

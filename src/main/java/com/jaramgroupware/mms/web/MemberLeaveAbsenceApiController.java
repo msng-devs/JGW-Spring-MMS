@@ -1,5 +1,7 @@
 package com.jaramgroupware.mms.web;
 
+import com.jaramgroupware.mms.dto.general.controllerDto.MessageDto;
+import com.jaramgroupware.mms.dto.member.controllerDto.MemberBulkDeleteRequestControllerDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceAddRequestControllerDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceIdResponseControllerDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceResponseControllerDto;
@@ -13,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +25,7 @@ import javax.validation.Valid;
 public class MemberLeaveAbsenceApiController {
 
     private final MemberLeaveAbsenceService memberLeaveAbsenceService;
+    private final MemberService memberService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping
@@ -28,7 +33,7 @@ public class MemberLeaveAbsenceApiController {
             @RequestBody @Valid MemberLeaveAbsenceAddRequestControllerDto memberLeaveAbsenceAddRequestControllerDto,
             @RequestHeader("user_pk") String uid) {
 
-        String id = memberLeaveAbsenceService.add(memberLeaveAbsenceAddRequestControllerDto.toServiceDto());
+        Integer id = memberLeaveAbsenceService.add(memberLeaveAbsenceAddRequestControllerDto.toServiceDto());
 
         return ResponseEntity.ok(new MemberLeaveAbsenceIdResponseControllerDto(id));
     }
@@ -39,7 +44,7 @@ public class MemberLeaveAbsenceApiController {
             @RequestHeader("user_pk") String uid,
             @RequestHeader("role_pk") Integer roleID) {
 
-        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.findById(memberId).toControllerDto();
+        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.findByMember(memberService.findById(memberId).toEntity()).toControllerDto();
 
         return ResponseEntity.ok(result);
     }
@@ -49,9 +54,9 @@ public class MemberLeaveAbsenceApiController {
             @PathVariable String memberID,
             @RequestHeader("user_pk") String uid){
 
-        memberLeaveAbsenceService.delete(memberID);
+        Integer result = memberLeaveAbsenceService.delete(memberLeaveAbsenceService.findByMember(memberService.findById(memberID).toEntity()).getId());
 
-        return ResponseEntity.ok(new MemberLeaveAbsenceIdResponseControllerDto(memberID));
+        return ResponseEntity.ok(new MemberLeaveAbsenceIdResponseControllerDto(result));
     }
 
     @PutMapping("{memberID}")
@@ -60,7 +65,7 @@ public class MemberLeaveAbsenceApiController {
             @RequestBody @Valid MemberLeaveAbsenceUpdateRequestControllerDto memberLeaveAbsenceUpdateRequestControllerDto,
             @RequestHeader("user_pk") String uid) {
 
-        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.update(memberID,memberLeaveAbsenceUpdateRequestControllerDto.toServiceDto()).toControllerDto();
+        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.update(memberLeaveAbsenceService.findByMember(memberService.findById(memberID).toEntity()).toControllerDto().getId(),memberLeaveAbsenceUpdateRequestControllerDto.toServiceDto()).toControllerDto();
 
         return ResponseEntity.ok(result);
     }
