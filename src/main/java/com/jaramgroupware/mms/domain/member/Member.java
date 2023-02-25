@@ -48,6 +48,5 @@ public class Member {
     public void update(Member member){
         name = member.getName();
         role = member.getRole();
-        status = member.isStatus();
     }
 }

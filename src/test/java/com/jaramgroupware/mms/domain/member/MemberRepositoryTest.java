@@ -135,50 +135,6 @@ class MemberRepositoryTest {
 //    }
 
     @Test
-    void bulkInsert(){
-        //given
-        Member testGoal = testUtils.getTestMember();
-        testGoal.setId("QWASZXERDFCVTYGHBNUIJKMLOPQQ");
-        testGoal.setEmail("test1@test.com");
-
-        Member testGoal2 = testUtils.getTestMember2();
-        testGoal2.setId("ZXASQWCVDFERBNGHTYMJKLUIOPIS");
-        testGoal2.setEmail("test2@test.com");
-
-        List<Member> testMembers = new ArrayList<>();
-        testMembers.add(testGoal);
-        testMembers.add(testGoal2);
-
-        //when
-        memberRepository.bulkInsert(testMembers);
-
-        //then
-        assertEquals(testEntityManager.find(Member.class,testGoal.getId()).toString(),testGoal.toString());
-        assertEquals(testEntityManager.find(Member.class,testGoal2.getId()).toString(),testGoal2.toString());
-    }
-
-    @Test
-    void bulkUpdate(){
-        //given
-        Member testGoal = testUtils.getTestMember();
-        testGoal.setName("test");
-
-        Member testGoal2 = testUtils.getTestMember2();
-        testGoal2.setName("test");
-
-        List<Member> testMembers = new ArrayList<>();
-        testMembers.add(testGoal);
-        testMembers.add(testGoal2);
-
-        //when
-        memberRepository.bulkUpdate(testMembers);
-
-        //then
-        assertEquals(testEntityManager.find(Member.class,testGoal.getId()).toString(),testGoal.toString());
-        assertEquals(testEntityManager.find(Member.class,testGoal2.getId()).toString(),testGoal2.toString());
-    }
-
-    @Test
     void findAllWithIntegratedSpec(){
         //given
         Member testMember = testUtils.getTestMember();

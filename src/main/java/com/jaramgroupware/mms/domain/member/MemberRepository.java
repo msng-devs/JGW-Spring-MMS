@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member,String>, JpaSpecificationExecutor<Member>,MemberCustomRepository{
+public interface MemberRepository extends JpaRepository<Member,String>, JpaSpecificationExecutor<Member> {
     Optional<Member> findMemberById(String id);
     Optional<List<Member>> findAllBy();
     boolean existsByEmail(String email);

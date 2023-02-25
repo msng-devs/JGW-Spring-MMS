@@ -108,10 +108,10 @@ class MemberServiceTest {
         testEntity2.setId(testUtils.getTestMember2().getId());
 
         //when
-        memberService.add(Arrays.asList(testServiceDto,testServiceDto2));
+        memberService.addAll(Arrays.asList(testServiceDto,testServiceDto2));
 
         //then
-        verify(memberRepository).bulkInsert(any());
+        verify(memberRepository).saveAll(anyList());
     }
 
     @Test
@@ -275,7 +275,6 @@ class MemberServiceTest {
 
     @Test
     void updateAll() {
-
         //given
         Member testEntity = testUtils.getTestMember();
         Member testEntity2 = testUtils.getTestMember2();
@@ -294,14 +293,16 @@ class MemberServiceTest {
                 .email(testUtils.getTestMember2().getEmail())
                 .build();
 
-        doReturn(Arrays.asList(testEntity,testEntity2)).when(memberRepository).findAllByIdIn(any());
+        doReturn(Optional.of(testEntity)).when(memberRepository).findMemberById(testEntity.getId());
+        doReturn(Optional.of(testEntity2)).when(memberRepository).findMemberById(testEntity2.getId());
 
         //when
-        memberService.update(Arrays.asList(testDto,testDto2));
+        memberService.updateAll(Arrays.asList(testDto,testDto2));
 
         //then
-        verify(memberRepository).findAllByIdIn(any());
-        verify(memberRepository).bulkUpdate(anyList());
+        verify(memberRepository).findMemberById(testEntity.getId());
+        verify(memberRepository).findMemberById(testEntity2.getId());
+        verify(memberRepository).saveAll(anyList());
     }
 
     @Test

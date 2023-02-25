@@ -85,25 +85,16 @@ public class MemberService {
     }
 
     @Transactional
-    public void add(List<MemberAddRequestServiceDto> memberAddRequestServiceDto){
-        List<MemberAddRequestServiceDto> batchDto = new ArrayList<>();
-        for (MemberAddRequestServiceDto dto:memberAddRequestServiceDto) {
-            if(memberRepository.existsByEmail(dto.getEmail())) {
-                throw  new CustomException(ErrorCode.DUPLICATED_EMAIL);
-            }
-            batchDto.add(dto);
-            if(batchDto.size() == batchSize){
-                batchAdd(batchDto);
-            }
-        }
-        if(!batchDto.isEmpty()) {
-            batchAdd(batchDto);
-        }
-    }
+    public void addAll(List<MemberAddRequestServiceDto> memberAddRequestServiceDtos){
 
-    public void batchAdd(List<MemberAddRequestServiceDto> batchDto){
-        memberRepository.bulkInsert(batchDto.stream().map(MemberAddRequestServiceDto::toEntity).collect(Collectors.toList()));
-        batchDto.clear();
+        List<Member> members = new ArrayList<>();
+        for(MemberAddRequestServiceDto dto : memberAddRequestServiceDtos) {
+            if (memberRepository.existsByEmail(dto.getEmail())) {
+                throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
+            }
+            members.add(dto.toEntity());
+        }
+        memberRepository.saveAll(members);
     }
 
     @Transactional
@@ -154,25 +145,17 @@ public class MemberService {
     }
 
     @Transactional
-    public void update(List<MemberBulkUpdateRequestServiceDto> updateDtos){
-        List<MemberBulkUpdateRequestServiceDto> batchDto = new ArrayList<>();
-        for (MemberBulkUpdateRequestServiceDto dto:updateDtos) {
-            batchDto.add(dto);
-            if(batchDto.size() == batchSize){
-                batchUpdate(batchDto);
-            }
+    public void updateAll(List<MemberBulkUpdateRequestServiceDto> memberBulkUpdateRequestServiceDtos){
+        List<Member> members = new ArrayList<>();
+        for(MemberBulkUpdateRequestServiceDto dto : memberBulkUpdateRequestServiceDtos) {
+
+            Member targetMember = memberRepository.findMemberById(dto.getId())
+                    .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_ID));
+
+            targetMember.update(dto.toEntity());
+            members.add(targetMember);
         }
-        if(!batchDto.isEmpty()) {
-            batchUpdate(batchDto);
-        }
+        memberRepository.saveAll(members);
     }
 
-    private void batchUpdate(List<MemberBulkUpdateRequestServiceDto> batchDto){
-        Set<String> ids = batchDto.stream().map(MemberBulkUpdateRequestServiceDto::getId).collect(Collectors.toSet());
-        if(memberRepository.findAllByIdIn(ids).size() != ids.size())
-            throw new IllegalArgumentException("찾을 수 없는 ID가 들어있습니다.");
-        memberRepository.bulkUpdate(batchDto.stream().map(MemberBulkUpdateRequestServiceDto::toEntity).collect(Collectors.toList()));
-        batchDto.clear();
-        ids.clear();
-    }
 }
