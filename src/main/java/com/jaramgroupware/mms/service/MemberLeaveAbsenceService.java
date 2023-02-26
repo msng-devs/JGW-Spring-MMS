@@ -15,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -69,8 +71,8 @@ public class MemberLeaveAbsenceService {
     }
 
     @Transactional
-    public Integer delete(Integer id){
-        MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceById(id)
+    public Integer delete(Member member){
+        MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceByMember(member)
                 .orElseThrow(()->new IllegalArgumentException(""));
 
         memberLeaveAbsenceRepository.delete(targetMemberLeaveAbsence);
@@ -103,9 +105,9 @@ public class MemberLeaveAbsenceService {
     }
 
     @Transactional
-    public MemberLeaveAbsenceResponseServiceDto update(Integer id, MemberLeaveAbsenceUpdateRequestServiceDto memberLeaveAbsenceUpdateRequestServiceDto){
+    public MemberLeaveAbsenceResponseServiceDto update(Member member, MemberLeaveAbsenceUpdateRequestServiceDto memberLeaveAbsenceUpdateRequestServiceDto){
 
-        MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceById(id)
+        MemberLeaveAbsence targetMemberLeaveAbsence = memberLeaveAbsenceRepository.findMemberLeaveAbsenceByMember(member)
                 .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_LEAVE_ABSENCE_ID));
 
         targetMemberLeaveAbsence.update(memberLeaveAbsenceUpdateRequestServiceDto.toEntity());

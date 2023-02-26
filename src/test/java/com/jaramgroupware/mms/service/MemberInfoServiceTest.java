@@ -5,7 +5,6 @@ import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoSpecification;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoBulkUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
@@ -29,8 +28,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ComponentScan
 @ActiveProfiles("test")
@@ -282,41 +280,44 @@ public class MemberInfoServiceTest {
         verify(memberInfoRepository).save(any());
     }
 
-//    @Test
-//    void updateAll() {
-//        //given
-//        MemberInfo testEntity = testUtils.getTestMemberInfo();
-//        MemberInfo testEntity2 = testUtils.getTestMemberInfo2();
-//
-//        MemberInfoBulkUpdateRequestServiceDto testDto = MemberInfoBulkUpdateRequestServiceDto.builder()
-//                .id(testEntity.getId())
-//                .year(testUtils.getTestMemberInfo().getYear())
-//                .rank(testUtils.getTestMemberInfo().getRank())
-//                .major(testUtils.getTestMemberInfo().getMajor())
-//                .studentID(testUtils.getTestMemberInfo().getStudentID())
-//                .phoneNumber("01011111111")
-//                .dateOfBirth(testUtils.getTestDate())
-//                .build();
-//
-//        MemberInfoBulkUpdateRequestServiceDto testDto2 = MemberInfoBulkUpdateRequestServiceDto.builder()
-//                .id(testEntity2.getId())
-//                .year(testUtils.getTestMemberInfo2().getYear())
-//                .rank(testUtils.getTestMemberInfo2().getRank())
-//                .major(testUtils.getTestMemberInfo2().getMajor())
-//                .studentID(testUtils.getTestMemberInfo2().getStudentID())
-//                .phoneNumber("01022222222")
-//                .dateOfBirth(testUtils.getTestDate2())
-//                .build();
-//
-//        doReturn(Arrays.asList(testEntity, testEntity2)).when(memberInfoRepository).findAllByIdIn(any());
-//
-//        //when
-//        memberInfoService.updateAll(Arrays.asList(testDto, testDto2), testUtils.getTestUid());
-//
-//        //then
-//        verify(memberInfoRepository).findAllByIdIn(any());
-//        verify(memberInfoRepository).saveAll(anyList());
-//    }
+    //TODO 2번 호출되는 오류 고치기
+    @Test
+    void updateAll() {
+        //given
+        MemberInfo testEntity = testUtils.getTestMemberInfo();
+        MemberInfo testEntity2 = testUtils.getTestMemberInfo2();
+
+        MemberInfoBulkUpdateRequestServiceDto testDto = MemberInfoBulkUpdateRequestServiceDto.builder()
+                .id(testEntity.getId())
+                .year(testUtils.getTestMemberInfo().getYear())
+                .rank(testUtils.getTestMemberInfo().getRank())
+                .major(testUtils.getTestMemberInfo().getMajor())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
+                .phoneNumber("01011111111")
+                .dateOfBirth(testUtils.getTestDate())
+                .build();
+
+        MemberInfoBulkUpdateRequestServiceDto testDto2 = MemberInfoBulkUpdateRequestServiceDto.builder()
+                .id(testEntity2.getId())
+                .year(testUtils.getTestMemberInfo2().getYear())
+                .rank(testUtils.getTestMemberInfo2().getRank())
+                .major(testUtils.getTestMemberInfo2().getMajor())
+                .studentID(testUtils.getTestMemberInfo2().getStudentID())
+                .phoneNumber("01022222222")
+                .dateOfBirth(testUtils.getTestDate2())
+                .build();
+
+        doReturn(Optional.of(testEntity)).when(memberInfoRepository).findMemberInfoByMember(any());
+        doReturn(Optional.of(testEntity2)).when(memberInfoRepository).findMemberInfoByMember(any());
+
+        //when
+        memberInfoService.updateAll(Arrays.asList(testDto, testDto2), testUtils.getTestUid());
+
+        //then
+        verify(memberInfoRepository).findMemberInfoByMember(any());
+        verify(memberInfoRepository).findMemberInfoByMember(any());
+        verify(memberInfoRepository).saveAll(anyList());
+    }
 
     @Test
     void DuplicatedStudentIdErrorWhenAddMemberInfo() {
@@ -340,36 +341,36 @@ public class MemberInfoServiceTest {
         });
     }
 
-//    @Test
-//    void DuplicatedStudentIdErrorWhenAddMemberInfoAll() {
-//        //given
-//        MemberInfoAddRequestServiceDto testServiceDto = MemberInfoAddRequestServiceDto
-//                .builder()
-//                .id(testUtils.getTestMemberInfo().getId())
-//                .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
-//                .studentID(testUtils.getTestMemberInfo().getStudentID())
-//                .year(testUtils.getTestMemberInfo().getYear())
-//                .rank(testUtils.getTestMemberInfo().getRank())
-//                .major(testUtils.getTestMemberInfo().getMajor())
-//                .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
-//                .build();
-//
-//        MemberInfoAddRequestServiceDto testServiceDto2 = MemberInfoAddRequestServiceDto
-//                .builder()
-//                .id(testUtils.getTestMemberInfo2().getId())
-//                .phoneNumber(testUtils.getTestMemberInfo2().getPhoneNumber())
-//                .studentID(testUtils.getTestMemberInfo2().getStudentID())
-//                .year(testUtils.getTestMemberInfo2().getYear())
-//                .rank(testUtils.getTestMemberInfo2().getRank())
-//                .major(testUtils.getTestMemberInfo2().getMajor())
-//                .dateOfBirth(testUtils.getTestMemberInfo2().getDateOfBirth())
-//                .build();
-//
-//        doReturn(true).when(memberInfoRepository).existsByStudentID(testServiceDto2.getStudentID());
-//
-//        //when then
-//        assertThrows(CustomException.class, () -> {
-//            memberInfoService.addAll(Arrays.asList(testServiceDto,testServiceDto2),testUtils.testUid);
-//        });
-//    }
+    @Test
+    void DuplicatedStudentIdErrorWhenAddMemberInfoAll() {
+        //given
+        MemberInfoAddRequestServiceDto testServiceDto = MemberInfoAddRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMemberInfo().getId())
+                .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
+                .year(testUtils.getTestMemberInfo().getYear())
+                .rank(testUtils.getTestMemberInfo().getRank())
+                .major(testUtils.getTestMemberInfo().getMajor())
+                .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
+                .build();
+
+        MemberInfoAddRequestServiceDto testServiceDto2 = MemberInfoAddRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMemberInfo2().getId())
+                .phoneNumber(testUtils.getTestMemberInfo2().getPhoneNumber())
+                .studentID(testUtils.getTestMemberInfo2().getStudentID())
+                .year(testUtils.getTestMemberInfo2().getYear())
+                .rank(testUtils.getTestMemberInfo2().getRank())
+                .major(testUtils.getTestMemberInfo2().getMajor())
+                .dateOfBirth(testUtils.getTestMemberInfo2().getDateOfBirth())
+                .build();
+
+        doReturn(true).when(memberInfoRepository).existsByStudentID(any());
+
+        //when then
+        assertThrows(CustomException.class, () -> {
+            memberInfoService.addAll(Arrays.asList(testServiceDto,testServiceDto2),testUtils.testUid);
+        });
+    }
 }

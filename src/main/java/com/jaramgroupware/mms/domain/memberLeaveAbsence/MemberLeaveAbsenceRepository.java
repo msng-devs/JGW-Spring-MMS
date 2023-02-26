@@ -2,6 +2,7 @@ package com.jaramgroupware.mms.domain.memberLeaveAbsence;
 
 import com.jaramgroupware.mms.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +18,7 @@ public interface MemberLeaveAbsenceRepository extends JpaRepository<MemberLeaveA
     Optional<MemberLeaveAbsence> findMemberLeaveAbsenceByMember(Member member);
     Optional<List<MemberLeaveAbsence>> findAllBy();
 
-    @Query("SELECT m FROM MEMBER_LEAVE_ABSENCE m WHERE m.id IN :ids")
+    @Query("SELECT m FROM MEMBER_LEAVE_ABSENCE m JOIN FETCH m.member WHERE m.id IN :ids")
     List<MemberLeaveAbsence> findAllByIdIn(@Param("ids") Set<Integer> ids);
 
     @Modifying(clearAutomatically = true)

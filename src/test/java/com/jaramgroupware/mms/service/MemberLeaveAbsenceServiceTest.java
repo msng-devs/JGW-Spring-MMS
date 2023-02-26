@@ -133,15 +133,15 @@ public class MemberLeaveAbsenceServiceTest {
         //given
         Integer testID = 1;
         MemberLeaveAbsence testEntity = testUtils.getTestMemberLeaveAbsence();
-        doReturn(Optional.of(testEntity)).when(memberLeaveAbsenceRepository).findMemberLeaveAbsenceById(testID);
+        doReturn(Optional.of(testEntity)).when(memberLeaveAbsenceRepository).findMemberLeaveAbsenceByMember(testEntity.getMember());
 
         //when
-        Integer resultID = memberLeaveAbsenceService.delete(testID);
+        Integer resultID = memberLeaveAbsenceService.delete(testEntity.getMember());
 
         //then
         Assertions.assertNotNull(resultID);
         Assertions.assertEquals(testID, Objects.requireNonNull(resultID));
-        verify(memberLeaveAbsenceRepository).findMemberLeaveAbsenceById(testID);
+        verify(memberLeaveAbsenceRepository).findMemberLeaveAbsenceByMember(testEntity.getMember());
         verify(memberLeaveAbsenceRepository).delete(any());
     }
 
@@ -172,7 +172,7 @@ public class MemberLeaveAbsenceServiceTest {
     @Test
     void update() {
         //given
-        Integer testID = testUtils.getTestMemberLeaveAbsence().getId();
+        Member testMember = testUtils.getTestMemberLeaveAbsence().getMember();
         MemberLeaveAbsenceUpdateRequestServiceDto testDto = MemberLeaveAbsenceUpdateRequestServiceDto.builder()
                 .status(testUtils.getTestMemberLeaveAbsence().isStatus())
                 .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence().getExpectedDateReturnSchool())
@@ -180,16 +180,16 @@ public class MemberLeaveAbsenceServiceTest {
 
         MemberLeaveAbsence targetEntity = testUtils.getTestMemberLeaveAbsence();
 
-        doReturn(Optional.of(targetEntity)).when(memberLeaveAbsenceRepository).findMemberLeaveAbsenceById(testID);
+        doReturn(Optional.of(targetEntity)).when(memberLeaveAbsenceRepository).findMemberLeaveAbsenceByMember(testMember);
 
         //when
-        MemberLeaveAbsenceResponseServiceDto result = memberLeaveAbsenceService.update(testID,testDto);
+        MemberLeaveAbsenceResponseServiceDto result = memberLeaveAbsenceService.update(testMember,testDto);
 
         //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(testDto.isStatus(),Objects.requireNonNull(result).isStatus());
         Assertions.assertEquals(testDto.getExpectedDateReturnSchool(),Objects.requireNonNull(result).getExpectedDateReturnSchool());
-        verify(memberLeaveAbsenceRepository).findMemberLeaveAbsenceById(testID);
+        verify(memberLeaveAbsenceRepository).findMemberLeaveAbsenceByMember(testMember);
         verify(memberLeaveAbsenceRepository).save(any());
     }
 

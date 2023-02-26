@@ -325,34 +325,34 @@ class MemberServiceTest {
         });
     }
 
-//    @Test
-//    void DuplicatedEmailErrorWhenAddMemberAll() {
-//        //given
-//        MemberAddRequestServiceDto testServiceDto = MemberAddRequestServiceDto
-//                .builder()
-//                .id(testUtils.getTestMember().getId())
-//                .name(testUtils.getTestMember().getName())
-//                .role(testUtils.getTestMember().getRole())
-//                .email(testUtils.getTestMember().getEmail())
-//                .status(testUtils.getTestMember().isStatus())
-//                .build();
-//
-//        MemberAddRequestServiceDto testServiceDto2 = MemberAddRequestServiceDto
-//                .builder()
-//                .id(testUtils.getTestMember2().getId())
-//                .name(testUtils.getTestMember2().getName())
-//                .role(testUtils.getTestMember2().getRole())
-//                .email(testUtils.getTestMember2().getEmail())
-//                .status(testUtils.getTestMember2().isStatus())
-//                .build();
-//
-//        Member testEntity = testServiceDto.toEntity();
-//
-//        doReturn(true).when(memberRepository).existsByEmail(testEntity.getEmail());
-//
-//        //when then
-//        assertThrows(CustomException.class, () -> {
-//            memberService.add(Arrays.asList(testServiceDto,testServiceDto2));
-//        });
-//    }
+    @Test
+    void DuplicatedEmailErrorWhenAddMemberAll() {
+        //given
+        MemberAddRequestServiceDto testServiceDto = MemberAddRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMember().getId())
+                .name(testUtils.getTestMember().getName())
+                .role(testUtils.getTestMember().getRole())
+                .email(testUtils.getTestMember().getEmail())
+                .status(testUtils.getTestMember().isStatus())
+                .build();
+
+        MemberAddRequestServiceDto testServiceDto2 = MemberAddRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMember2().getId())
+                .name(testUtils.getTestMember2().getName())
+                .role(testUtils.getTestMember2().getRole())
+                .email(testUtils.getTestMember2().getEmail())
+                .status(testUtils.getTestMember2().isStatus())
+                .build();
+
+        Member testEntity = testServiceDto.toEntity();
+
+        doReturn(true).when(memberRepository).existsByEmail(testEntity.getEmail());
+
+        //when then
+        assertThrows(CustomException.class, () -> {
+            memberService.addAll(Arrays.asList(testServiceDto,testServiceDto2));
+        });
+    }
 }

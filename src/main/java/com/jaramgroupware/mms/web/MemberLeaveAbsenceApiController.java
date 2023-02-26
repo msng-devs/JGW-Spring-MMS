@@ -1,7 +1,6 @@
 package com.jaramgroupware.mms.web;
 
-import com.jaramgroupware.mms.dto.general.controllerDto.MessageDto;
-import com.jaramgroupware.mms.dto.member.controllerDto.MemberBulkDeleteRequestControllerDto;
+import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceAddRequestControllerDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceIdResponseControllerDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceResponseControllerDto;
@@ -15,8 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,7 +41,8 @@ public class MemberLeaveAbsenceApiController {
             @RequestHeader("user_pk") String uid,
             @RequestHeader("role_pk") Integer roleID) {
 
-        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.findByMember(memberService.findById(memberId).toEntity()).toControllerDto();
+        Member targetMember = memberService.findById(memberId).toEntity();
+        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.findByMember(targetMember).toControllerDto();
 
         return ResponseEntity.ok(result);
     }
@@ -54,7 +52,8 @@ public class MemberLeaveAbsenceApiController {
             @PathVariable String memberID,
             @RequestHeader("user_pk") String uid){
 
-        Integer result = memberLeaveAbsenceService.delete(memberLeaveAbsenceService.findByMember(memberService.findById(memberID).toEntity()).getId());
+        Member targetMember = memberService.findById(memberID).toEntity();
+        Integer result = memberLeaveAbsenceService.delete(targetMember);
 
         return ResponseEntity.ok(new MemberLeaveAbsenceIdResponseControllerDto(result));
     }
@@ -65,7 +64,8 @@ public class MemberLeaveAbsenceApiController {
             @RequestBody @Valid MemberLeaveAbsenceUpdateRequestControllerDto memberLeaveAbsenceUpdateRequestControllerDto,
             @RequestHeader("user_pk") String uid) {
 
-        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.update(memberLeaveAbsenceService.findByMember(memberService.findById(memberID).toEntity()).toControllerDto().getId(),memberLeaveAbsenceUpdateRequestControllerDto.toServiceDto()).toControllerDto();
+        Member targetMember = memberService.findById(memberID).toEntity();
+        MemberLeaveAbsenceResponseControllerDto result = memberLeaveAbsenceService.update(targetMember,memberLeaveAbsenceUpdateRequestControllerDto.toServiceDto()).toControllerDto();
 
         return ResponseEntity.ok(result);
     }

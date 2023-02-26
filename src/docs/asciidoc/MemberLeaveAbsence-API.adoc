@@ -1,0 +1,27 @@
+[[MemberLeaveAbsence-API]]
+= MemberLeaveAbsence-API
+회원 휴학 정보를 조회 및 관리할 수 있는 api 입니다.
+
+[[MemberLeaveAbsence-Add-Single]]
+== POST : /mms/api/v1/member-leave-absence
+=== 단일 회원 휴학 정보를 등록
+
+operation::member-leave-absence-add-single[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response']
+
+[[MemberLeaveAbsence-Get-Single]]
+== GET : /mms/api/v1/member-leave-absence/{memberID}
+=== 단일 회원 휴학 정보를 조회
+
+operation::member-leave-absence-get-single[snippets='path-parameters,response-fields,response-body,http-request,http-response']
+
+[[MemberLeaveAbsence-Del-Single]]
+== DELETE : /mms/api/v1/member-leave-absence/{memberID}
+=== 단일 회원 휴학 정보를 삭제
+
+operation::member-leave-absence-del-single[snippets='path-parameters,response-fields,response-body,http-request,http-response']
+
+[[MemberLeaveAbsence-Update-Single]]
+== PUT : /mms/api/v1/member-leave-absence/{memberID}
+=== 단일 회원 휴학 정보를 업데이트
+
+operation::member-leave-absence-update-single[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']

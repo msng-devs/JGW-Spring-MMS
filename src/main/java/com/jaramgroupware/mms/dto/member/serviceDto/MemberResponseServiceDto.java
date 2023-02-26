@@ -2,6 +2,7 @@ package com.jaramgroupware.mms.dto.member.serviceDto;
 
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.role.Role;
+import com.jaramgroupware.mms.dto.member.controllerDto.MemberFullResponseControllerDto;
 import lombok.*;
 
 
@@ -38,6 +39,17 @@ public class MemberResponseServiceDto {
                                 .name(roleName)
                                 .build()
                 )
+                .status(status)
+                .build();
+    }
+
+    public MemberFullResponseControllerDto toController() {
+        return MemberFullResponseControllerDto.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .roleID(roleID)
+                .roleName(roleName)
                 .status(status)
                 .build();
     }
