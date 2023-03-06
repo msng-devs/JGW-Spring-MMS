@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface MemberLeaveAbsenceRepository extends JpaRepository<MemberLeaveAbsence,Integer> {
+public interface MemberLeaveAbsenceRepository extends JpaRepository<MemberLeaveAbsence,Integer>, JpaSpecificationExecutor<MemberLeaveAbsence> {
     Optional<MemberLeaveAbsence> findMemberLeaveAbsenceById(Integer id);
     Optional<MemberLeaveAbsence> findMemberLeaveAbsenceByMember(Member member);
     Optional<List<MemberLeaveAbsence>> findAllBy();

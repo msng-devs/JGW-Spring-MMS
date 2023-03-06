@@ -21,7 +21,6 @@ public class MemberFullResponseControllerDto {
 
     public MemberResponseControllerDto toTiny(){
         return MemberResponseControllerDto.builder()
-                .id(id)
                 .name(name)
                 .email(email)
                 .status(status)

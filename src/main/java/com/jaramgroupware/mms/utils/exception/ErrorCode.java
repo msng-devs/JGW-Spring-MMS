@@ -19,7 +19,7 @@ public enum ErrorCode {
     INVALID_RANK_ID(HttpStatus.NOT_FOUND,"INVALID_ROLE_ID","해당 rankId 을 찾을 수 없습니다!",20114),
     INVALID_MAJOR_ID(HttpStatus.NOT_FOUND,"INVALID_MAJOR_ID","해당 majorId 을 찾을 수 없습니다!",20116),
     INVALID_PENALTY_ID(HttpStatus.NOT_FOUND,"INVALID_PENALTY_ID","해당 penalty를 찾을 수 없습니다!",20118),
-    INVALID_MEMBER_INFO_ID(HttpStatus.NOT_FOUND,"INVALID_MEMBER_INFO","해당 memberInfo 을 찾을 수 없습니다!",20121),
+    INVALID_MEMBER_INFO(HttpStatus.NOT_FOUND,"INVALID_MEMBER_INFO","해당 memberInfo 을 찾을 수 없습니다!",20121),
     INVALID_MEMBER_LEAVE_ABSENCE_ID(HttpStatus.NOT_FOUND,"INVALID_MEMBER_LEAVE_ABSENCE_ID","해당 memberLeaveAbsenceId 을 찾을 수 없습니다!",20119),
 
 

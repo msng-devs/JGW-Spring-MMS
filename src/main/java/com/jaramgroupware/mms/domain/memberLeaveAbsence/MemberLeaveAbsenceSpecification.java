@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.domain.memberInfo;
+package com.jaramgroupware.mms.domain.memberLeaveAbsence;
 
 import com.jaramgroupware.mms.utils.spec.PredicatesBuilder;
 import com.jaramgroupware.mms.utils.spec.SearchCriteria;
@@ -8,22 +8,19 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemberInfoSpecification implements Specification<MemberInfo> {
-
+public class MemberLeaveAbsenceSpecification implements Specification<MemberLeaveAbsence> {
     private final List<SearchCriteria> list = new ArrayList<>();
 
     @Override
-    public Predicate toPredicate(Root<MemberInfo> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(Root<MemberLeaveAbsence> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         PredicatesBuilder predicatesBuilder = new PredicatesBuilder();
         query.distinct(true);
 
         //count query error
         //ref : https://starrybleu.github.io/development/2018/08/10/jpa-n+1-fetch-strategy-specification.html
-        if (query.getResultType() != Long.class && query.getResultType() != long.class){
+//        if (query.getResultType() != Long.class && query.getResultType() != long.class){
 //            root.fetch("member", JoinType.LEFT);
-            root.fetch("rank", JoinType.LEFT);
-            root.fetch("major", JoinType.LEFT);
-        }
+//        }
 
         return predicatesBuilder.build(root,query,builder,list);
     }

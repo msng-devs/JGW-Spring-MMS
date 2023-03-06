@@ -32,7 +32,7 @@ public class MemberInfoResponseServiceDto {
     private String roleName;
     private Integer year;
     private boolean status;
-    private LocalDate dateOfBirth;
+    private LocalDate dateofbirth;
     private LocalDateTime createdDateTime;
 
     public MemberInfoResponseServiceDto(MemberInfo memberInfo) {
@@ -50,7 +50,7 @@ public class MemberInfoResponseServiceDto {
         roleName = memberInfo.getMember().getRole().getName();
         year = memberInfo.getYear();
         status = memberInfo.getMember().isStatus();
-        dateOfBirth = memberInfo.getDateOfBirth();
+        dateofbirth = memberInfo.getDateOfBirth();
         createdDateTime = memberInfo.getCreatedDateTime();
     }
 
@@ -81,7 +81,7 @@ public class MemberInfoResponseServiceDto {
                         .build()
                 )
                 .year(year)
-                .dateOfBirth(dateOfBirth)
+                .dateOfBirth(dateofbirth)
                 .build();
     }
 
@@ -102,7 +102,7 @@ public class MemberInfoResponseServiceDto {
                 .roleName(roleName)
                 .year(year)
                 .status(status)
-                .dateOfBirth(dateOfBirth)
+                .dateofbirth(dateofbirth)
                 .createdDateTime(createdDateTime)
                 .build();
     }

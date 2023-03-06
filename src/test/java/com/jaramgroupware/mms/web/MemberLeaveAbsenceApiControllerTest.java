@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jaramgroupware.mms.TestUtils;
 import com.jaramgroupware.mms.domain.member.Member;
+import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceAddRequestControllerDto;
+import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceBulkDeleteRequestControllerDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto.MemberLeaveAbsenceUpdateRequestControllerDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceResponseServiceDto;
@@ -28,11 +30,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 
+import javax.xml.transform.Result;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.jaramgroupware.mms.RestDocsConfig.field;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -152,6 +160,45 @@ public class MemberLeaveAbsenceApiControllerTest {
     }
 
     @Test
+    void getMemberLeaveAbsenceAll() throws Exception {
+        //given
+        List<MemberLeaveAbsenceResponseServiceDto> targetMemberLeaveAbsenceList = new ArrayList<MemberLeaveAbsenceResponseServiceDto>();
+
+        MemberLeaveAbsenceResponseServiceDto targetMemberLeaveAbsenceDto1 = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence());
+        targetMemberLeaveAbsenceList.add(targetMemberLeaveAbsenceDto1);
+
+        MemberLeaveAbsenceResponseServiceDto targetMemberLeaveAbsenceDto2 = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence2());
+        targetMemberLeaveAbsenceList.add(targetMemberLeaveAbsenceDto2);
+
+        doReturn(targetMemberLeaveAbsenceList).when(memberLeaveAbsenceService).findAll(any(),any());
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/v1/member-leave-absence/")
+                                .header("user_pk",testUtils.getTestUid())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("member-leave-absence-get-multiple",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("[].id").description("대상 member leave absence의 id"),
+                                fieldWithPath("[].member_id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
+                                fieldWithPath("[].status").description("대상 member의 휴학 여부").attributes(field("constraints", "true : 휴학 , false : 휴학 아님")),
+                                fieldWithPath("[].expected_date_return_school").description("대상 member의 휴학 예정일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")))
+                        ));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(content().json(
+                        objectMapper.writeValueAsString(targetMemberLeaveAbsenceList.stream()
+                                .map(MemberLeaveAbsenceResponseServiceDto::toControllerDto)
+                                .collect(Collectors.toList()))));
+        verify(memberLeaveAbsenceService).findAll(any(),any());
+    }
+
+    @Test
     void delMemberLeaveAbsence() throws Exception {
         //given
         Member member = testUtils.getTestMemberLeaveAbsence().getMember();
@@ -185,6 +232,44 @@ public class MemberLeaveAbsenceApiControllerTest {
                 .andExpect(jsonPath("$.id").value(id));
         verify(memberLeaveAbsenceService).delete(any(Member.class));
     }
+
+    //TODO 서버 에러 나는 부분 고치기
+//    @Test
+//    void bulkDelete() throws  Exception{
+//        //given
+//        Set<Integer> ids = new HashSet<>();
+//        ids.add(testUtils.getTestMemberLeaveAbsence().getId());
+//        ids.add(testUtils.getTestMemberLeaveAbsence2().getId());
+//
+//        MemberLeaveAbsenceBulkDeleteRequestControllerDto dto = MemberLeaveAbsenceBulkDeleteRequestControllerDto.builder()
+//                .MemberLeaveAbsenceIDs(ids)
+//                .build();
+//
+//        //when
+//        ResultActions result = mvc.perform(
+//                        RestDocumentationRequestBuilders.delete("/api/v1/member-leave-absence")
+//                                .header("user_pk",testUtils.getTestUid())
+//                                .header("role_pk",4)
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .accept(MediaType.APPLICATION_JSON)
+//                                .content(objectMapper.writeValueAsString(dto)))
+//                .andDo(print())
+//                .andDo(document("member-leave-absence-del-bulk",
+//                        preprocessRequest(prettyPrint()),
+//                        preprocessResponse(prettyPrint()),
+//                        requestFields(
+//                                fieldWithPath("member_leave_absence_ids").description("삭제할 MemberLeaveAbsence의 id")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("message").description("삭제된 MemberLeaveAbsence의 갯수 ")
+//                        )
+//                ));
+//
+//        //then
+//        result.andExpect(status().isOk())
+//                .andExpect(jsonPath("$.message").value("총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"));
+//        verify(memberLeaveAbsenceService).delete(anySet());
+//    }
 
     @Test
     void updateMemberLeaveAbsence() throws Exception {

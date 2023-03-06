@@ -12,9 +12,7 @@ import lombok.*;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberInfoResponseControllerDto {
 
-    private String memberID;
     private String email;
-    private String name;
     private String studentID;
     private Integer majorID;
     private String majorName;

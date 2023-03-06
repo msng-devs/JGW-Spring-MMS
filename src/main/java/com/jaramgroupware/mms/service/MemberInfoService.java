@@ -1,10 +1,8 @@
 package com.jaramgroupware.mms.service;
 
 import com.jaramgroupware.mms.domain.member.Member;
-import com.jaramgroupware.mms.domain.member.MemberRepository;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoBulkUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
@@ -41,7 +39,7 @@ public class MemberInfoService {
     public MemberInfoResponseServiceDto findByMember(Member member){
 
         MemberInfo targetMemberInfo = memberInfoRepository.findMemberInfoByMember(member)
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_INFO_ID));
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_INFO));
 
         return new MemberInfoResponseServiceDto(targetMemberInfo);
     }
@@ -90,19 +88,19 @@ public class MemberInfoService {
         return memberInfoRepository.save(targetMemberInfo).getId();
     }
 
-    @Transactional
-    public void addAll(List<MemberInfoAddRequestServiceDto> memberInfoAddRequestServiceDtos, String who){
-        List<MemberInfo> memberInfos = new ArrayList<>();
-        for(MemberInfoAddRequestServiceDto dto : memberInfoAddRequestServiceDtos) {
-            if (memberInfoRepository.existsByStudentID(dto.getStudentID())) {
-                throw new CustomException(ErrorCode.DUPLICATED_STUDENT_ID);
-            }
-            dto.toEntity().setCreateBy(who);
-            dto.toEntity().setModifiedBy(who);
-            memberInfos.add(dto.toEntity());
-        }
-        memberInfoRepository.saveAll(memberInfos);
-    }
+//    @Transactional
+//    public void addAll(List<MemberInfoAddRequestServiceDto> memberInfoAddRequestServiceDtos, String who){
+//        List<MemberInfo> memberInfos = new ArrayList<>();
+//        for(MemberInfoAddRequestServiceDto dto : memberInfoAddRequestServiceDtos) {
+//            if (memberInfoRepository.existsByStudentID(dto.getStudentID())) {
+//                throw new CustomException(ErrorCode.DUPLICATED_STUDENT_ID);
+//            }
+//            dto.toEntity().setCreateBy(who);
+//            dto.toEntity().setModifiedBy(who);
+//            memberInfos.add(dto.toEntity());
+//        }
+//        memberInfoRepository.saveAll(memberInfos);
+//    }
 
     @Transactional
     public Integer delete(Member member){
@@ -142,7 +140,7 @@ public class MemberInfoService {
     public MemberInfoResponseServiceDto update(Member member, MemberInfoUpdateRequestServiceDto memberInfoUpdateRequestServiceDto, String who){
 
         MemberInfo targetMemberInfo = memberInfoRepository.findMemberInfoByMember(member)
-                .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_INFO_ID));
+                .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_INFO));
 
         targetMemberInfo.update(memberInfoUpdateRequestServiceDto.toEntity(),who);
 
@@ -151,17 +149,17 @@ public class MemberInfoService {
         return new MemberInfoResponseServiceDto(targetMemberInfo);
     }
 
-    @Transactional
-    public void updateAll(List<MemberInfoBulkUpdateRequestServiceDto> memberInfoUpdateRequestServiceDtos, String who){
-        List<MemberInfo> memberInfos = new ArrayList<>();
-        for(MemberInfoBulkUpdateRequestServiceDto dto : memberInfoUpdateRequestServiceDtos) {
-
-            MemberInfo targetMemberInfo = memberInfoRepository.findMemberInfoByMember(dto.getMember())
-                    .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_INFO_ID));
-
-            targetMemberInfo.update(dto.toEntity(),who);
-            memberInfos.add(targetMemberInfo);
-        }
-        memberInfoRepository.saveAll(memberInfos);
-    }
+//    @Transactional
+//    public void updateAll(List<MemberInfoBulkUpdateRequestServiceDto> memberInfoUpdateRequestServiceDtos, String who){
+//        List<MemberInfo> memberInfos = new ArrayList<>();
+//        for(MemberInfoBulkUpdateRequestServiceDto dto : memberInfoUpdateRequestServiceDtos) {
+//
+//            MemberInfo targetMemberInfo = memberInfoRepository.findMemberInfoByMember(dto.getMember())
+//                    .orElseThrow(()->new CustomException(ErrorCode.INVALID_MEMBER_INFO));
+//
+//            targetMemberInfo.update(dto.toEntity(),who);
+//            memberInfos.add(targetMemberInfo);
+//        }
+//        memberInfoRepository.saveAll(memberInfos);
+//    }
 }

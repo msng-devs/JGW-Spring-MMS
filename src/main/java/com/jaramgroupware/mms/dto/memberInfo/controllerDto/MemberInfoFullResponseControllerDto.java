@@ -29,16 +29,14 @@ public class MemberInfoFullResponseControllerDto {
     private Integer roleID;
     private String roleName;
     private Integer year;
-    private LocalDate dateOfBirth;
+    private LocalDate dateofbirth;
     private LocalDateTime createdDateTime;
     private boolean status;
 
     public MemberInfoResponseControllerDto toTiny() {
         return MemberInfoResponseControllerDto
                 .builder()
-                .memberID(memberID)
                 .email(email)
-                .name(name)
                 .studentID(studentID.substring(2,4))
                 .majorID(majorID)
                 .majorName(majorName)

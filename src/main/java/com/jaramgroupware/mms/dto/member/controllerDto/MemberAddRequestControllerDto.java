@@ -55,9 +55,6 @@ public class MemberAddRequestControllerDto {
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;
 
-    @NotNull(message = "휴학 여부가 비여있습니다!")
-    private boolean leaveAbsence;
-
     private LocalDate dateOfBirth;
 
     @NotNull(message = "계정 활성 상태 여부가 비여있습니다!")

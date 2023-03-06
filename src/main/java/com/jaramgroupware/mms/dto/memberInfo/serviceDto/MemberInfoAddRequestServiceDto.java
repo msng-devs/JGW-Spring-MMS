@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class MemberInfoAddRequestServiceDto {
-    private Integer id;
     private Member member;
     private String phoneNumber;
     private String studentID;
@@ -26,7 +25,6 @@ public class MemberInfoAddRequestServiceDto {
 
     public MemberInfo toEntity(){
         return MemberInfo.builder()
-                .id(id)
                 .member(member)
                 .phoneNumber(phoneNumber)
                 .studentID(studentID)

@@ -11,7 +11,6 @@ import lombok.*;
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberResponseControllerDto {
-    private String id;
     private String name;
     private String email;
     private boolean status;
