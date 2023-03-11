@@ -54,6 +54,7 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.2'
 }
 ext {
     // 아래서 사용할 변수 선언

@@ -37,10 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles("test")
-@SqlGroup({
-        @Sql(scripts = "classpath:tableBuild.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(scripts = "classpath:testDataSet.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ExtendWith(SpringExtension.class)
 @Transactional
@@ -144,19 +140,20 @@ public class MemberLeaveAbsenceRepositoryTest {
         assertTrue(testUtils.isListSame(res,testMemberLeaveAbsences));
     }
 
-    //TODO 테스트 환경 바꿔서 다시 해보기
-//    @Test
-//    void deleteAllByIdInQuery(){
-//        //given
-//        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMemberLeaveAbsence().getId(),testUtils.getTestMemberLeaveAbsence2().getId())){};
-//
-//        //when
-//        memberLeaveAbsenceRepository.deleteAllByIdInQuery(testIds);
-//
-//        //then
-//        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence().getId()),is(nullValue()));
-//        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence2().getId()),is(nullValue()));
-//    }
+    @Test
+    void deleteAllByIdInQuery(){
+        //given
+        Set<Integer> testIds = new HashSet<>();
+        testIds.add(testUtils.getTestMemberLeaveAbsence().getId());
+        testIds.add(testUtils.getTestMemberLeaveAbsence2().getId());
+
+        //when
+        memberLeaveAbsenceRepository.deleteAllByIdInQuery(testIds);
+
+        //then
+        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence().getId()),is(nullValue()));
+        assertThat(testEntityManager.find(MemberLeaveAbsence.class,testUtils.getTestMemberLeaveAbsence2().getId()),is(nullValue()));
+    }
 
     @Test
     void findAllWithIntegratedSpec() {
