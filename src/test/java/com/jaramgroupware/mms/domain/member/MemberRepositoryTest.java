@@ -107,20 +107,19 @@ class MemberRepositoryTest {
         assertThat(res,is(notNullValue()));
         assertTrue(testUtils.isListSame(res,testMembers));
     }
-//TODO H2 에서만 생기는 오류 고치기
 
-//    @Test
-//    void deleteAllByIdInQuery(){
-//        //given
-//        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMember().getId(),testUtils.getTestMember2().getId())){};
-//
-//        //when
-//        memberRepository.deleteAllByIdInQuery(testIds);
-//
-//        //then
-//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember().getId()),is(nullValue()));
-//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember2().getId()),is(nullValue()));
-//    }
+    @Test
+    void deleteAllByIdInQuery(){
+        //given
+        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMember().getId(),testUtils.getTestMember2().getId())){};
+
+        //when
+        memberRepository.deleteAllByIdInQuery(testIds);
+
+        //then
+        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember().getId()),is(nullValue()));
+        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember2().getId()),is(nullValue()));
+    }
 
     @Test
     void findAllWithIntegratedSpec(){
@@ -332,7 +331,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(2L,res.getTotalElements());
+        assertEquals(1L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
 
@@ -351,7 +350,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(2L,res.getTotalElements());
+        assertEquals(1L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
     

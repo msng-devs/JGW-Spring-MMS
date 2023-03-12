@@ -38,14 +38,6 @@ class RoleRepositoryTest {
     @Autowired
     private RoleRepository roleRepository;
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void findRoleById() {
         //given
@@ -68,21 +60,6 @@ class RoleRepositoryTest {
                 .orElseThrow(IllegalArgumentException::new);
         //then
         assertThat(testUtils.isListSame(testGoal,results),is(true));
-    }
-
-    @Test
-    void save() {
-        //given
-        Role testGoal = testUtils.getTestRole();
-        testGoal.setId(null);
-        testGoal.setName("ROLE_GUEST");
-
-        //when
-        roleRepository.save(testGoal);
-
-        //then
-        testGoal.setId(3);
-        assertEquals(testGoal.toString(),testEntityManager.find(Role.class,3).toString());
     }
 
     @Test

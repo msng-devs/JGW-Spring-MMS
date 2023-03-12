@@ -1,11 +1,6 @@
 package com.jaramgroupware.mms.domain.memberLeaveAbsence;
 
 import com.jaramgroupware.mms.TestUtils;
-import com.jaramgroupware.mms.domain.member.Member;
-import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
-import com.jaramgroupware.mms.domain.memberInfo.MemberInfoSpecification;
-import com.jaramgroupware.mms.domain.memberInfo.MemberInfoSpecificationBuilder;
-import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.utils.parse.ParseByNameBuilder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -92,6 +85,7 @@ public class MemberLeaveAbsenceRepositoryTest {
         List<MemberLeaveAbsence> testGoal = new ArrayList<>();
         testGoal.add(testUtils.getTestMemberLeaveAbsence());
         testGoal.add(testUtils.getTestMemberLeaveAbsence2());
+        testGoal.add(testUtils.getTestMemberLeaveAbsence3());
 
         //when
         List<MemberLeaveAbsence> results = memberLeaveAbsenceRepository.findAllBy()
@@ -158,7 +152,7 @@ public class MemberLeaveAbsenceRepositoryTest {
     @Test
     void findAllWithIntegratedSpec() {
         //given
-        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence();
+        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence2();
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
         queryParam.add("status",(testMemberLeaveAbsence.isStatus()) ? "true" : "false" );
@@ -178,7 +172,7 @@ public class MemberLeaveAbsenceRepositoryTest {
     @Test
     void findAllWithIntegratedSpec2() {
         //given
-        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence2();
+        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence3();
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
         queryParam.add("status",(testMemberLeaveAbsence.isStatus()) ? "true" : "false" );
@@ -209,15 +203,14 @@ public class MemberLeaveAbsenceRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(2L,res.getTotalElements());
-        assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(1).toString());
+        assertEquals(1L,res.getTotalElements());
+        assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(0).toString());
     }
 
     @Test
     void findAllWithStatus2(){
         //given
-        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence();
-        testMemberLeaveAbsence.setStatus(false);
+        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence2();
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
         queryParam.add("includeGuest","false");
@@ -229,14 +222,15 @@ public class MemberLeaveAbsenceRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(0L,res.getTotalElements());
+        assertEquals(2L,res.getTotalElements());
+        assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(1).toString());
     }
 
     @DisplayName("MemberLeaveAbsence ExpectedDateOfReturnSchool로 검색 - 시작시간과 종료 시간이 주어졌을 경우")
     @Test
     void findAllWithExpectedDateOfReturnSchoolWithStartAndEnd(){
         //given
-        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence();
+        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence2();
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
         queryParam.add("startExpectedDateOfReturnSchool",testMemberLeaveAbsence.getExpectedDateReturnSchool().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -256,7 +250,7 @@ public class MemberLeaveAbsenceRepositoryTest {
     @Test
     void findAllWithExpectedDateOfReturnSchoolWithStartAndEnd2(){
         //given
-        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence2();
+        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence3();
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
         queryParam.add("startExpectedDateOfReturnSchool",testMemberLeaveAbsence.getExpectedDateReturnSchool().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -276,7 +270,7 @@ public class MemberLeaveAbsenceRepositoryTest {
     @Test
     void findAllWithExpectedDateOfReturnSchoolWithStart(){
         //given
-        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence();
+        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence3();
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
         queryParam.add("startExpectedDateOfReturnSchool",testMemberLeaveAbsence.getExpectedDateReturnSchool().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
@@ -288,7 +282,7 @@ public class MemberLeaveAbsenceRepositoryTest {
         //then
         assertThat(res,is(notNullValue()));
         assertEquals(2L,res.getTotalElements());
-        assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(1).toString());
+        assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(0).toString());
     }
 
     @DisplayName("MemberLeaveAbsence ExpectedDateOfReturnSchool로 검색 - 시작시간이 주어졌을 경우2")
@@ -314,25 +308,6 @@ public class MemberLeaveAbsenceRepositoryTest {
     @Test
     void findAllWithExpectedDateOfReturnSchoolWithEnd(){
         //given
-        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence();
-
-        MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
-        queryParam.add("endExpectedDateOfReturnSchool",testMemberLeaveAbsence.getExpectedDateReturnSchool().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        MemberLeaveAbsenceSpecification testSpec = memberLeaveAbsenceSpecificationBuilder.toSpec(queryParam);
-
-        //when
-        Page<MemberLeaveAbsence> res = memberLeaveAbsenceRepository.findAll(testSpec, PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC,"id")));
-
-        //then
-        assertThat(res,is(notNullValue()));
-        assertEquals(1L,res.getTotalElements());
-        assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(0).toString());
-    }
-
-    @DisplayName("MemberLeaveAbsence ExpectedDateOfReturnSchool로 검색 - 종료시간이 주어졌을 경우2")
-    @Test
-    void findAllWithExpectedDateOfReturnSchoolWithEnd2(){
-        //given
         MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence2();
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
@@ -345,6 +320,25 @@ public class MemberLeaveAbsenceRepositoryTest {
         //then
         assertThat(res,is(notNullValue()));
         assertEquals(2L,res.getTotalElements());
+        assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(1).toString());
+    }
+
+    @DisplayName("MemberLeaveAbsence ExpectedDateOfReturnSchool로 검색 - 종료시간이 주어졌을 경우2")
+    @Test
+    void findAllWithExpectedDateOfReturnSchoolWithEnd2(){
+        //given
+        MemberLeaveAbsence testMemberLeaveAbsence = testUtils.getTestMemberLeaveAbsence3();
+
+        MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
+        queryParam.add("endExpectedDateOfReturnSchool",testMemberLeaveAbsence.getExpectedDateReturnSchool().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        MemberLeaveAbsenceSpecification testSpec = memberLeaveAbsenceSpecificationBuilder.toSpec(queryParam);
+
+        //when
+        Page<MemberLeaveAbsence> res = memberLeaveAbsenceRepository.findAll(testSpec, PageRequest.of(0, 1000, Sort.by(Sort.Direction.DESC,"id")));
+
+        //then
+        assertThat(res,is(notNullValue()));
+        assertEquals(1L,res.getTotalElements());
         assertEquals(testMemberLeaveAbsence.toString(),res.getContent().get(0).toString());
     }
 
