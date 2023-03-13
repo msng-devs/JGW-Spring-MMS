@@ -182,11 +182,11 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.post("/api/v1/member")
-                        .header("user_pk",testUtils.getTestUid())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto))
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.post("/api/v1/member")
+                                .header("user_pk",testUtils.getTestUid())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto))
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-add-single",
                         preprocessRequest(prettyPrint()),
@@ -227,11 +227,11 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_pk",testUtils.getTestUid())
-                        .header("role_pk",4)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
+                                .header("user_pk",testUtils.getTestUid())
+                                .header("role_pk",4)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-get-single",
                         preprocessRequest(prettyPrint()),
@@ -266,11 +266,11 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_pk",testUtils.getTestMember2().getId())
-                        .header("role_pk",4)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
+                                .header("user_pk",testUtils.getTestMember2().getId())
+                                .header("role_pk",4)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-get-single-admin-not-self",
                         preprocessRequest(prettyPrint()),
@@ -305,11 +305,11 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_pk",testUtils.getTestUid())
-                        .header("role_pk",3)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
+                                .header("user_pk",testUtils.getTestUid())
+                                .header("role_pk",3)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-get-single-no-admin-self",
                         preprocessRequest(prettyPrint()),
@@ -344,11 +344,11 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
-                        .header("user_pk",testUtils.getTestMember2().getId())
-                        .header("role_pk",3)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.get("/api/v1/member/{memberID}",memberID)
+                                .header("user_pk",testUtils.getTestMember2().getId())
+                                .header("role_pk",3)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-get-single-tiny",
                         preprocessRequest(prettyPrint()),
@@ -580,20 +580,20 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/member/")
-                        .header("user_pk",testUtils.getTestUid())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.get("/api/v1/member/")
+                                .header("user_pk",testUtils.getTestUid())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-get-multiple",
-        responseFields(
-                fieldWithPath("[].id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
-                fieldWithPath("[].email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
-                fieldWithPath("[].name").description("대상 member의 name(실명)"),
-                fieldWithPath("[].status").description("대상 member의 계정 활성 여부").attributes(field("constraints", "true : 활성 , false : 활성 아님")),
-                fieldWithPath("[].role_id").description("대상 member의 role(object)의 ID"),
-                fieldWithPath("[].role_name").description("대상 member의 role(object)의 이름")
-                )));
+                        responseFields(
+                                fieldWithPath("[].id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
+                                fieldWithPath("[].email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
+                                fieldWithPath("[].name").description("대상 member의 name(실명)"),
+                                fieldWithPath("[].status").description("대상 member의 계정 활성 여부").attributes(field("constraints", "true : 활성 , false : 활성 아님")),
+                                fieldWithPath("[].role_id").description("대상 member의 role(object)의 ID"),
+                                fieldWithPath("[].role_name").description("대상 member의 role(object)의 이름")
+                        )));
 
         //then
         result.andExpect(status().isOk())
@@ -670,10 +670,10 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.delete("/api/v1/member/{memberID}",memberID)
-                        .header("user_pk",testUtils.getTestUid())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.delete("/api/v1/member/{memberID}",memberID)
+                                .header("user_pk",testUtils.getTestUid())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-del-single",
                         preprocessRequest(prettyPrint()),
@@ -729,11 +729,11 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.delete("/api/v1/member")
-                        .header("user_pk",testUtils.getTestUid())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(MemberBulkDeleteRequestControllerDto.builder().MemberIDs(ids).build())))
+                        RestDocumentationRequestBuilders.delete("/api/v1/member")
+                                .header("user_pk",testUtils.getTestUid())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(MemberBulkDeleteRequestControllerDto.builder().MemberIDs(ids).build())))
                 .andDo(print())
                 .andDo(document("member-del-bulk",
                         preprocessRequest(prettyPrint()),
@@ -785,11 +785,11 @@ class MemberApiControllerTest {
 
         //when
         ResultActions result = mvc.perform(
-                RestDocumentationRequestBuilders.put("/api/v1/member/{memberID}",memberID)
-                        .header("user_pk",testUtils.getTestUid())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(testMemberDto))
-                        .accept(MediaType.APPLICATION_JSON))
+                        RestDocumentationRequestBuilders.put("/api/v1/member/{memberID}",memberID)
+                                .header("user_pk",testUtils.getTestUid())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(testMemberDto))
+                                .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-update-single",
                         preprocessRequest(prettyPrint()),
@@ -825,7 +825,7 @@ class MemberApiControllerTest {
                                 fieldWithPath("role_id").description("대상 member의 role(object)의 ID"),
                                 fieldWithPath("role_name").description("대상 member의 role(object)의 이름"),
                                 fieldWithPath("created_date_time").description("대상 member가 생성된 시간"))
-                        ));
+                ));
 
         //then
         result.andExpect(status().isOk())

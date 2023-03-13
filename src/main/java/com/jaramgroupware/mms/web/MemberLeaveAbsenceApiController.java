@@ -30,6 +30,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * MemberLeaveAbsence Api Controller 클래스
+ * @since 2023-03-07
+ * @author 황준서(37기) hzser123@gmail.com
+ * @author 이현희(38기) heeit13145@gmail.com
+ */
 @RequiredArgsConstructor
 @RestController
 @Validated
@@ -41,6 +47,12 @@ public class MemberLeaveAbsenceApiController {
     private final MemberLeaveAbsenceSpecificationBuilder memberLeaveAbsenceSpecificationBuilder;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 단일 회원 휴학 정보를 등록하는 함수
+     * @param memberLeaveAbsenceAddRequestControllerDto MemberLeaveAbsence(Object)의 등록 요청 정보를 담고 있는 dto
+     * @param uid 해당 등록을 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 등록된 MemberLeaveAbsence(Object)의 ID를 반환
+     */
     @PostMapping
     public ResponseEntity<MemberLeaveAbsenceIdResponseControllerDto> addMemberLeaveAbsence(
             @RequestBody @Valid MemberLeaveAbsenceAddRequestControllerDto memberLeaveAbsenceAddRequestControllerDto,
@@ -51,6 +63,13 @@ public class MemberLeaveAbsenceApiController {
         return ResponseEntity.ok(new MemberLeaveAbsenceIdResponseControllerDto(id));
     }
 
+    /**
+     * 단일 회원 휴학 정보를 조회하는 함수
+     * @param memberId 조회할 회원 휴학 정보의 해당 Member(Object) UID(Firebase uid)
+     * @param uid 해당 조회를 요청한 Member(Object)의 UID(Firebase uid)
+     * @param roleID 해당 조회를 요청한 Member(Object)의 Role(Object) ID
+     * @return 성공적으로 조회 완료 시 해당 MemberLeaveAbsence(Object)의 정보를 담은 dto 반환
+     */
     @GetMapping("{memberId}")
     public ResponseEntity<MemberLeaveAbsenceResponseControllerDto> getMemberLeaveAbsenceById(
             @PathVariable String memberId,
@@ -63,6 +82,14 @@ public class MemberLeaveAbsenceApiController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * 다수 회원 휴학 정보를 조회하는 함수
+     * @param pageable sort option
+     * @param queryParam query option
+     * @param includeGuest 신규 학회원(true), 기존 학회원(false) option
+     * @param uid 해당 조회 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 다수 MemberLeaveAbsence(Object)의 정보를 담은 dto 반환(List type)
+     */
     @GetMapping
     public ResponseEntity<List<MemberLeaveAbsenceResponseControllerDto>> getMemberLeaveAbsenceAll(
             @PageableDefault(page = 0,size = 1000,sort = "id",direction = Sort.Direction.DESC)
@@ -101,6 +128,12 @@ public class MemberLeaveAbsenceApiController {
         return ResponseEntity.ok(results);
     }
 
+    /**
+     * 단일 회원 휴학 정보를 삭제하는 함수
+     * @param memberID 삭제할 회원 휴학 정보의 해당 Member(Object) UID(Firebase uid)
+     * @param uid 해당 삭제 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 삭제된 MemberLeaveAbsence(Object)의 ID
+     */
     @DeleteMapping("{memberID}")
     public ResponseEntity<MemberLeaveAbsenceIdResponseControllerDto> delMemberLeaveAbsence(
             @PathVariable String memberID,
@@ -112,6 +145,13 @@ public class MemberLeaveAbsenceApiController {
         return ResponseEntity.ok(new MemberLeaveAbsenceIdResponseControllerDto(result));
     }
 
+    /**
+     * 다수 회원 휴학 정보를 삭제하는 함수
+     * @param dto 삭제할 다수 MemberLeaveAbsence(Object)의 id들을 담은 dto
+     * @param uid 해당 삭제 요청한 Member(Object)의 UID(Firebase uid)
+     * @param roleID 해당 삭제 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 삭제된 회원 휴학 정보의 개수를 포함한 메시지 반환
+     */
     @DeleteMapping
     public ResponseEntity<MessageDto> bulkDelMemberLeaveAbsence(
             @RequestBody @Valid MemberLeaveAbsenceBulkDeleteRequestControllerDto dto,
@@ -123,6 +163,13 @@ public class MemberLeaveAbsenceApiController {
         return ResponseEntity.ok(new MessageDto("총 ("+dto.getMemberLeaveAbsenceIDs().size()+")개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"));
     }
 
+    /**
+     * 단일 회원 휴학 정보를 수정하는 함수
+     * @param memberID 수정할 회원 휴학 정보의 해당 Member(Object) UID(Firebase uid)
+     * @param memberLeaveAbsenceUpdateRequestControllerDto 수정할 회원 휴학 정보의 수정 내용을 담은 dto
+     * @param uid 해당 수정 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 수정된 MemberLeaveAbsence(Object)의 정보를 담은 dto 반환
+     */
     @PutMapping("{memberID}")
     public ResponseEntity<MemberLeaveAbsenceResponseControllerDto> updateMemberLeaveAbsence(
             @PathVariable String memberID,

@@ -8,6 +8,12 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MemberInfo(Object)의 다중 조건 조회를 위한 클래스
+ * @since 2023-03-07
+ * @author 황준서(37기) hzser123@gmail.com
+ * @author 이현희(38기) heeit13145@gmail.com
+ */
 public class MemberInfoSpecification implements Specification<MemberInfo> {
 
     private final List<SearchCriteria> list = new ArrayList<>();

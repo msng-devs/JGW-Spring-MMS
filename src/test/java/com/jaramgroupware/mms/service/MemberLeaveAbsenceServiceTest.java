@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -160,6 +161,7 @@ public class MemberLeaveAbsenceServiceTest {
         MemberLeaveAbsence testEntity2 = testUtils.getTestMemberLeaveAbsence2();
 
         doReturn(Arrays.asList(testEntity,testEntity2)).when(memberLeaveAbsenceRepository).findAllByIdIn(ids);
+        doReturn(2).when(memberLeaveAbsenceRepository).deleteAllByIdInQuery(ids);
 
         //when
         memberLeaveAbsenceService.delete(ids);

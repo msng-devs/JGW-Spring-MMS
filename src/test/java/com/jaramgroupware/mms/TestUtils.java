@@ -50,6 +50,7 @@ public class TestUtils {
     private final MemberInfo testMemberInfo2;
     private final MemberLeaveAbsence testMemberLeaveAbsence;
     private final MemberLeaveAbsence testMemberLeaveAbsence2;
+    private final MemberLeaveAbsence testMemberLeaveAbsence3;
     private final LocalDate testReturnDate;
     private final LocalDate testReturnDate2;
     public final String testUid;
@@ -103,14 +104,14 @@ public class TestUtils {
                 .name("황테스트")
                 .email("hwangTest@test.com")
                 .role(testRole)
-                .status(false)
+                .status(true)
                 .build();
         testMember2 = Member.builder()
                 .id("ThiS1SNotRea1U1DDOY0UKNOWHoS")
                 .name("김테스트")
                 .email("kimTest@test.com")
                 .role(testRole2)
-                .status(true)
+                .status(false)
                 .build();
         testMember3 = Member.builder()
                 .id("AASDFGHJKLZXCVBNMQWERTYUIOPS")
@@ -157,14 +158,20 @@ public class TestUtils {
         testMemberLeaveAbsence = MemberLeaveAbsence.builder()
                 .id(1)
                 .member(testMember)
-                .status(true)
-                .expectedDateReturnSchool(testReturnDate)
+                .status(false)
+                .expectedDateReturnSchool(null)
                 .build();
         testMemberLeaveAbsence2 = MemberLeaveAbsence.builder()
                 .id(2)
                 .member(testMember2)
                 .status(true)
                 .expectedDateReturnSchool(testReturnDate2)
+                .build();
+        testMemberLeaveAbsence3 = MemberLeaveAbsence.builder()
+                .id(3)
+                .member(testMember4)
+                .status(true)
+                .expectedDateReturnSchool(testReturnDate)
                 .build();
         testUid = testMember.getId();
     }

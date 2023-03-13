@@ -20,6 +20,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Major Api Controller 클래스
+ * @since 2023-03-07
+ * @author 황준서(37기) hzser123@gmail.com
+ * @author 이현희(38기) heeit13145@gmail.com
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/major")
@@ -28,6 +34,11 @@ public class MajorApiController {
     private final MajorService majorService;
     private final MajorSpecificationBuilder majorSpecificationBuilder;
 
+    /**
+     * 단일 전공을 조회하는 함수
+     * @param majorId 조회할 Major(Object)의 ID
+     * @return 성공적으로 조회 완료 시 해당 Major(Object)의 정보를 담은 dto 반환
+     */
     @GetMapping("{majorId}")
     public ResponseEntity<MajorResponseControllerDto> getMajorById(
             @PathVariable Integer majorId){
@@ -37,6 +48,12 @@ public class MajorApiController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * 다수 전공을 조회하는 함수
+     * @param pageable sort option
+     * @param queryParam query option
+     * @return 성공적으로 조회 완료 시 해당 Major(Object)의 정보를 담은 dto들을 반환(List type)
+     */
     @GetMapping
     public ResponseEntity<List<MajorResponseControllerDto>> getMajorAll(
             @PageableDefault(page = 0,size = 1000,sort = "id",direction = Sort.Direction.DESC)

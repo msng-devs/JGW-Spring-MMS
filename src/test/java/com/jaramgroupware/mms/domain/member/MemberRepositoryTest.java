@@ -29,10 +29,6 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
-@SqlGroup({
-        @Sql(scripts = "classpath:tableBuild.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-        @Sql(scripts = "classpath:testDataSet.sql",executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ExtendWith(SpringExtension.class)
 @Transactional
@@ -47,14 +43,6 @@ class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     void findMemberById() {
@@ -119,20 +107,19 @@ class MemberRepositoryTest {
         assertThat(res,is(notNullValue()));
         assertTrue(testUtils.isListSame(res,testMembers));
     }
-//TODO H2 에서만 생기는 오류 고치기
 
-//    @Test
-//    void deleteAllByIdInQuery(){
-//        //given
-//        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMember().getId(),testUtils.getTestMember2().getId())){};
-//
-//        //when
-//        memberRepository.deleteAllByIdInQuery(testIds);
-//
-//        //then
-//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember().getId()),is(nullValue()));
-//        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember2().getId()),is(nullValue()));
-//    }
+    @Test
+    void deleteAllByIdInQuery(){
+        //given
+        Set<String> testIds = new HashSet<>(Arrays.asList(testUtils.getTestMember().getId(),testUtils.getTestMember2().getId())){};
+
+        //when
+        memberRepository.deleteAllByIdInQuery(testIds);
+
+        //then
+        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember().getId()),is(nullValue()));
+        assertThat(testEntityManager.find(Member.class,testUtils.getTestMember2().getId()),is(nullValue()));
+    }
 
     @Test
     void findAllWithIntegratedSpec(){
@@ -344,7 +331,7 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(2L,res.getTotalElements());
+        assertEquals(1L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
 
@@ -363,10 +350,10 @@ class MemberRepositoryTest {
 
         //then
         assertThat(res,is(notNullValue()));
-        assertEquals(2L,res.getTotalElements());
+        assertEquals(1L,res.getTotalElements());
         assertEquals(testMember.toString(),res.getContent().get(0).toString());
     }
-    
+
     @Test
     void existsByEmail() {
         //given
