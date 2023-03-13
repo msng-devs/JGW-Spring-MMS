@@ -16,6 +16,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * MemberInfo(Object)의 다중 조건 조회를 위한 Builder 클래스
+ * @since 2023-03-07
+ * @author 황준서(37기) hzser123@gmail.com
+ * @author 이현희(38기) heeit13145@gmail.com
+ */
 @Component
 @RequiredArgsConstructor
 public class MemberInfoSpecificationBuilder {
@@ -33,6 +39,9 @@ public class MemberInfoSpecificationBuilder {
     private final Rank defaultRank = Rank.builder().id(1).build();
     private final Rank defaultNewRank = Rank.builder().id(2).build();
 
+    /**
+     * 해당 옵션들은 입력된 값과 완전히 일치 되는 경우를 탐색한다
+     */
     @Getter
     @AllArgsConstructor
     private enum EqualKeys {
@@ -49,6 +58,9 @@ public class MemberInfoSpecificationBuilder {
         private final String type;
     }
 
+    /**
+     * 해당 옵션들을 사용하여 날짜와 시간 범위를 탐색한다
+     */
     @Getter
     @AllArgsConstructor
     private enum RangeKeys {
@@ -61,6 +73,9 @@ public class MemberInfoSpecificationBuilder {
         private final String tableName;
     }
 
+    /**
+     * 해당 옵션들을 사용해서 날짜 범위를 탐색한다
+     */
     @Getter
     @AllArgsConstructor
     private enum DateRangeKeys {
@@ -72,6 +87,9 @@ public class MemberInfoSpecificationBuilder {
         private final String tableName;
     }
 
+    /**
+     * 해당 옵션들은 해당 문자열을 포함하는 경우를 탐색한다
+     */
     @Getter
     @AllArgsConstructor
     private enum LikeKeys{

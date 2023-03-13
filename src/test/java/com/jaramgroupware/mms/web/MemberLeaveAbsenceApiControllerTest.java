@@ -164,11 +164,11 @@ public class MemberLeaveAbsenceApiControllerTest {
         //given
         List<MemberLeaveAbsenceResponseServiceDto> targetMemberLeaveAbsenceList = new ArrayList<MemberLeaveAbsenceResponseServiceDto>();
 
-        MemberLeaveAbsenceResponseServiceDto targetMemberLeaveAbsenceDto1 = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence());
-        targetMemberLeaveAbsenceList.add(targetMemberLeaveAbsenceDto1);
-
         MemberLeaveAbsenceResponseServiceDto targetMemberLeaveAbsenceDto2 = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence2());
         targetMemberLeaveAbsenceList.add(targetMemberLeaveAbsenceDto2);
+
+        MemberLeaveAbsenceResponseServiceDto targetMemberLeaveAbsenceDto3 = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence3());
+        targetMemberLeaveAbsenceList.add(targetMemberLeaveAbsenceDto3);
 
         doReturn(targetMemberLeaveAbsenceList).when(memberLeaveAbsenceService).findAll(any(),any());
 
@@ -233,7 +233,7 @@ public class MemberLeaveAbsenceApiControllerTest {
         verify(memberLeaveAbsenceService).delete(any(Member.class));
     }
 
-    //TODO 서버 에러 나는 부분 고치기
+    //TODO 505 서버 에러 나는 부분 고치기
 //    @Test
 //    void bulkDelete() throws  Exception{
 //        //given
@@ -244,6 +244,8 @@ public class MemberLeaveAbsenceApiControllerTest {
 //        MemberLeaveAbsenceBulkDeleteRequestControllerDto dto = MemberLeaveAbsenceBulkDeleteRequestControllerDto.builder()
 //                .MemberLeaveAbsenceIDs(ids)
 //                .build();
+//
+//        doReturn(ids).when(memberLeaveAbsenceService).delete(ids);
 //
 //        //when
 //        ResultActions result = mvc.perform(
@@ -264,11 +266,10 @@ public class MemberLeaveAbsenceApiControllerTest {
 //                                fieldWithPath("message").description("삭제된 MemberLeaveAbsence의 갯수 ")
 //                        )
 //                ));
-//
 //        //then
 //        result.andExpect(status().isOk())
 //                .andExpect(jsonPath("$.message").value("총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"));
-//        verify(memberLeaveAbsenceService).delete(anySet());
+//        verify(memberLeaveAbsenceService).delete(dto.getMemberLeaveAbsenceIDs());
 //    }
 
     @Test

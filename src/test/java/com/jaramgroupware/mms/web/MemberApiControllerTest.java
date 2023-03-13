@@ -656,16 +656,8 @@ class MemberApiControllerTest {
     @Test
     void delMember() throws Exception {
         //given
-        Member member = testUtils.getTestMember();
         String memberID = testUtils.getTestMember().getId();
-        Integer memberInfoId = testUtils.getTestMemberInfo().getId();
-        Integer memberLeaveAbsenceId = testUtils.getTestMemberLeaveAbsence().getId();
 
-        MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(member);
-
-        doReturn(memberResponseServiceDto).when(memberService).findById(anyString());
-        doReturn(memberLeaveAbsenceId).when(memberLeaveAbsenceService).delete(any(Member.class));
-        doReturn(memberInfoId).when(memberInfoService).delete(any(Member.class));
         doReturn(memberID).when(memberService).delete(anyString());
 
         //when
@@ -688,9 +680,6 @@ class MemberApiControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.member_id").value(memberID));
-        verify(memberService).findById(anyString());
-        verify(memberLeaveAbsenceService).delete(any(Member.class));
-        verify(memberInfoService).delete(any(Member.class));
         verify(memberService).delete(anyString());
     }
 
@@ -701,31 +690,11 @@ class MemberApiControllerTest {
         ids.add(testUtils.getTestMember().getId());
         ids.add(testUtils.getTestMember2().getId());
 
-        Set<Integer> ids2 = new HashSet<>();
-        ids2.add(1);
-        ids2.add(2);
+        MemberBulkDeleteRequestControllerDto dto = MemberBulkDeleteRequestControllerDto.builder()
+                .MemberIDs(ids)
+                .build();
 
-        Member member = testUtils.getTestMember();
-        Member member1 = testUtils.getTestMember2();
-        MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(member);
-        MemberResponseServiceDto memberResponseServiceDto1 = new MemberResponseServiceDto(member1);
-
-        MemberInfo memberInfo = testUtils.getTestMemberInfo();
-        MemberInfo memberInfo1 = testUtils.getTestMemberInfo2();
-        MemberInfoResponseServiceDto memberInfoResponseServiceDto = new MemberInfoResponseServiceDto(memberInfo);
-        MemberInfoResponseServiceDto memberInfoResponseServiceDto1 = new MemberInfoResponseServiceDto(memberInfo1);
-
-        MemberLeaveAbsence memberLeaveAbsence = testUtils.getTestMemberLeaveAbsence();
-        MemberLeaveAbsence memberLeaveAbsence1 = testUtils.getTestMemberLeaveAbsence2();
-        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto = new MemberLeaveAbsenceResponseServiceDto(memberLeaveAbsence);
-        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto1 = new MemberLeaveAbsenceResponseServiceDto(memberLeaveAbsence1);
-
-        doReturn(memberResponseServiceDto).when(memberService).findById(anyString());
-        doReturn(memberResponseServiceDto1).when(memberService).findById(anyString());
-        doReturn(memberInfoResponseServiceDto).when(memberInfoService).findByMember(any(Member.class));
-        doReturn(memberInfoResponseServiceDto1).when(memberInfoService).findByMember(any(Member.class));
-        doReturn(memberLeaveAbsenceResponseServiceDto).when(memberLeaveAbsenceService).findByMember(any(Member.class));
-        doReturn(memberLeaveAbsenceResponseServiceDto1).when(memberLeaveAbsenceService).findByMember(any(Member.class));
+        doReturn(ids).when(memberService).delete(anySet());
 
         //when
         ResultActions result = mvc.perform(
@@ -733,7 +702,7 @@ class MemberApiControllerTest {
                         .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(MemberBulkDeleteRequestControllerDto.builder().MemberIDs(ids).build())))
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andDo(document("member-del-bulk",
                         preprocessRequest(prettyPrint()),
@@ -748,11 +717,6 @@ class MemberApiControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("총 (2)개의 Member를 성공적으로 삭제했습니다!"));
-        verify(memberService, times(4)).findById(anyString());
-        verify(memberInfoService, times(2)).findByMember(any(Member.class));
-        verify(memberLeaveAbsenceService, times(2)).findByMember(any(Member.class));
-        verify(memberLeaveAbsenceService).delete(anySet());
-        verify(memberInfoService).delete(anySet());
         verify(memberService).delete(anySet());
     }
 
