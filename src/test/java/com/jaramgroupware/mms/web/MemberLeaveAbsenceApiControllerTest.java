@@ -234,43 +234,43 @@ public class MemberLeaveAbsenceApiControllerTest {
     }
 
     //TODO 505 서버 에러 나는 부분 고치기
-//    @Test
-//    void bulkDelete() throws  Exception{
-//        //given
-//        Set<Integer> ids = new HashSet<>();
-//        ids.add(testUtils.getTestMemberLeaveAbsence().getId());
-//        ids.add(testUtils.getTestMemberLeaveAbsence2().getId());
-//
-//        MemberLeaveAbsenceBulkDeleteRequestControllerDto dto = MemberLeaveAbsenceBulkDeleteRequestControllerDto.builder()
-//                .MemberLeaveAbsenceIDs(ids)
-//                .build();
-//
-//        doReturn(ids).when(memberLeaveAbsenceService).delete(ids);
-//
-//        //when
-//        ResultActions result = mvc.perform(
-//                        RestDocumentationRequestBuilders.delete("/api/v1/member-leave-absence")
-//                                .header("user_pk",testUtils.getTestUid())
-//                                .header("role_pk",4)
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .accept(MediaType.APPLICATION_JSON)
-//                                .content(objectMapper.writeValueAsString(dto)))
-//                .andDo(print())
-//                .andDo(document("member-leave-absence-del-bulk",
-//                        preprocessRequest(prettyPrint()),
-//                        preprocessResponse(prettyPrint()),
-//                        requestFields(
-//                                fieldWithPath("member_leave_absence_ids").description("삭제할 MemberLeaveAbsence의 id")
-//                        ),
-//                        responseFields(
-//                                fieldWithPath("message").description("삭제된 MemberLeaveAbsence의 갯수 ")
-//                        )
-//                ));
-//        //then
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.message").value("총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"));
-//        verify(memberLeaveAbsenceService).delete(dto.getMemberLeaveAbsenceIDs());
-//    }
+    @Test
+    void bulkDelete() throws  Exception{
+        //given
+        Set<Integer> ids = new HashSet<>();
+        ids.add(testUtils.getTestMemberLeaveAbsence().getId());
+        ids.add(testUtils.getTestMemberLeaveAbsence2().getId());
+
+        MemberLeaveAbsenceBulkDeleteRequestControllerDto dto = MemberLeaveAbsenceBulkDeleteRequestControllerDto.builder()
+                .MemberLeaveAbsenceIDs(ids)
+                .build();
+
+        doReturn(ids).when(memberLeaveAbsenceService).delete(ids);
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.delete("/api/v1/member-leave-absence")
+                                .header("user_pk",testUtils.getTestUid())
+                                .header("role_pk",4)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andDo(document("member-leave-absence-del-bulk",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("member_leave_absence_ids").description("삭제할 MemberLeaveAbsence의 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("message").description("삭제된 MemberLeaveAbsence의 갯수 ")
+                        )
+                ));
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"));
+        verify(memberLeaveAbsenceService).delete(dto.getMemberLeaveAbsenceIDs());
+    }
 
     @Test
     void updateMemberLeaveAbsence() throws Exception {

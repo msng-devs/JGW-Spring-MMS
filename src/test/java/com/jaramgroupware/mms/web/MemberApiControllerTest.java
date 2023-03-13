@@ -1,6 +1,5 @@
 package com.jaramgroupware.mms.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -8,8 +7,6 @@ import com.jaramgroupware.mms.TestUtils;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
-import com.jaramgroupware.mms.domain.rank.Rank;
-import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.major.serviceDto.MajorResponseServiceDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.*;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
@@ -18,31 +15,20 @@ import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDt
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoUpdateRequestServiceDto;
-import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceResponseServiceDto;
 import com.jaramgroupware.mms.dto.rank.serviceDto.RankResponseServiceDto;
 import com.jaramgroupware.mms.dto.role.serviceDto.RoleResponseServiceDto;
 import com.jaramgroupware.mms.service.*;
-import com.jaramgroupware.mms.web.MemberApiController;
-import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -63,7 +49,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -656,16 +641,8 @@ class MemberApiControllerTest {
     @Test
     void delMember() throws Exception {
         //given
-        Member member = testUtils.getTestMember();
         String memberID = testUtils.getTestMember().getId();
-        Integer memberInfoId = testUtils.getTestMemberInfo().getId();
-        Integer memberLeaveAbsenceId = testUtils.getTestMemberLeaveAbsence().getId();
 
-        MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(member);
-
-        doReturn(memberResponseServiceDto).when(memberService).findById(anyString());
-        doReturn(memberLeaveAbsenceId).when(memberLeaveAbsenceService).delete(any(Member.class));
-        doReturn(memberInfoId).when(memberInfoService).delete(any(Member.class));
         doReturn(memberID).when(memberService).delete(anyString());
 
         //when
@@ -688,9 +665,6 @@ class MemberApiControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.member_id").value(memberID));
-        verify(memberService).findById(anyString());
-        verify(memberLeaveAbsenceService).delete(any(Member.class));
-        verify(memberInfoService).delete(any(Member.class));
         verify(memberService).delete(anyString());
     }
 
@@ -701,31 +675,7 @@ class MemberApiControllerTest {
         ids.add(testUtils.getTestMember().getId());
         ids.add(testUtils.getTestMember2().getId());
 
-        Set<Integer> ids2 = new HashSet<>();
-        ids2.add(1);
-        ids2.add(2);
-
-        Member member = testUtils.getTestMember();
-        Member member1 = testUtils.getTestMember2();
-        MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(member);
-        MemberResponseServiceDto memberResponseServiceDto1 = new MemberResponseServiceDto(member1);
-
-        MemberInfo memberInfo = testUtils.getTestMemberInfo();
-        MemberInfo memberInfo1 = testUtils.getTestMemberInfo2();
-        MemberInfoResponseServiceDto memberInfoResponseServiceDto = new MemberInfoResponseServiceDto(memberInfo);
-        MemberInfoResponseServiceDto memberInfoResponseServiceDto1 = new MemberInfoResponseServiceDto(memberInfo1);
-
-        MemberLeaveAbsence memberLeaveAbsence = testUtils.getTestMemberLeaveAbsence();
-        MemberLeaveAbsence memberLeaveAbsence1 = testUtils.getTestMemberLeaveAbsence2();
-        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto = new MemberLeaveAbsenceResponseServiceDto(memberLeaveAbsence);
-        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto1 = new MemberLeaveAbsenceResponseServiceDto(memberLeaveAbsence1);
-
-        doReturn(memberResponseServiceDto).when(memberService).findById(anyString());
-        doReturn(memberResponseServiceDto1).when(memberService).findById(anyString());
-        doReturn(memberInfoResponseServiceDto).when(memberInfoService).findByMember(any(Member.class));
-        doReturn(memberInfoResponseServiceDto1).when(memberInfoService).findByMember(any(Member.class));
-        doReturn(memberLeaveAbsenceResponseServiceDto).when(memberLeaveAbsenceService).findByMember(any(Member.class));
-        doReturn(memberLeaveAbsenceResponseServiceDto1).when(memberLeaveAbsenceService).findByMember(any(Member.class));
+        doReturn(ids).when(memberService).delete(anySet());
 
         //when
         ResultActions result = mvc.perform(
@@ -748,11 +698,6 @@ class MemberApiControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("총 (2)개의 Member를 성공적으로 삭제했습니다!"));
-        verify(memberService, times(4)).findById(anyString());
-        verify(memberInfoService, times(2)).findByMember(any(Member.class));
-        verify(memberLeaveAbsenceService, times(2)).findByMember(any(Member.class));
-        verify(memberLeaveAbsenceService).delete(anySet());
-        verify(memberInfoService).delete(anySet());
         verify(memberService).delete(anySet());
     }
 
