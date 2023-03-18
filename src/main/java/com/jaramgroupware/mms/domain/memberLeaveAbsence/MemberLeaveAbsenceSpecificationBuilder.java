@@ -36,7 +36,6 @@ public class MemberLeaveAbsenceSpecificationBuilder {
     @AllArgsConstructor
     private enum EqualKeys {
 
-        //        MEMBER("memberID","member","String"),
         STATUS("status","status","Boolean");
 
         private final String queryParamName;

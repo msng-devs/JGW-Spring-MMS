@@ -26,7 +26,6 @@ public class MemberInfoSpecification implements Specification<MemberInfo> {
         //count query error
         //ref : https://starrybleu.github.io/development/2018/08/10/jpa-n+1-fetch-strategy-specification.html
         if (query.getResultType() != Long.class && query.getResultType() != long.class){
-//            root.fetch("member", JoinType.LEFT);
             root.fetch("rank", JoinType.LEFT);
             root.fetch("major", JoinType.LEFT);
         }

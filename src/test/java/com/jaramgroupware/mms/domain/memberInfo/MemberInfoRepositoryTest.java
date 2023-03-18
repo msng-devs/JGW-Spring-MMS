@@ -177,7 +177,6 @@ public class MemberInfoRepositoryTest {
 
         MultiValueMap<String, String> queryParam = new LinkedMultiValueMap<>();
         queryParam.add("includeGuest","true");
-        queryParam.add("memberID",testMemberInfo.getMember().getId());
         queryParam.add("phoneNumber",testMemberInfo.getPhoneNumber());
         queryParam.add("studentID",testMemberInfo.getStudentID());
         queryParam.add("majorID",testMemberInfo.getMajor().getId().toString());

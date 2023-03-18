@@ -10,6 +10,7 @@ import java.util.Set;
 @ToString
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)

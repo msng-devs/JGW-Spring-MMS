@@ -22,12 +22,6 @@ public class MemberLeaveAbsenceSpecification implements Specification<MemberLeav
         PredicatesBuilder predicatesBuilder = new PredicatesBuilder();
         query.distinct(true);
 
-        //count query error
-        //ref : https://starrybleu.github.io/development/2018/08/10/jpa-n+1-fetch-strategy-specification.html
-//        if (query.getResultType() != Long.class && query.getResultType() != long.class){
-//            root.fetch("member", JoinType.LEFT);
-//        }
-
         return predicatesBuilder.build(root,query,builder,list);
     }
 

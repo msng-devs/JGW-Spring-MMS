@@ -32,8 +32,6 @@ public class MemberBulkUpdateRequestControllerDto {
     @NotEmpty(message = "이름이 비여있습니다!")
     private String name;
 
-    @NotEmpty(message = "휴대폰 번호가 비여있습니다!")
-    @Pattern(regexp="(^$|[0-9]{11})")
     private String phoneNumber;
 
     @NotEmpty(message = "학생번호가 비여있습니다!")

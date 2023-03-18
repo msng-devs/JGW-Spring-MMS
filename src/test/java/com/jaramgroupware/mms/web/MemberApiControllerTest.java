@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jaramgroupware.mms.TestUtils;
 import com.jaramgroupware.mms.domain.member.Member;
-import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
-import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.dto.major.serviceDto.MajorResponseServiceDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.*;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
@@ -15,7 +13,6 @@ import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDt
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoUpdateRequestServiceDto;
-import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceResponseServiceDto;
 import com.jaramgroupware.mms.dto.rank.serviceDto.RankResponseServiceDto;
 import com.jaramgroupware.mms.dto.role.serviceDto.RoleResponseServiceDto;
 import com.jaramgroupware.mms.service.*;
@@ -180,10 +177,10 @@ class MemberApiControllerTest {
                                 fieldWithPath("id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
                                 fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
                                 fieldWithPath("name").description("대상 member의 name(실명)"),
-                                fieldWithPath("phone_number").description("대상 member의 휴대폰 번호").attributes(field("constraints", "- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})")),
+                                fieldWithPath("phone_number").description("대상 member의 휴대폰 번호").attributes(field("constraints", "- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})")).optional(),
                                 fieldWithPath("student_id").description("대상 member의 student id(학번)").attributes(field("constraints", "10자리의 student id")),
                                 fieldWithPath("year").description("대상 member의 기수"),
-                                fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")),
+                                fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")).optional(),
                                 fieldWithPath("major_id").description("대상 member의 major id").attributes(field("constraints", "Major (object)의 ID(PK)")),
                                 fieldWithPath("rank_id").description("대상 member의 rank id").attributes(field("constraints", "Rank (object)의 ID(PK)")),
                                 fieldWithPath("role_id").description("대상 member의 role id").attributes(field("constraints", "Role (object)의 ID(PK)")),
@@ -379,7 +376,7 @@ class MemberApiControllerTest {
                                 parameterWithName("memberID").description("대상 Member의 uid(firebase uid)")
                         ),
                         responseFields(
-                                fieldWithPath("id").description("대상 member의 멤버 정보 id"),
+                                fieldWithPath("id").description("대상 member의 memberInfo ID"),
                                 fieldWithPath("member_id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
                                 fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
                                 fieldWithPath("name").description("대상 member의 name(실명)"),
@@ -533,7 +530,7 @@ class MemberApiControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
-                                fieldWithPath("student_id").description("대상 member의 student id(학번)").attributes(field("constraints", "10자리의 student id")),
+                                fieldWithPath("student_id").description("대상 member의 student id(학번), 10자리 중 2,3번째만 공개").attributes(field("constraints", "10자리의 student id")),
                                 fieldWithPath("year").description("대상 member의 기수"),
                                 fieldWithPath("status").description("대상 member의 계정 활성 여부").attributes(field("constraints", "true : 활성 , false : 활성 아님")),
                                 fieldWithPath("major_id").description("대상 member의 major(object)의 ID"),
@@ -571,6 +568,8 @@ class MemberApiControllerTest {
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-get-multiple",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("[].id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
                                 fieldWithPath("[].email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
@@ -610,6 +609,8 @@ class MemberApiControllerTest {
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-info-get-multiple",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("[].id").description("대상 member의 멤버 정보 id"),
                                 fieldWithPath("[].member_id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
@@ -745,10 +746,10 @@ class MemberApiControllerTest {
                         requestFields(
                                 fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
                                 fieldWithPath("name").description("대상 member의 name(실명)"),
-                                fieldWithPath("phone_number").description("대상 member의 휴대폰 번호").attributes(field("constraints", "- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})")),
+                                fieldWithPath("phone_number").description("대상 member의 휴대폰 번호").attributes(field("constraints", "- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})")).optional(),
                                 fieldWithPath("student_id").description("대상 member의 student id(학번)").attributes(field("constraints", "10자리의 student id")),
                                 fieldWithPath("year").description("대상 member의 기수"),
-                                fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")),
+                                fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")).optional(),
                                 fieldWithPath("major_id").description("대상 member의 major id").attributes(field("constraints", "Major (object)의 ID(PK)")),
                                 fieldWithPath("rank_id").description("대상 member의 rank id").attributes(field("constraints", "Rank (object)의 ID(PK)")),
                                 fieldWithPath("role_id").description("대상 member의 role id").attributes(field("constraints", "Role (object)의 ID(PK)"))

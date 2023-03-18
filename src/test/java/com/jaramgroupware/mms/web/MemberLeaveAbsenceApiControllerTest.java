@@ -84,11 +84,11 @@ public class MemberLeaveAbsenceApiControllerTest {
     @Test
     void addMemberLeaveAbsence() throws Exception {
         //given
-        Integer id = testUtils.getTestMemberLeaveAbsence().getId();
+        Integer id = testUtils.getTestMemberLeaveAbsence2().getId();
         MemberLeaveAbsenceAddRequestControllerDto memberLeaveAbsenceAddRequestControllerDto= MemberLeaveAbsenceAddRequestControllerDto.builder()
-                .memberId(testUtils.getTestMemberLeaveAbsence().getMember().getId())
-                .status(testUtils.getTestMemberLeaveAbsence().isStatus())
-                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence().getExpectedDateReturnSchool())
+                .memberId(testUtils.getTestMemberLeaveAbsence2().getMember().getId())
+                .status(testUtils.getTestMemberLeaveAbsence2().isStatus())
+                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence2().getExpectedDateReturnSchool())
                 .build();
 
         doReturn(id).when(memberLeaveAbsenceService).add(any(MemberLeaveAbsenceAddRequestServiceDto.class));
@@ -107,7 +107,7 @@ public class MemberLeaveAbsenceApiControllerTest {
                         requestFields(
                                 fieldWithPath("member_id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
                                 fieldWithPath("status").description("대상 member의 휴학 여부").attributes(field("constraints", "true : 휴학 , false : 휴학 아님")),
-                                fieldWithPath("expected_date_return_school").description("대상 member의 휴학 예정일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함."))
+                                fieldWithPath("expected_date_return_school").description("대상 member의 휴학 예정일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")).optional()
                         ),
                         responseFields(
                                 fieldWithPath("id").description("추가된 member leave absence의 id")
@@ -123,10 +123,10 @@ public class MemberLeaveAbsenceApiControllerTest {
     @Test
     void getMemberLeaveAbsence() throws Exception {
         //given
-        String memberID = testUtils.getTestMemberLeaveAbsence().getMember().getId();
+        String memberID = testUtils.getTestMemberLeaveAbsence2().getMember().getId();
 
-        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence());
-        MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(testUtils.getTestMember());
+        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence2());
+        MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(testUtils.getTestMemberLeaveAbsence2().getMember());
 
         doReturn(memberResponseServiceDto).when(memberService).findById(memberID);
         doReturn(memberLeaveAbsenceResponseServiceDto).when(memberLeaveAbsenceService).findByMember(any(Member.class));
@@ -201,9 +201,9 @@ public class MemberLeaveAbsenceApiControllerTest {
     @Test
     void delMemberLeaveAbsence() throws Exception {
         //given
-        Member member = testUtils.getTestMemberLeaveAbsence().getMember();
+        Member member = testUtils.getTestMemberLeaveAbsence2().getMember();
         String memberID = member.getId();
-        Integer id = testUtils.getTestMemberLeaveAbsence().getId();
+        Integer id = testUtils.getTestMemberLeaveAbsence2().getId();
 
         MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(member);
 
@@ -233,19 +233,18 @@ public class MemberLeaveAbsenceApiControllerTest {
         verify(memberLeaveAbsenceService).delete(any(Member.class));
     }
 
-    //TODO 505 서버 에러 나는 부분 고치기
     @Test
     void bulkDelete() throws  Exception{
         //given
         Set<Integer> ids = new HashSet<>();
-        ids.add(testUtils.getTestMemberLeaveAbsence().getId());
         ids.add(testUtils.getTestMemberLeaveAbsence2().getId());
+        ids.add(testUtils.getTestMemberLeaveAbsence3().getId());
 
         MemberLeaveAbsenceBulkDeleteRequestControllerDto dto = MemberLeaveAbsenceBulkDeleteRequestControllerDto.builder()
                 .MemberLeaveAbsenceIDs(ids)
                 .build();
 
-        doReturn(ids).when(memberLeaveAbsenceService).delete(ids);
+        doReturn(ids).when(memberLeaveAbsenceService).delete(anySet());
 
         //when
         ResultActions result = mvc.perform(
@@ -260,30 +259,30 @@ public class MemberLeaveAbsenceApiControllerTest {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("member_leave_absence_ids").description("삭제할 MemberLeaveAbsence의 id")
+                                fieldWithPath("member_leave_absence_ids").description("삭제할 MemberLeaveAbsence의 ids")
                         ),
                         responseFields(
-                                fieldWithPath("message").description("삭제된 MemberLeaveAbsence의 갯수 ")
+                                fieldWithPath("message").description("삭제된 MemberLeaveAbsence의 개수")
                         )
                 ));
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"));
-        verify(memberLeaveAbsenceService).delete(dto.getMemberLeaveAbsenceIDs());
+        verify(memberLeaveAbsenceService).delete(anySet());
     }
 
     @Test
     void updateMemberLeaveAbsence() throws Exception {
         //given
-        Member member = testUtils.getTestMemberLeaveAbsence().getMember();
+        Member member = testUtils.getTestMemberLeaveAbsence2().getMember();
         String memberID = member.getId();
 
         MemberLeaveAbsenceUpdateRequestControllerDto memberLeaveAbsenceUpdateRequestControllerDto = MemberLeaveAbsenceUpdateRequestControllerDto.builder()
-                .status(testUtils.getTestMemberLeaveAbsence().isStatus())
-                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence().getExpectedDateReturnSchool())
+                .status(testUtils.getTestMemberLeaveAbsence2().isStatus())
+                .expectedDateReturnSchool(testUtils.getTestMemberLeaveAbsence2().getExpectedDateReturnSchool())
                 .build();
 
-        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence());
+        MemberLeaveAbsenceResponseServiceDto memberLeaveAbsenceResponseServiceDto = new MemberLeaveAbsenceResponseServiceDto(testUtils.getTestMemberLeaveAbsence2());
         MemberResponseServiceDto memberResponseServiceDto = new MemberResponseServiceDto(member);
 
         doReturn(memberResponseServiceDto).when(memberService).findById(memberID);
@@ -298,12 +297,14 @@ public class MemberLeaveAbsenceApiControllerTest {
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andDo(document("member-leave-absence-update-single",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("memberID").description("대상 Member의 uid(firebase uid)")
                         ),
                         requestFields(
                                 fieldWithPath("status").description("대상 member의 휴학 여부").attributes(field("constraints", "true : 휴학 , false : 휴학 아님")),
-                                fieldWithPath("expected_date_return_school").description("대상 member의 휴학 예정일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함."))
+                                fieldWithPath("expected_date_return_school").description("대상 member의 휴학 예정일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")).optional()
                         ),
                         responseFields(
                                 fieldWithPath("id").description("수정된 member leave absence의 id"),

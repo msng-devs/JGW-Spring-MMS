@@ -46,7 +46,6 @@ public class MemberInfoSpecificationBuilder {
     @AllArgsConstructor
     private enum EqualKeys {
 
-        //        MEMBER("memberID","member","String"),
         MAJOR("majorID","major","Integer"),
         RANK("rankID","rank","Integer"),
         YEAR("year","year","Integer"),
