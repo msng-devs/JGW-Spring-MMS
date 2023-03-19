@@ -19,12 +19,16 @@ public enum ErrorCode {
     INVALID_RANK_ID(HttpStatus.NOT_FOUND,"INVALID_ROLE_ID","해당 rankId 을 찾을 수 없습니다!",20114),
     INVALID_MAJOR_ID(HttpStatus.NOT_FOUND,"INVALID_MAJOR_ID","해당 majorId 을 찾을 수 없습니다!",20116),
     INVALID_PENALTY_ID(HttpStatus.NOT_FOUND,"INVALID_PENALTY_ID","해당 penalty를 찾을 수 없습니다!",20118),
+    INVALID_MEMBER_INFO(HttpStatus.NOT_FOUND,"INVALID_MEMBER_INFO","해당 memberInfo 을 찾을 수 없습니다!",20121),
+    INVALID_MEMBER_LEAVE_ABSENCE_ID(HttpStatus.NOT_FOUND,"INVALID_MEMBER_LEAVE_ABSENCE_ID","해당 memberLeaveAbsenceId 을 찾을 수 없습니다!",20119),
 
 
     EMPTY_TIMETABLE(HttpStatus.NOT_FOUND,"EMPTY_TIMETABLE","timetable이 존재하지 않습니다.",20105),
     EMPTY_ATTENDANCE(HttpStatus.NOT_FOUND,"EMPTY_ATTENDANCE","ATTENDANCE가 존재하지 않습니다.",20109),
     EMPTY_EVENT(HttpStatus.NOT_FOUND,"EMPTY_EVENT","event가 존재하지 않습니다.",20104),
     EMPTY_MEMBER(HttpStatus.NOT_FOUND,"EMPTY_MEMBER","member가 존재하지 않습니다.",20111),
+    EMPTY_MEMBER_LEAVE_ABSENCE(HttpStatus.NOT_FOUND,"EMPTY_MEMBER_LEAVE_ABSENCE","member leave absence가 존재하지 않습니다.",20120),
+    EMPTY_MEMBER_INFO(HttpStatus.NOT_FOUND,"EMPTY_MEMBER_INFO","member info가 존재하지 않습니다.",20122),
     EMPTY_ROLE(HttpStatus.NOT_FOUND,"EMPTY_ROLE","role이 존재하지 않습니다.",20113),
     EMPTY_RANK(HttpStatus.NOT_FOUND,"EMPTY_RANK","rank가 존재하지 않습니다.",20115),
     EMPTY_MAJOR(HttpStatus.NOT_FOUND,"EMPTY_MAJOR","major가 존재하지 않습니다.",20117),
@@ -35,6 +39,8 @@ public enum ErrorCode {
     ATTENDANCE_CODE_NOT_VALID(HttpStatus.FORBIDDEN,"ATTENDANCE_CODE_NOT_VALID","코드가 일치하지 않습니다!",10104),
     REGISTER_CODE_NOT_VALID(HttpStatus.FORBIDDEN,"REGISTER_CODE_NOT_VALID","회원가입 코드가 일치하지 않습니다!",10104),
     ALREADY_HAS_CODE(HttpStatus.BAD_REQUEST,"ALREADY_HAS_CODE","이미 코드를 가지고 있는 TimeTable입니다.",20106),
+    DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST,"DUPLICATED_EMAIL","중복된 이메일입니다.",20123),
+    DUPLICATED_STUDENT_ID(HttpStatus.BAD_REQUEST,"DUPLICATED_STUDENT_ID","중복된 학번입니다.",20124),
     FORBIDDEN_ROLE(HttpStatus.FORBIDDEN,"FORBIDDEN_ROLE","접근 가능한 권한이 아닙니다.",20106),
     CANNOT_CREATE_KEY(HttpStatus.INTERNAL_SERVER_ERROR,"CANNOT_CREATE_KEY","키 생성에 실패했습니다! 다시 시도해 주세요!",30101),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"INTERNAL_SERVER_ERROR","알 수 없는 서버 에러입니다.",null);
