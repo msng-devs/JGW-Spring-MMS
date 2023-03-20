@@ -386,12 +386,6 @@ sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방
 |member
 |member의 uid
 
-|email
-|member의 이메일 주소
-
-|name
-|member의 실명
-
 |phoneNumber
 |member의 휴대폰 번호
 
@@ -403,12 +397,6 @@ sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방
 
 |rank
 |member의 회원 등급
-
-|status
-|member의 계정 활성 상태
-
-|role
-|member의 role
 
 |year
 |member의 기수
