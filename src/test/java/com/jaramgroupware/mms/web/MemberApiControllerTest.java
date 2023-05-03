@@ -91,54 +91,54 @@ class MemberApiControllerTest {
     void tearDown() {
     }
 
-//    @Test
-//    void registerMember() throws Exception {
-//        //given
-//        MemberRegisterRequestControllerDto memberRegisterRequestControllerDto = MemberRegisterRequestControllerDto.builder()
-//                .id(testUtils.getTestMember().getId())
-//                .email(testUtils.getTestMember().getEmail())
-//                .leaveAbsence(testUtils.getTestMember().isLeaveAbsence())
-//                .majorId(testUtils.getTestMember().getMajor().getId())
-//                .phoneNumber(testUtils.getTestMember().getPhoneNumber())
-//                .name(testUtils.getTestMember().getName())
-//                .studentID(testUtils.getTestMember().getStudentID())
-//                .dateOfBirth(testUtils.getTestDate())
-//                .build();
-//
-//        doReturn(memberRegisterRequestControllerDto.getId()).when(memberService).add(any(MemberAddRequestServiceDto.class),anyString());
-//
-//        //when
-//        ResultActions result = mvc.perform(
-//                RestDocumentationRequestBuilders.post("/api/v1/member/register")
-//                        .header("user_pk",testUtils.getTestUid())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(memberRegisterRequestControllerDto))
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andDo(document("member-register",
-//                        preprocessRequest(prettyPrint()),
-//                        preprocessResponse(prettyPrint()),
-//                        requestFields(
-//                                fieldWithPath("id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
-//                                fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
-//                                fieldWithPath("name").description("대상 member의 name(실명)"),
-//                                fieldWithPath("phone_number").description("대상 member의 휴대폰 번호").attributes(field("constraints", "- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})")),
-//                                fieldWithPath("student_id").description("대상 member의 student id(학번)").attributes(field("constraints", "10자리의 student id")),
-//                                fieldWithPath("leave_absence").description("대상 member의 휴학 여부").attributes(field("constraints", "true : 휴학 , false : 휴학 아님")),
-//                                fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")),
-//                                fieldWithPath("major_id").description("대상 member의 major id").attributes(field("constraints", "Major (object)의 ID(PK)"))
-//                        ),
-//                        responseFields(
-//                                fieldWithPath("member_id").description(testUtils.getTestMember().getId())
-//                        )
-//                ));
-//        //then
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.member_id").value(memberRegisterRequestControllerDto.getId()));
-//        verify(memberService).add(any(MemberAddRequestServiceDto.class),anyString());
-//
-//
-//    }
+    @Test
+    void registerMember() throws Exception {
+        //given
+        String memberId = "QWERASDFZXCVPOIULKJHMNBVQAWS";
+        int memberInfoId = 1;
+        MemberRegisterRequestControllerDto memberRegisterRequestControllerDto = MemberRegisterRequestControllerDto.builder()
+                .id("QWERASDFZXCVPOIULKJHMNBVQAWS")
+                .email("test@test.com")
+                .name(testUtils.getTestMemberInfo().getMember().getName())
+                .phoneNumber("01011112222")
+                .studentID("2023001122")
+                .majorId(testUtils.getTestMemberInfo().getMajor().getId())
+                .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
+                .build();
+
+        doReturn(memberId).when(memberService).add(any(MemberAddRequestServiceDto.class));
+        doReturn(memberInfoId).when(memberInfoService).add(any(MemberInfoAddRequestServiceDto.class),anyString());
+
+        //when
+        ResultActions result = mvc.perform(
+                RestDocumentationRequestBuilders.post("/api/v1/member/register")
+                        .header("user_pk",testUtils.getTestUid())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberRegisterRequestControllerDto))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("member-register",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
+                                fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
+                                fieldWithPath("name").description("대상 member의 name(실명)"),
+                                fieldWithPath("phone_number").description("대상 member의 휴대폰 번호").attributes(field("constraints", "- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})")).optional(),
+                                fieldWithPath("student_id").description("대상 member의 student id(학번)").attributes(field("constraints", "10자리의 student id")),
+                                fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")).optional(),
+                                fieldWithPath("major_id").description("대상 member의 major id").attributes(field("constraints", "Major (object)의 ID(PK)"))
+                        ),
+                        responseFields(
+                                fieldWithPath("member_id").description("가입 완료된 member의 UID (firebase uid)")
+                        )
+                ));
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.member_id").value(memberRegisterRequestControllerDto.getId()));
+        verify(memberService).add(any(MemberAddRequestServiceDto.class));
+        verify(memberInfoService).add(any(MemberInfoAddRequestServiceDto.class),anyString());
+    }
 
     @Test
     void addMember() throws Exception {
@@ -156,7 +156,6 @@ class MemberApiControllerTest {
                 .roleId(testUtils.getTestMemberInfo().getMember().getRole().getId())
                 .year(testUtils.getTestMemberInfo().getYear())
                 .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
-                .status(testUtils.getTestMemberInfo().getMember().isStatus())
                 .build();
 
         doReturn(memberId).when(memberService).add(any(MemberAddRequestServiceDto.class));
@@ -183,8 +182,7 @@ class MemberApiControllerTest {
                                 fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")).optional(),
                                 fieldWithPath("major_id").description("대상 member의 major id").attributes(field("constraints", "Major (object)의 ID(PK)")),
                                 fieldWithPath("rank_id").description("대상 member의 rank id").attributes(field("constraints", "Rank (object)의 ID(PK)")),
-                                fieldWithPath("role_id").description("대상 member의 role id").attributes(field("constraints", "Role (object)의 ID(PK)")),
-                                fieldWithPath("status").description("대상 member의 계정 활성 여부").attributes(field("constraints", "true : 활성화 , false : 비 활성화"))
+                                fieldWithPath("role_id").description("대상 member의 role id").attributes(field("constraints", "Role (object)의 ID(PK)"))
                         ),
                         responseFields(
                                 fieldWithPath("member_id").description("새롭게 추가된 Member의 UID (firebase uid)")

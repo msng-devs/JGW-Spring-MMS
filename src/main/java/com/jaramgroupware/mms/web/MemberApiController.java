@@ -16,8 +16,6 @@ import com.jaramgroupware.mms.dto.memberInfo.controllerDto.MemberInfoFullRespons
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
 import com.jaramgroupware.mms.service.*;
 import com.jaramgroupware.mms.utils.validation.PageableValid;
-import com.jaramgroupware.mms.utils.validation.member.BulkAddMemberValid;
-import com.jaramgroupware.mms.utils.validation.member.BulkUpdateMemberValid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +29,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -67,22 +63,30 @@ public class MemberApiController {
 
     private final Role adminRole = Role.builder().id(4).build();
 
+    /**
+     * 신규 Member를 가입시키는 함수
+     * @param isNew 어떤 종류의 회원인지 구분, 새롭게 학회에 등록한 회원 = true, 기존 학회원 혹은 OB = false
+     * @param memberRegisterRequestControllerDto Member(Object)와 MemberInfo(Object)의 신규 가입 요청을 담은 dto
+     * @param uid 회원의 신규 가입을 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 신규 가입 완료된 Member(Object)의 UID(Firebase uid)를 반환
+     */
+    @PostMapping("/register")
+    public ResponseEntity<MemberIdResponseControllerDto> registerMember(
+            @RequestParam(defaultValue = "true",name = "isNew") Boolean isNew,
+            @RequestBody @Valid MemberRegisterRequestControllerDto memberRegisterRequestControllerDto,
+            @RequestHeader("user_pk") String uid){
 
-//    @PostMapping("/register")
-//    public ResponseEntity<MemberIdResponseControllerDto> registerMember(
-//            @RequestParam(defaultValue = "true",name = "isNew") Boolean isNew,
-//            @RequestBody @Valid MemberRegisterRequestControllerDto memberRegisterRequestControllerDto,
-//            @RequestHeader("user_pk") String uid){
-//
-//        String id;
-//        if(isNew){
-//            id = memberService.add(memberRegisterRequestControllerDto.toServiceDto(defaultNewRank,defaultNewMemberRole),"system");
-//        } else{
-//            id = memberService.add(memberRegisterRequestControllerDto.toServiceDto(defaultRank,defaultMemberRole),"system");
-//        }
-//
-//        return ResponseEntity.ok(new MemberIdResponseControllerDto(id));
-//    }
+        String id;
+        if(isNew){
+            id = memberService.add(memberRegisterRequestControllerDto.toServiceDto(defaultNewMemberRole));
+            memberInfoService.add(memberRegisterRequestControllerDto.toServiceDto(defaultNewRank),"system");
+        } else{
+            id = memberService.add(memberRegisterRequestControllerDto.toServiceDto(defaultMemberRole));
+            memberInfoService.add(memberRegisterRequestControllerDto.toServiceDto(defaultRank),"system");
+        }
+
+        return ResponseEntity.ok(new MemberIdResponseControllerDto(id));
+    }
 
 //    // 다수 Member를 등록
 //    @PostMapping

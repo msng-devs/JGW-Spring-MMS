@@ -2,6 +2,43 @@
 = Member-API
 회원 정보를 조회 및 관리할 수 있는 api 입니다.
 
+[[Member-Register]]
+== POST : /mms/api/v1/member/register
+=== 신규 Member을 가입
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|x
+
+|add user info
+|false
+|===
+
+=== Query Params
+
+[cols="1,1,1"]
+|===
+|param name|options|description
+
+|isNew
+|true,false (기본 값 true)
+|신규 학회원(가두 모집 등)인지 아니면, 기존 학회원인지 여부
+|===
+
+새로운 Member을 가입할 때 사용하는 API 입니다. 위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.
+
+만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며
+
+만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.
+
+해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role과 rank를 임시로 갖게 됩니다.
+
+operation::member-register[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
+
 [[Member-Add]]
 == POST : /mms/api/v1/member
 === 단일 Member를 등록
@@ -18,43 +55,6 @@
 |false
 |===
 operation::member-add-single[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
-
-// [[Member-Register]]
-// == POST : /mms/api/v1/member/register
-// === 신규 Member을 가입
-// === Route Options
-// [cols="1,1"]
-// |===
-// |authorization
-// |true
-//
-// |Role
-// |x
-//
-// |add user info
-// |false
-// |===
-//
-// === Query Params
-//
-// [cols="1,1,1"]
-// |===
-// |param name|options|description
-//
-// |isNew
-// |true,false (기본 값 true)
-// |신규 학회원(가두 모집 등)인지 아니면, 기존 학회원인지 여부
-// |===
-//
-// 새로운 Member을 가입할 때 사용하는 API 입니다. 위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.
-//
-// 만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며
-//
-// 만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.
-//
-// 해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role과 rank를 임시로 갖게 됩니다.
-//
-// operation::member-register[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
 
 [[Member-Get-Single]]
 == GET : /mms/api/v1/member/{memberID}

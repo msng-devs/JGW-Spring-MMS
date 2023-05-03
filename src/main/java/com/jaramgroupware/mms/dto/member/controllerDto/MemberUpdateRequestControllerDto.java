@@ -9,6 +9,7 @@ import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoUpdateRequestServiceDto;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -28,6 +29,7 @@ public class MemberUpdateRequestControllerDto {
     @NotEmpty(message = "이름이 비여있습니다!")
     private String name;
 
+    @Pattern(regexp="(^$|[0-9]{11})")
     private String phoneNumber;
 
     @NotEmpty(message = "학생번호가 비여있습니다!")
@@ -46,6 +48,7 @@ public class MemberUpdateRequestControllerDto {
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     public MemberUpdateRequestServiceDto toMemberServiceDto(Role role){
