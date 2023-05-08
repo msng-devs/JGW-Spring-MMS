@@ -35,6 +35,7 @@ public class MemberAddRequestControllerDto {
     @NotEmpty(message = "이름이 비여있습니다!")
     private String name;
 
+    @Pattern(regexp="(^$|[0-9]{11})")
     private String phoneNumber;
 
     @NotEmpty(message = "학생번호가 비여있습니다!")
@@ -53,10 +54,8 @@ public class MemberAddRequestControllerDto {
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
-
-    @NotNull(message = "계정 활성 상태 여부가 비여있습니다!")
-    private boolean status;
 
     public MemberAddRequestServiceDto toMemberAddServiceDto(){
         return MemberAddRequestServiceDto.builder()
@@ -64,7 +63,7 @@ public class MemberAddRequestControllerDto {
                 .name(name)
                 .email(email)
                 .role(Role.builder().id(roleId).build())
-                .status(status)
+                .status(true)
                 .build();
     }
 
