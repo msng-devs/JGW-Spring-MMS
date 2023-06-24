@@ -4,13 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jaramgroupware.mms.TestUtils;
+import com.jaramgroupware.mms.domain.authCode.AuthCode;
+import com.jaramgroupware.mms.domain.authCode.AuthCodeRepository;
 import com.jaramgroupware.mms.domain.member.Member;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
 import com.jaramgroupware.mms.dto.major.serviceDto.MajorResponseServiceDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.*;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
+import com.jaramgroupware.mms.dto.member.serviceDto.MemberRegisterRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberInfo.controllerDto.MemberInfoRegisterRequestControllerDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoRegisterRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.rank.serviceDto.RankResponseServiceDto;
@@ -79,6 +86,12 @@ class MemberApiControllerTest {
     @MockBean
     private RoleService roleService;
 
+    @MockBean
+    private MemberInfoRepository memberInfoRepository;
+
+    @MockBean
+    private AuthCodeRepository authCodeRepository;
+
     private final TestUtils testUtils = new TestUtils();
 
     @BeforeEach
@@ -92,52 +105,91 @@ class MemberApiControllerTest {
     }
 
     @Test
-    void registerMember() throws Exception {
+    void addNewMemberInfo() throws Exception {
         //given
-        String memberId = "QWERASDFZXCVPOIULKJHMNBVQAWS";
-        int memberInfoId = 1;
-        MemberRegisterRequestControllerDto memberRegisterRequestControllerDto = MemberRegisterRequestControllerDto.builder()
-                .id("QWERASDFZXCVPOIULKJHMNBVQAWS")
-                .email("test@test.com")
-                .name(testUtils.getTestMemberInfo().getMember().getName())
-                .phoneNumber("01011112222")
-                .studentID("2023001122")
+        MemberInfoRegisterRequestControllerDto memberInfoRegisterRequestControllerDto = MemberInfoRegisterRequestControllerDto.builder()
+                .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
                 .majorId(testUtils.getTestMemberInfo().getMajor().getId())
                 .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
                 .build();
 
-        doReturn(memberId).when(memberService).add(any(MemberAddRequestServiceDto.class));
-        doReturn(memberInfoId).when(memberInfoService).add(any(MemberInfoAddRequestServiceDto.class),anyString());
+        Integer memberInfoId = testUtils.getTestMemberInfo().getId();
+
+        doReturn(memberInfoId).when(memberInfoService).register(any(MemberInfoRegisterRequestServiceDto.class),anyString());
 
         //when
         ResultActions result = mvc.perform(
                 RestDocumentationRequestBuilders.post("/api/v1/member/register")
                         .header("user_pk",testUtils.getTestUid())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberRegisterRequestControllerDto))
+                        .content(objectMapper.writeValueAsString(memberInfoRegisterRequestControllerDto))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andDo(document("member-register",
+                .andDo(document("member-info-register-single",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
-                                fieldWithPath("id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
-                                fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
-                                fieldWithPath("name").description("대상 member의 name(실명)"),
                                 fieldWithPath("phone_number").description("대상 member의 휴대폰 번호").attributes(field("constraints", "- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})")).optional(),
                                 fieldWithPath("student_id").description("대상 member의 student id(학번)").attributes(field("constraints", "10자리의 student id")),
                                 fieldWithPath("date_of_birth").description("대상 member의 생년월일").attributes(field("constraints", "yyyy-MM-dd format을 따라야함.")).optional(),
                                 fieldWithPath("major_id").description("대상 member의 major id").attributes(field("constraints", "Major (object)의 ID(PK)"))
                         ),
                         responseFields(
-                                fieldWithPath("member_id").description("가입 완료된 member의 UID (firebase uid)")
+                                fieldWithPath("id").description("가입 완료된 memberInfo의 Id(PK)")
                         )
                 ));
         //then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.member_id").value(memberRegisterRequestControllerDto.getId()));
-        verify(memberService).add(any(MemberAddRequestServiceDto.class));
-        verify(memberInfoService).add(any(MemberInfoAddRequestServiceDto.class),anyString());
+                .andExpect(jsonPath("$.id").value(memberInfoId));
+        verify(memberInfoService).register(any(MemberInfoRegisterRequestServiceDto.class),anyString());
+    }
+
+    @Test
+    void registerNewMember() throws Exception {
+        //given
+        MemberRegisterRequestControllerDto memberRegisterRequestControllerDto = MemberRegisterRequestControllerDto.builder()
+                .authCode(testUtils.getTestAuthCode().getId())
+                .id(testUtils.getTestMember().getId())
+                .email(testUtils.getTestMember().getEmail())
+                .name(testUtils.getTestMember().getName())
+                .build();
+
+        AuthCode testAuthCode = testUtils.getTestAuthCode();
+        MemberInfo testMemberInfo = testUtils.getTestMemberInfo();
+        String memberId = testUtils.getTestMember().getId();
+
+        doReturn(Optional.of(testAuthCode)).when(authCodeRepository).findById(anyString());
+        doReturn(Optional.of(testMemberInfo)).when(memberInfoRepository).findMemberInfoById(anyInt());
+        doReturn(memberId).when(memberService).register(any(MemberRegisterRequestServiceDto.class));
+
+        //when
+        ResultActions result = mvc.perform(
+                        RestDocumentationRequestBuilders.post("/api/v1/member/register/auth")
+                                .header("user_pk",testUtils.getTestUid())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(memberRegisterRequestControllerDto))
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(document("member-register-single",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("auth_code").description("대상 member의 회원가입 인증코드"),
+                                fieldWithPath("id").description("대상 member의 UID (firebase uid)").attributes(field("constraints", "28자 firebase uid")),
+                                fieldWithPath("email").description("대상 member의 email").attributes(field("constraints", "email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]$")),
+                                fieldWithPath("name").description("대상 member의 name(실명)")
+                        ),
+                        responseFields(
+                                fieldWithPath("member_id").description("새롭게 추가된 Member의 UID (firebase uid)")
+                        )
+                ));
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.member_id").value(memberId));
+        verify(authCodeRepository).findById(anyString());
+        verify(memberInfoRepository).findMemberInfoById(anyInt());
+        verify(memberService).register(any(MemberRegisterRequestServiceDto.class));
     }
 
     @Test

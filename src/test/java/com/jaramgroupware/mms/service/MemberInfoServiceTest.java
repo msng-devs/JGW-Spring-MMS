@@ -1,11 +1,14 @@
 package com.jaramgroupware.mms.service;
 
 import com.jaramgroupware.mms.TestUtils;
+import com.jaramgroupware.mms.domain.authCode.AuthCode;
+import com.jaramgroupware.mms.domain.authCode.AuthCodeRepository;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoSpecification;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoRegisterRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoUpdateRequestServiceDto;
 import com.jaramgroupware.mms.utils.exception.CustomException;
@@ -19,12 +22,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.awt.print.Pageable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,6 +42,9 @@ public class MemberInfoServiceTest {
 
     @Mock
     private MemberInfoRepository memberInfoRepository;
+
+    @Mock
+    private AuthCodeRepository authCodeRepository;
 
     private final TestUtils testUtils = new TestUtils();
 
@@ -168,6 +171,54 @@ public class MemberInfoServiceTest {
         Assertions.assertNotNull(resultID);
         Assertions.assertEquals(resultID, Objects.requireNonNull(resultID));
         verify(memberInfoRepository).save(any());
+    }
+
+    @Test
+    void register() {
+        //given
+        MemberInfoRegisterRequestServiceDto testServiceDto = MemberInfoRegisterRequestServiceDto
+                .builder()
+                .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
+                .rank(testUtils.getTestMemberInfo().getRank())
+                .major(testUtils.getTestMemberInfo().getMajor())
+                .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
+                .build();
+
+        MemberInfo testEntity = testServiceDto.toEntity();
+        testEntity.setId(testUtils.getTestMemberInfo().getId());
+        AuthCode testAuthCode = testUtils.getTestAuthCode();
+
+        doReturn(testEntity).when(memberInfoRepository).save(any(MemberInfo.class));
+        doReturn(testAuthCode).when(authCodeRepository).save(any(AuthCode.class));
+
+        //when
+        Integer resultID = memberInfoService.register(testServiceDto, testUtils.testUid);
+
+        //then
+        Assertions.assertNotNull(resultID);
+        verify(memberInfoRepository).save(any(MemberInfo.class));
+        verify(authCodeRepository).save(any(AuthCode.class));
+    }
+
+    @Test
+    void duplicatedStudentIdErrorWhenRegister() {
+        //given
+        MemberInfoRegisterRequestServiceDto testServiceDto = MemberInfoRegisterRequestServiceDto
+                .builder()
+                .phoneNumber(testUtils.getTestMemberInfo().getPhoneNumber())
+                .studentID(testUtils.getTestMemberInfo().getStudentID())
+                .rank(testUtils.getTestMemberInfo().getRank())
+                .major(testUtils.getTestMemberInfo().getMajor())
+                .dateOfBirth(testUtils.getTestMemberInfo().getDateOfBirth())
+                .build();
+
+        doReturn(true).when(memberInfoRepository).existsByStudentID(testServiceDto.getStudentID());
+
+        //when then
+        assertThrows(CustomException.class, () -> {
+            memberInfoService.register(testServiceDto,testUtils.testUid);
+        });
     }
 
 //    @Test

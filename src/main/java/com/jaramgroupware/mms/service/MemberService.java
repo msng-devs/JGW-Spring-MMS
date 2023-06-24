@@ -2,10 +2,8 @@ package com.jaramgroupware.mms.service;
 
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.dto.member.serviceDto.*;
 import com.jaramgroupware.mms.utils.exception.CustomException;
 import com.jaramgroupware.mms.utils.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -97,6 +95,21 @@ public class MemberService {
                 .map(MemberResponseServiceDto::new)
                 .collect(Collectors.toList());
 
+    }
+    @Transactional
+    public String register(MemberRegisterRequestServiceDto memberRegisterRequestServiceDto) {
+
+        if (memberRepository.existsByEmail(memberRegisterRequestServiceDto.getEmail())) {
+            throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
+        }
+
+        Member targetMember = memberRegisterRequestServiceDto.toEntity();
+        Member result = memberRepository.save(targetMember);
+
+        MemberInfo targetMemberInfo = memberRegisterRequestServiceDto.getMemberInfo();
+        targetMemberInfo.setMember(targetMember);
+
+        return result.getId();
     }
 
     /**
