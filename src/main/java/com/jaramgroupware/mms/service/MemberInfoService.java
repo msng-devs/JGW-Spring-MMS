@@ -105,6 +105,12 @@ public class MemberInfoService {
 
     }
 
+    /**
+     * 신규 회원의 정보를 등록하는 함수
+     * @param memberInfoRegisterRequestServiceDto 등록할 MemberInfo(Object)의 정보를 담은 dto
+     * @param who 해당 신규 회원 정보를 등록한 Member(Object)의 UID(Firebase uid)
+     * @return 등록된 MemberInfo(Object)의 ID, 등록 요청 dto 내의 학번이 이미 존재한다면 DUPLICATED_STUDENT_ID 예외 처리
+     */
     @Transactional
     public Integer register(MemberInfoRegisterRequestServiceDto memberInfoRegisterRequestServiceDto, String who){
 
