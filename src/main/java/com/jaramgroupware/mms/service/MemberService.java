@@ -3,6 +3,7 @@ package com.jaramgroupware.mms.service;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
 import com.jaramgroupware.mms.dto.member.serviceDto.*;
 import com.jaramgroupware.mms.utils.exception.CustomException;
 import com.jaramgroupware.mms.utils.exception.ErrorCode;
@@ -36,6 +37,9 @@ public class MemberService {
 
     @Autowired
     private final MemberRepository memberRepository;
+
+    @Autowired
+    private final MemberInfoRepository memberInfoRepository;
 
     /**
      * 단일 멤버를 조회하는 함수
@@ -103,11 +107,23 @@ public class MemberService {
             throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         }
 
+//        Member targetMember = memberRegisterRequestServiceDto.toEntity();
+//        MemberInfo targetMemberInfo = memberRegisterRequestServiceDto.getMemberInfo();
+//
+//        targetMemberInfo.setMember(targetMember);
+//        MemberInfo result = memberInfoRepository.save(targetMemberInfo);
+//        targetMember.setMemberInfo(result);
+//
+//        Member savedMember = memberRepository.save(targetMember);
+//
+//        return savedMember.getId();
+
         Member targetMember = memberRegisterRequestServiceDto.toEntity();
         Member result = memberRepository.save(targetMember);
 
         MemberInfo targetMemberInfo = memberRegisterRequestServiceDto.getMemberInfo();
-        targetMemberInfo.setMember(targetMember);
+        targetMemberInfo.setMember(result);
+        memberInfoRepository.save(targetMemberInfo);
 
         return result.getId();
     }

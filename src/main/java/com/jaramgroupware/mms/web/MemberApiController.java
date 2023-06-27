@@ -107,7 +107,7 @@ public class MemberApiController {
             @RequestBody @Valid MemberRegisterRequestControllerDto memberRegisterRequestControllerDto,
             @RequestHeader("user_pk") String uid){
 
-        AuthCode targetAuthCode = authCodeRepository.findById(memberRegisterRequestControllerDto.getId())
+        AuthCode targetAuthCode = authCodeRepository.findById(memberRegisterRequestControllerDto.getAuthCode())
                 .orElseThrow(()->new IllegalArgumentException(""));
 
         MemberInfo targetMemberInfo = memberInfoRepository.findMemberInfoById(targetAuthCode.getMemberInfo().getId())
