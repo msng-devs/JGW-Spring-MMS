@@ -4,7 +4,8 @@ import com.jaramgroupware.mms.TestUtils;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
 import com.jaramgroupware.mms.domain.member.MemberSpecification;
-import com.jaramgroupware.mms.domain.rank.Rank;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
 import com.jaramgroupware.mms.dto.member.serviceDto.*;
 import com.jaramgroupware.mms.utils.exception.CustomException;
 import org.junit.jupiter.api.AfterEach;
@@ -40,6 +41,9 @@ class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private MemberInfoRepository memberInfoRepository;
 
     private final TestUtils testUtils = new TestUtils();
 
@@ -91,6 +95,7 @@ class MemberServiceTest {
                 .build();
 
         doReturn(testServiceDto.toEntity()).when(memberRepository).save(any(Member.class));
+        doReturn(testUtils.getTestMemberInfo()).when(memberInfoRepository).save(any(MemberInfo.class));
 
         //when
         String resultID = memberService.register(testServiceDto);

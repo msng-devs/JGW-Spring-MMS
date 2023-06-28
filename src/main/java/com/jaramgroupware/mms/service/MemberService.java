@@ -100,23 +100,18 @@ public class MemberService {
                 .collect(Collectors.toList());
 
     }
+
+    /**
+     * 신규 회원을 최종으로 등록 완료하는 함수
+     * @param memberRegisterRequestServiceDto 신규 회원의 등록 정보를 담은 dto
+     * @return 등록된 Member(Object)의 UID(Firebase uid), email 중복시 DUPLICATED_EMAIL 예외 처리
+     */
     @Transactional
     public String register(MemberRegisterRequestServiceDto memberRegisterRequestServiceDto) {
 
         if (memberRepository.existsByEmail(memberRegisterRequestServiceDto.getEmail())) {
             throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
         }
-
-//        Member targetMember = memberRegisterRequestServiceDto.toEntity();
-//        MemberInfo targetMemberInfo = memberRegisterRequestServiceDto.getMemberInfo();
-//
-//        targetMemberInfo.setMember(targetMember);
-//        MemberInfo result = memberInfoRepository.save(targetMemberInfo);
-//        targetMember.setMemberInfo(result);
-//
-//        Member savedMember = memberRepository.save(targetMember);
-//
-//        return savedMember.getId();
 
         Member targetMember = memberRegisterRequestServiceDto.toEntity();
         Member result = memberRepository.save(targetMember);
