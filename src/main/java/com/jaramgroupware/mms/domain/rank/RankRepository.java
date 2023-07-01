@@ -15,5 +15,5 @@ import java.util.Optional;
 @Repository
 public interface RankRepository extends JpaRepository<Rank,Integer> {
     Optional<Rank> findRankById (Integer id);
-    Optional<List<Rank>> findAllBy();
+    List<Rank> findAllBy();
 }
