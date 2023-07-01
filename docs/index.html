@@ -453,7 +453,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#Major">Major(전공 정보)</a></li>
 <li><a href="#Role">Role(권한 레벨)</a></li>
 <li><a href="#Rank">Rank(회원 등급)</a></li>
-<li><a href="#Member">Member(회원 정보)</a></li>
+<li><a href="#Member">Member(회원)</a></li>
+<li><a href="#MemberInfo">MemberInfo(회원 정보)</a></li>
+<li><a href="#MemberLeaveAbsence">MemberLeaveAbsence(회원 휴학 정보)</a></li>
 </ul>
 </li>
 <li><a href="#Rank-API">Rank-API</a>
@@ -476,14 +478,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#Member-API">Member-API</a>
 <ul class="sectlevel1">
+<li><a href="#Member-Info-Register">POST : /mms/api/v1/member/register</a></li>
+<li><a href="#Member-Register">POST : /mms/api/v1/member/register/auth</a></li>
 <li><a href="#Member-Add">POST : /mms/api/v1/member</a></li>
-<li><a href="#Member-Register">POST : /mms/api/v1/member/register</a></li>
 <li><a href="#Member-Get-Single">GET : /mms/api/v1/member/{memberID}</a></li>
+<li><a href="#Member-Get-Single-Tiny">GET : /mms/api/v1/member/{memberID}</a></li>
+<li><a href="#Member-Info-Get-Single">GET : /mms/api/v1/member/info/{memberID}</a></li>
+<li><a href="#Member-Info-Get-Single-Tiny">GET : /mms/api/v1/member/info/{memberID}</a></li>
 <li><a href="#Member-Get-Multiple">GET : /mms/api/v1/member/</a></li>
+<li><a href="#Member-Info-Get-Multiple">GET : /mms/api/v1/member/info/</a></li>
 <li><a href="#Member-Del-Single">DELETE : /mms/api/v1/member/{memberID}</a></li>
 <li><a href="#Member-Del-Bulk">DELETE : /mms/api/v1/member/</a></li>
 <li><a href="#Member-Update-Single">PUT : /mms/api/v1/member/{memberID}</a></li>
-<li><a href="#Member-Update-Bulk">PUT : /mms/api/v1/member</a></li>
+</ul>
+</li>
+<li><a href="#MemberLeaveAbsence-API">MemberLeaveAbsence-API</a>
+<ul class="sectlevel1">
+<li><a href="#MemberLeaveAbsence-Add-Single">POST : /mms/api/v1/member-leave-absence</a></li>
+<li><a href="#MemberLeaveAbsence-Get-Single">GET : /mms/api/v1/member-leave-absence/{memberID}</a></li>
+<li><a href="#MemberLeaveAbsence-Get-Multiple">GET : /mms/api/v1/member-leave-absence/</a></li>
+<li><a href="#MemberLeaveAbsence-Del-Single">DELETE : /mms/api/v1/member-leave-absence/{memberID}</a></li>
+<li><a href="#MemberLeaveAbsence-Del-Bulk">DELETE : /mms/api/v1/member-leave-absence/</a></li>
+<li><a href="#MemberLeaveAbsence-Update-Single">PUT : /mms/api/v1/member-leave-absence/{memberID}</a></li>
 </ul>
 </li>
 </ul>
@@ -671,7 +687,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>주요 API</strong></p>
 </div>
 <div class="paragraph">
-<p>Major API : <a href="#Role-API">Role-API</a></p>
+<p>Role API : <a href="#Role-API">Role-API</a></p>
 </div>
 <div class="paragraph">
 <p><strong>관련 API</strong></p>
@@ -737,7 +753,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>주요 API</strong></p>
 </div>
 <div class="paragraph">
-<p>Major API : <a href="#Rank-API">Rank-API</a></p>
+<p>Rank API : <a href="#Rank-API">Rank-API</a></p>
 </div>
 <div class="paragraph">
 <p><strong>관련 API</strong></p>
@@ -749,10 +765,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="Member"><a class="link" href="#Member">Member(회원 정보)</a></h2>
+<h2 id="Member"><a class="link" href="#Member">Member(회원)</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Member는 회원 정보에 대한 정보를 담고 있는 Object입니다.</p>
+<p>Member는 회원에 대한 정보를 담고 있는 Object입니다.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -784,6 +800,85 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 권한 레벨입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Role">Role(권한 레벨)</a>(Object)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 계정 활성화 여부입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>ex)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{
+    "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+    "name" : "홍길동",
+    "email": "test@test.com",
+    "role":{
+        "id" : 1,
+        "name" : "ROLE_GUEST"
+    },
+    "status": true
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>모든 API에서 핵심적으로 사용하는 Member Object입니다. MMS 는 firebase를 사용하고 있기 때문에, 멤버 uid로 firebase uid를 제공해야합니다.</p>
+</div>
+<div class="sect2">
+<h3 id="_연관_api_4"><a class="link" href="#_연관_api_4">연관 API</a></h3>
+<div class="paragraph">
+<p><strong>주요 API</strong></p>
+</div>
+<div class="paragraph">
+<p>Member API : <a href="#Member-API">Member-API</a></p>
+</div>
+<div class="paragraph">
+<p><strong>관련 API</strong></p>
+</div>
+<div class="paragraph">
+<p>MemberLeaveAbsence API : <a href="#MemberLeaveAbsence-API">MemberLeaveAbsence-API</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberInfo"><a class="link" href="#MemberInfo">MemberInfo(회원 정보)</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>MemberInfo는 회원 정보에 대한 정보를 담고 있는 Object입니다.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">설명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MemberInfo의 ID(PK)입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 정보의 해당 회원입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Member">Member(회원)</a>(Object)</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">phoneNumber</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">회원의 휴대폰번호입니다.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
@@ -794,9 +889,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">major</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 전공입니다.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Major">Major(전공 정보)</a>(Object)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">year</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 기수입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">rank</p></td>
@@ -804,19 +899,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Rank">Rank(회원 등급)</a>(Object)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">role</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 권한 레벨입니다.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Role">Role(권한 레벨)</a>(Object)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">year</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 기수입니다.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">leaveAbsence</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 휴학 여부입니다.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">major</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 전공입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Major">Major(전공 정보)</a>(Object)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">dateOfBirth</p></td>
@@ -851,25 +936,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre>{
-    "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
-    "name" : "홍길동",
-    "email": "test@test.com",
+    "id" : 1,
+    "member":{
+        "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+        "name" : "홍길동",
+        "email" : "test@test.com"
+        "role":{
+            "id" : 1,
+            "name" : "ROLE_GUEST"
+        },
+        "status" : true
+    },
     "phoneNumber":"01000000000",
     "studentID":"2022000004",
-    "major" : {
-        "id" : 1,
-        "name" : "인공지능학과"
-    },
-    "role":{
-        "id" : 1,
-        "name" : "ROLE_GUEST"
-    },
+    "year": 38,
     "rank":{
         "id" : 1,
         "name" : "정회원"
     },
-    "year": 38,
-    "leaveAbsence": false,
+    "major":{
+        "id" : 1,
+        "name" : "인공지능학과"
+    },
     "dateOfBirth": "2022-01-22",
     "createdDateTime":"2022-03-01 00:00:00",
     "modifiedDateTime":"2022-03-01 00:00:00",
@@ -878,13 +966,91 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 }</pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_연관_api_5"><a class="link" href="#_연관_api_5">연관 API</a></h3>
 <div class="paragraph">
-<p>모든 API에서 핵심적으로 사용하는 Member Object입니다. MMS 는 firebase를 사용하고 있기 때문에, 멤버 uid로 firebase uid를 제공해야합니다.</p>
+<p><strong>관련 API</strong></p>
+</div>
+<div class="paragraph">
+<p>Member API : <a href="#Member-API">Member-API</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberLeaveAbsence"><a class="link" href="#MemberLeaveAbsence">MemberLeaveAbsence(회원 휴학 정보)</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>MemberLeaveAbsence는 회원 휴학 정보를 담고 있는 Object입니다.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">설명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MemberLeaveAbsence의 ID(PK)입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 휴학 여부입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">expectedDateReturnSchool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원의 휴학 예정일입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date(yyyy-MM-dd)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 휴학 정보의 해당 회원입니다.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Member">Member(회원)</a>(Object)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>ex)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{
+    "id" : 1,
+    "status" : true,
+    "expectedDateReturnSchool" : "2024-03-02",
+    "member":{
+        "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+        "name" : "홍길동",
+        "email" : "test@test.com"
+        "role":{
+            "id" : 1,
+            "name" : "ROLE_GUEST"
+        },
+        "status" : true
+    }
+}</pre>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_연관_api_4"><a class="link" href="#_연관_api_4">연관 API</a></h3>
+<h3 id="_연관_api_6"><a class="link" href="#_연관_api_6">연관 API</a></h3>
 <div class="paragraph">
 <p><strong>주요 API</strong></p>
+</div>
+<div class="paragraph">
+<p>MemberLeaveAbsence API : <a href="#MemberLeaveAbsence-API">MemberLeaveAbsence-API</a></p>
+</div>
+<div class="paragraph">
+<p><strong>관련 API</strong></p>
 </div>
 <div class="paragraph">
 <p>Member API : <a href="#Member-API">Member-API</a></p>
@@ -1005,7 +1171,7 @@ Host: docs.api.com:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 36
+Content-Length: 33
 
 {
   "id" : 1,
@@ -1105,7 +1271,7 @@ Host: docs.api.com:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 78
+Content-Length: 72
 
 [ {
   "id" : 1,
@@ -1233,7 +1399,7 @@ Host: docs.api.com:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 36
+Content-Length: 33
 
 {
   "id" : 1,
@@ -1333,7 +1499,7 @@ Host: docs.api.com:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 78
+Content-Length: 72
 
 [ {
   "id" : 1,
@@ -1461,7 +1627,7 @@ Host: docs.api.com:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 36
+Content-Length: 33
 
 {
   "id" : 1,
@@ -1682,7 +1848,7 @@ Host: docs.api.com:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 40
+Content-Length: 37
 
 [ {
   "id" : 1,
@@ -1701,10 +1867,10 @@ Content-Length: 40
 </div>
 </div>
 <div class="sect1">
-<h2 id="Member-Add"><a class="link" href="#Member-Add">POST : /mms/api/v1/member</a></h2>
+<h2 id="Member-Info-Register"><a class="link" href="#Member-Info-Register">POST : /mms/api/v1/member/register</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_다수_member를_등록"><a class="link" href="#_다수_member를_등록">다수 Member를 등록</a></h3>
+<h3 id="_회원가입을_위한_신규_회원_정보_등록"><a class="link" href="#_회원가입을_위한_신규_회원_정보_등록">회원가입을 위한 신규 회원 정보 등록</a></h3>
 
 </div>
 <div class="sect2">
@@ -1722,229 +1888,6 @@ Content-Length: 40
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect3">
-<h4 id="_route_options_7_request_fields"><a class="link" href="#_route_options_7_request_fields">Request fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">28자 firebase uid</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-<em>.]?[0-9a-zA-Z])<strong>@[0-9a-zA-Z]([-</em>.]?[0-9a-zA-Z])</strong>.[a-zA-Z]$</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].phone_number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴대폰 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].student_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">10자리의 student id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 student id(학번)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].year</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].leave_absence</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true : 휴학 , false : 휴학 아님</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].date_of_birth</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd format을 따라야함.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 생년월일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].major_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Major (object)의 ID(PK)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].rank_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Rank (object)의 ID(PK)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].role_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Role (object)의 ID(PK)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role id</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_route_options_7_request_body"><a class="link" href="#_route_options_7_request_body">Request body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">[ {
-  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
-  "email" : "hwangTest@test.com",
-  "name" : "황테스트",
-  "phone_number" : "01000000000",
-  "student_id" : "2022000004",
-  "major_id" : 1,
-  "rank_id" : 1,
-  "role_id" : 1,
-  "year" : 38,
-  "leave_absence" : false,
-  "date_of_birth" : "2022-01-22"
-} ]</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_route_options_7_response_fields"><a class="link" href="#_route_options_7_response_fields">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">새롭게 추가된 Member의 수</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_route_options_7_response_body"><a class="link" href="#_route_options_7_response_body">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
-  "message" : "총 (1)개의 Member를 성공적으로 추가했습니다!"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_route_options_7_http_request"><a class="link" href="#_route_options_7_http_request">HTTP request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
-Accept: application/json
-Content-Length: 313
-Host: docs.api.com:8080
-
-[ {
-  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
-  "email" : "hwangTest@test.com",
-  "name" : "황테스트",
-  "phone_number" : "01000000000",
-  "student_id" : "2022000004",
-  "major_id" : 1,
-  "rank_id" : 1,
-  "role_id" : 1,
-  "year" : 38,
-  "leave_absence" : false,
-  "date_of_birth" : "2022-01-22"
-} ]</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_route_options_7_http_response"><a class="link" href="#_route_options_7_http_response">HTTP response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 81
-
-{
-  "message" : "총 (1)개의 Member를 성공적으로 추가했습니다!"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="Member-Register"><a class="link" href="#Member-Register">POST : /mms/api/v1/member/register</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_신규_member을_가입"><a class="link" href="#_신규_member을_가입">신규 Member을 가입</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="_route_options_8"><a class="link" href="#_route_options_8">Route Options</a></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
@@ -1977,7 +1920,10 @@ Content-Length: 81
 </tbody>
 </table>
 <div class="paragraph">
-<p>새로운 Member을 가입할 때 사용하는 API 입니다. 위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.</p>
+<p>새로운 Member가 인증코드를 받아 최종적으로 회원가입에 성공하기 전에, 임원진이 신규 회원의 정보를 미리 등록할 때 사용하는 API 입니다.</p>
+</div>
+<div class="paragraph">
+<p>위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.</p>
 </div>
 <div class="paragraph">
 <p>만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며</p>
@@ -1986,10 +1932,369 @@ Content-Length: 81
 <p>만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.</p>
 </div>
 <div class="paragraph">
-<p>해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role과 rank를 임시로 갖게 됩니다.</p>
+<p>해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 rank를 임시로 갖게 됩니다.</p>
 </div>
 <div class="sect3">
 <h4 id="_query_params_request_fields"><a class="link" href="#_query_params_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone_number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴대폰 번호</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>student_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10자리의 student id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 student id(학번)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>date_of_birth</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd format을 따라야함.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 생년월일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>major_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Major (object)의 ID(PK)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_query_params_request_body"><a class="link" href="#_query_params_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "date_of_birth" : "2022-01-22"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_response_fields"><a class="link" href="#_query_params_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입 완료된 memberInfo의 Id(PK)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_query_params_response_body"><a class="link" href="#_query_params_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "id" : 1
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_http_request"><a class="link" href="#_query_params_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member/register HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Content-Length: 119
+Host: docs.api.com:8080
+
+{
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "date_of_birth" : "2022-01-22"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_http_response"><a class="link" href="#_query_params_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 14
+
+{
+  "id" : 1
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Member-Register"><a class="link" href="#Member-Register">POST : /mms/api/v1/member/register/auth</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_신규_회원의_회원가입_코드_인증_및_회원가입_진행"><a class="link" href="#_신규_회원의_회원가입_코드_인증_및_회원가입_진행">신규 회원의 회원가입 코드 인증 및 회원가입 진행</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_8"><a class="link" href="#_route_options_8">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_query_params_2"><a class="link" href="#_query_params_2">Query Params</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">options</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">isNew</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true,false (기본 값 true)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신규 학회원(가두 모집 등)인지 아니면, 기존 학회원인지 여부</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>새로운 Member를 가입할 때 사용하는 API입니다. 신규 회원은 임원진에게 회원 가입 코드를 받아 해당 API를 통해 인증을 할 수 있고, 인증 코드와 함께 부가적인 멤버 정보를 입력해 최종적으로 회원가입을 마칠 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며</p>
+</div>
+<div class="paragraph">
+<p>만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.</p>
+</div>
+<div class="paragraph">
+<p>해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role을 임시로 갖게 됩니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_request_fields"><a class="link" href="#_query_params_2_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auth_code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 회원가입 인증코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">28자 firebase uid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-<em>.]?[0-9a-zA-Z])<strong>@[0-9a-zA-Z]([-</em>.]?[0-9a-zA-Z])</strong>.[a-zA-Z]$</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_request_body"><a class="link" href="#_query_params_2_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "auth_code" : "123e4567-e89b-12d3-a456-426655440000",
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_response_fields"><a class="link" href="#_query_params_2_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">새롭게 추가된 Member의 UID (firebase uid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_response_body"><a class="link" href="#_query_params_2_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_http_request"><a class="link" href="#_query_params_2_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member/register/auth HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Content-Length: 160
+Host: docs.api.com:8080
+
+{
+  "auth_code" : "123e4567-e89b-12d3-a456-426655440000",
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_http_response"><a class="link" href="#_query_params_2_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 50
+
+{
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Member-Add"><a class="link" href="#Member-Add">POST : /mms/api/v1/member</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_member를_등록"><a class="link" href="#_단일_member를_등록">단일 Member를 등록</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_9"><a class="link" href="#_route_options_9">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_route_options_9_request_fields"><a class="link" href="#_route_options_9_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -2030,7 +2335,7 @@ Content-Length: 81
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone_number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴대폰 번호</p></td>
 </tr>
@@ -2042,16 +2347,16 @@ Content-Length: 81
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 student id(학번)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>leave_absence</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>year</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true : 휴학 , false : 휴학 아님</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>date_of_birth</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd format을 따라야함.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 생년월일</p></td>
 </tr>
@@ -2062,11 +2367,25 @@ Content-Length: 81
 <td class="tableblock halign-left valign-top"><p class="tableblock">Major (object)의 ID(PK)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major id</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rank_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rank (object)의 ID(PK)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>role_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role (object)의 ID(PK)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role id</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_query_params_request_body"><a class="link" href="#_query_params_request_body">Request body</a></h4>
+<h4 id="_route_options_9_request_body"><a class="link" href="#_route_options_9_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2076,14 +2395,16 @@ Content-Length: 81
   "phone_number" : "01000000000",
   "student_id" : "2022000004",
   "major_id" : 1,
-  "leave_absence" : false,
+  "rank_id" : 1,
+  "role_id" : 1,
+  "year" : 38,
   "date_of_birth" : "2022-01-22"
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_params_response_fields"><a class="link" href="#_query_params_response_fields">Response fields</a></h4>
+<h4 id="_route_options_9_response_fields"><a class="link" href="#_route_options_9_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2099,13 +2420,13 @@ Content-Length: 81
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Th1s1sNotRea1U1DDOY0UKNOWH0S</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">새롭게 추가된 Member의 UID (firebase uid)</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_query_params_response_body"><a class="link" href="#_query_params_response_body">Response body</a></h4>
+<h4 id="_route_options_9_response_body"><a class="link" href="#_route_options_9_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2115,14 +2436,14 @@ Content-Length: 81
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_params_http_request"><a class="link" href="#_query_params_http_request">HTTP request</a></h4>
+<h4 id="_route_options_9_http_request"><a class="link" href="#_route_options_9_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member/register HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
 Accept: application/json
-Content-Length: 257
+Content-Length: 270
 Host: docs.api.com:8080
 
 {
@@ -2132,19 +2453,21 @@ Host: docs.api.com:8080
   "phone_number" : "01000000000",
   "student_id" : "2022000004",
   "major_id" : 1,
-  "leave_absence" : false,
+  "rank_id" : 1,
+  "role_id" : 1,
+  "year" : 38,
   "date_of_birth" : "2022-01-22"
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_query_params_http_response"><a class="link" href="#_query_params_http_response">HTTP response</a></h4>
+<h4 id="_route_options_9_http_response"><a class="link" href="#_route_options_9_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 52
+Content-Length: 50
 
 {
   "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S"
@@ -2163,7 +2486,7 @@ Content-Length: 52
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_9"><a class="link" href="#_route_options_9">Route Options</a></h3>
+<h3 id="_route_options_10"><a class="link" href="#_route_options_10">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2185,7 +2508,7 @@ Content-Length: 52
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_9_path_parameters"><a class="link" href="#_route_options_9_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_10_path_parameters"><a class="link" href="#_route_options_10_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member/{memberID}</caption>
 <colgroup>
@@ -2207,7 +2530,7 @@ Content-Length: 52
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_response_fields"><a class="link" href="#_route_options_9_response_fields">Response fields</a></h4>
+<h4 id="_route_options_10_response_fields"><a class="link" href="#_route_options_10_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2222,6 +2545,289 @@ Content-Length: 52
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 계정 활성 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>role_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role(object)의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>role_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role(object)의 이름</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_10_response_body"><a class="link" href="#_route_options_10_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "name" : "황테스트",
+  "email" : "hwangTest@test.com",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "status" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_10_http_request"><a class="link" href="#_route_options_10_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+role_pk: 4
+Accept: application/json
+Host: docs.api.com:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_10_http_response"><a class="link" href="#_route_options_10_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 170
+
+{
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "name" : "황테스트",
+  "email" : "hwangTest@test.com",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "status" : true
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Member-Get-Single-Tiny"><a class="link" href="#Member-Get-Single-Tiny">GET : /mms/api/v1/member/{memberID}</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_member를_조회_tiny_반환"><a class="link" href="#_단일_member를_조회_tiny_반환">단일 Member를 조회 (Tiny 반환)</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_11"><a class="link" href="#_route_options_11">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>권한이 없는 유저가 자기 자신이 아닌 타 유저의 정보를 조회 시도할 경우 유저 정보의 일부만 반환합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_route_options_11_path_parameters"><a class="link" href="#_route_options_11_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/member/{memberID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 Member의 uid(firebase uid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_11_response_fields"><a class="link" href="#_route_options_11_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 계정 활성 여부</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_11_response_body"><a class="link" href="#_route_options_11_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "name" : "황테스트",
+  "email" : "hwangTest@test.com",
+  "status" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_11_http_request"><a class="link" href="#_route_options_11_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: ThiS1SNotRea1U1DDOY0UKNOWHoS
+role_pk: 3
+Accept: application/json
+Host: docs.api.com:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_11_http_response"><a class="link" href="#_route_options_11_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 82
+
+{
+  "name" : "황테스트",
+  "email" : "hwangTest@test.com",
+  "status" : true
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Member-Info-Get-Single"><a class="link" href="#Member-Info-Get-Single">GET : /mms/api/v1/member/info/{memberID}</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_memberinfo를_조회"><a class="link" href="#_단일_memberinfo를_조회">단일 MemberInfo를 조회</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_12"><a class="link" href="#_route_options_12">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_route_options_12_path_parameters"><a class="link" href="#_route_options_12_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/member/info/{memberID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 Member의 uid(firebase uid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_12_response_fields"><a class="link" href="#_route_options_12_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 memberInfo ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
 </tr>
@@ -2251,9 +2857,9 @@ Content-Length: 52
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>leave_absence</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 계정 활성 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>dateofbirth</code></p></td>
@@ -2299,11 +2905,12 @@ Content-Length: 52
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_response_body"><a class="link" href="#_route_options_9_response_body">Response body</a></h4>
+<h4 id="_route_options_12_response_body"><a class="link" href="#_route_options_12_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
-  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "id" : 1,
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
   "email" : "hwangTest@test.com",
   "name" : "황테스트",
   "phone_number" : "01000000000",
@@ -2315,18 +2922,18 @@ Content-Length: 52
   "role_id" : 1,
   "role_name" : "ROLE_ADMIN",
   "year" : 38,
-  "leave_absence" : false,
   "dateofbirth" : "2022-01-22",
-  "created_date_time" : "2022-08-04T04:16:00"
+  "created_date_time" : "2022-08-04T04:16:00",
+  "status" : true
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_http_request"><a class="link" href="#_route_options_9_http_request">HTTP request</a></h4>
+<h4 id="_route_options_12_http_request"><a class="link" href="#_route_options_12_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/info/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
 role_pk: 4
@@ -2336,15 +2943,16 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_http_response"><a class="link" href="#_route_options_9_http_response">HTTP response</a></h4>
+<h4 id="_route_options_12_http_response"><a class="link" href="#_route_options_12_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 456
+Content-Length: 451
 
 {
-  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "id" : 1,
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
   "email" : "hwangTest@test.com",
   "name" : "황테스트",
   "phone_number" : "01000000000",
@@ -2356,9 +2964,174 @@ Content-Length: 456
   "role_id" : 1,
   "role_name" : "ROLE_ADMIN",
   "year" : 38,
-  "leave_absence" : false,
   "dateofbirth" : "2022-01-22",
-  "created_date_time" : "2022-08-04T04:16:00"
+  "created_date_time" : "2022-08-04T04:16:00",
+  "status" : true
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Member-Info-Get-Single-Tiny"><a class="link" href="#Member-Info-Get-Single-Tiny">GET : /mms/api/v1/member/info/{memberID}</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_memberinfo를_조회_tiny_반환"><a class="link" href="#_단일_memberinfo를_조회_tiny_반환">단일 MemberInfo를 조회 (Tiny 반환)</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_13"><a class="link" href="#_route_options_13">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>권한이 없는 유저가 자기 자신이 아닌 타 유저의 정보를 조회 시도할 경우 유저 정보의 일부만 반환합니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_route_options_13_path_parameters"><a class="link" href="#_route_options_13_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/member/info/{memberID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 Member의 uid(firebase uid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_13_response_fields"><a class="link" href="#_route_options_13_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>student_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 student id(학번), 10자리 중 2,3번째만 공개</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>year</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 계정 활성 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>major_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major(object)의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>major_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major(object)의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rank_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank(object)의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>rank_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank(object)의 이름</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_13_response_body"><a class="link" href="#_route_options_13_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "email" : "hwangTest@test.com",
+  "student_id" : "22",
+  "major_id" : 1,
+  "major_name" : "인공지능학과",
+  "rank_id" : 1,
+  "rank_name" : "정회원",
+  "year" : 38,
+  "status" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_13_http_request"><a class="link" href="#_route_options_13_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/info/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: ThiS1SNotRea1U1DDOY0UKNOWHoS
+role_pk: 3
+Accept: application/json
+Host: docs.api.com:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_13_http_response"><a class="link" href="#_route_options_13_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 196
+
+{
+  "email" : "hwangTest@test.com",
+  "student_id" : "22",
+  "major_id" : 1,
+  "major_name" : "인공지능학과",
+  "rank_id" : 1,
+  "rank_name" : "정회원",
+  "year" : 38,
+  "status" : true
 }</code></pre>
 </div>
 </div>
@@ -2374,7 +3147,7 @@ Content-Length: 456
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_10"><a class="link" href="#_route_options_10">Route Options</a></h3>
+<h3 id="_route_options_14"><a class="link" href="#_route_options_14">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2439,9 +3212,322 @@ Content-Length: 456
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">roleID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 Role(Object)의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 계정 활성 상태</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_like_query_options_2"><a class="link" href="#_like_query_options_2">Like Query Options</a></h3>
+<div class="paragraph">
+<p>해당 옵션들을 사용하면, 해당 문자열을 포함하는 Member를 조회합니다.</p>
+</div>
+<div class="paragraph">
+<p>예를 들어 "출결코드에 의해 자동으로 생성된 Attendance입니다."라는 index가 있다고 가정합시다.</p>
+</div>
+<div class="paragraph">
+<p>"index" 인자로 "출결" 이라는 값을 주었다면, index에 "출결"이라는 글자가 들어가는 Attendance들을 찾습니다.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">type</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">email</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 이메일 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 실명</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_pagination_options_2"><a class="link" href="#_pagination_options_2">Pagination Options</a></h3>
+<div class="paragraph">
+<p>해당 인자를 통해 pagination처리를 할 수 있습니다. Sort Option은 아래 파트를 참고하세요.</p>
+</div>
+<div class="paragraph">
+<p><strong>주의!</strong> pagination을 설정하지 않더라도, 모든 request는 1000의 Size로 자동으로 pagination처리가 됩니다!
+만약 1000건 보다 많은 양의 데이터가 필요하다면, size를 지정해주어야합니다.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">description</th>
+<th class="tableblock halign-left valign-top">size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Page의 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">page</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Page의 위치</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_sort_options_2"><a class="link" href="#_sort_options_2">Sort Options</a></h3>
+<div class="paragraph">
+<p>Sort Option은 "sort" 인자에 제공해야합니다. 위 옵션들과 다르게 Sort Option은 여러 인자들을 입력해도 됩니다.</p>
+</div>
+<div class="paragraph">
+<p>sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방향을 지정해주여야 합니다. ASC(오름차순), DESC(내림차순) 2가지 옵션이 있습니다.
+만약 옵션을 지정해주지 않았다면, DESC로 동작합니다.</p>
+</div>
+<div class="paragraph">
+<p>사용예시 "sort=member,asc", "sort=member,timeTable,desc"</p>
+</div>
+<div class="paragraph">
+<p><strong>주의!</strong> Sort Option을 지정해주지 않더라도, 기본적으로 Id에 대하여 DESC 방향으로 정렬을 진행합니다!</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 uid</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">email</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 이메일 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 실명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 계정 활성 상태</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 role</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_sort_options_2_response_fields"><a class="link" href="#_sort_options_2_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 계정 활성 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].role_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role(object)의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].role_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role(object)의 이름</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_sort_options_2_response_body"><a class="link" href="#_sort_options_2_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">[ {
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "name" : "황테스트",
+  "email" : "hwangTest@test.com",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "status" : true
+}, {
+  "id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "name" : "김테스트",
+  "email" : "kimTest@test.com",
+  "role_id" : 2,
+  "role_name" : "ROLE_DEV",
+  "status" : false
+} ]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sort_options_2_http_request"><a class="link" href="#_sort_options_2_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/ HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Host: docs.api.com:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sort_options_2_http_response"><a class="link" href="#_sort_options_2_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 343
+
+[ {
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "name" : "황테스트",
+  "email" : "hwangTest@test.com",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "status" : true
+}, {
+  "id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "name" : "김테스트",
+  "email" : "kimTest@test.com",
+  "role_id" : 2,
+  "role_name" : "ROLE_DEV",
+  "status" : false
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Member-Info-Get-Multiple"><a class="link" href="#Member-Info-Get-Multiple">GET : /mms/api/v1/member/info/</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_다수_memberinfo를_조회"><a class="link" href="#_다수_memberinfo를_조회">다수 MemberInfo를 조회</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_15"><a class="link" href="#_route_options_15">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Query Options, 혹은 Page Options 등을 사용하여 attendance를 조회하거나, pagination 작업을 수행할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p><strong>주의!</strong> 모든 option들은 단 한개의 인자만 수용가능합니다!</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(O) "?memberID=456465456&amp;timeTableID=1"</p>
+</li>
+<li>
+<p>(X) "?memberID=456465456,456456456465&amp;timeTableID=1,123123"</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>또한 모든 Option들은 And로 동작합니다.</p>
+</div>
+<div class="paragraph">
+<p>만약 "?memberID=456465456&amp;timeTableID=1"라는 인자가 있다면, memberID가 "456465456"이고, timeTableID가 1인 Attendance를 찾습니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_equal_query_options_2"><a class="link" href="#_equal_query_options_2">Equal Query Options</a></h3>
+<div class="paragraph">
+<p>해당 옵션들은 입력된 값과 완전히 일치 되는 경우를 탐색합니다.
+예를들어 "timeTableID = 1" 옵션을 제공하면, TimeTable(Object)의 ID가 1인 attendance들을 조회합니다.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">type</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">majorID</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의  전공정보,Major(Object)의 ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 전공정보,Major(Object)의 ID</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">rankID</p></td>
@@ -2449,14 +3535,9 @@ Content-Length: 456
 <td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 Rank(Object)의 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">roleID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">year</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 Role(Object)의 ID</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">leaveAbsence</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bool</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 휴학여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 기수</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">modifiedBy</p></td>
@@ -2536,7 +3617,7 @@ Content-Length: 456
 </table>
 </div>
 <div class="sect2">
-<h3 id="_like_query_options_2"><a class="link" href="#_like_query_options_2">Like Query Options</a></h3>
+<h3 id="_like_query_options_3"><a class="link" href="#_like_query_options_3">Like Query Options</a></h3>
 <div class="paragraph">
 <p>해당 옵션들을 사용하면, 해당 문자열을 포함하는 Member를 조회합니다.</p>
 </div>
@@ -2561,16 +3642,6 @@ Content-Length: 456
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">email</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 이메일 주소</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 실명</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">phoneNumber</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 휴대폰 번호</p></td>
@@ -2584,7 +3655,7 @@ Content-Length: 456
 </table>
 </div>
 <div class="sect2">
-<h3 id="_pagination_options_2"><a class="link" href="#_pagination_options_2">Pagination Options</a></h3>
+<h3 id="_pagination_options_3"><a class="link" href="#_pagination_options_3">Pagination Options</a></h3>
 <div class="paragraph">
 <p>해당 인자를 통해 pagination처리를 할 수 있습니다. Sort Option은 아래 파트를 참고하세요.</p>
 </div>
@@ -2615,12 +3686,12 @@ Content-Length: 456
 </table>
 </div>
 <div class="sect2">
-<h3 id="_sort_options_2"><a class="link" href="#_sort_options_2">Sort Options</a></h3>
+<h3 id="_sort_options_3"><a class="link" href="#_sort_options_3">Sort Options</a></h3>
 <div class="paragraph">
 <p>Sort Option은 "sort" 인자에 제공해야합니다. 위 옵션들과 다르게 Sort Option은 여러 인자들을 입력해도 됩니다.</p>
 </div>
 <div class="paragraph">
-<p>sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방향을 지정해주여야 합니다. ASC(오름 차순), DESC(내립차순) 2가지 옵션이 있습니다.
+<p>sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방향을 지정해주여야 합니다. ASC(오름차순), DESC(내림차순) 2가지 옵션이 있습니다.
 만약 옵션을 지정해주지 않았다면, DESC로 동작합니다.</p>
 </div>
 <div class="paragraph">
@@ -2643,15 +3714,11 @@ Content-Length: 456
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">memberInfo의 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">member의 uid</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">email</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">member의 이메일 주소</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">member의 실명</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">phoneNumber</p></td>
@@ -2670,15 +3737,7 @@ Content-Length: 456
 <td class="tableblock halign-left valign-top"><p class="tableblock">member의 회원 등급</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">role</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">member의 role</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">year</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">member의 기수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">leaveAbsence</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">member의 기수</p></td>
 </tr>
 <tr>
@@ -2704,7 +3763,7 @@ Content-Length: 456
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_sort_options_2_response_fields"><a class="link" href="#_sort_options_2_response_fields">Response fields</a></h4>
+<h4 id="_sort_options_3_response_fields"><a class="link" href="#_sort_options_3_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2719,6 +3778,11 @@ Content-Length: 456
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 멤버 정보 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].member_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
 </tr>
@@ -2748,9 +3812,9 @@ Content-Length: 456
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].leave_absence</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 계정 활성 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].dateofbirth</code></p></td>
@@ -2796,18 +3860,52 @@ Content-Length: 456
 </table>
 </div>
 <div class="sect3">
-<h4 id="_sort_options_2_response_body"><a class="link" href="#_sort_options_2_response_body">Response body</a></h4>
+<h4 id="_sort_options_3_response_body"><a class="link" href="#_sort_options_3_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">[{"id":"Th1s1sNotRea1U1DDOY0UKNOWH0S","email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"major_name":"인공지능학과","rank_id":1,"rank_name":"정회원","role_id":1,"role_name":"ROLE_ADMIN","year":38,"leave_absence":false,"dateofbirth":"2022-01-22","created_date_time":"2022-08-04T04:16:00"},{"id":"ThiS1SNotRea1U1DDOY0UKNOWHoS","email":"kimTest@test.com","name":"김테스트","phone_number":"01000000011","student_id":"2022000005","major_id":2,"major_name":"소프트웨어학부 컴퓨터 전공","rank_id":2,"rank_name":"준OB","role_id":2,"role_name":"ROLE_DEV","year":37,"leave_absence":true,"dateofbirth":"2022-08-28","created_date_time":"2022-08-28T04:16:00"}]</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">[ {
+  "id" : 1,
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "major_name" : "인공지능학과",
+  "rank_id" : 1,
+  "rank_name" : "정회원",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "year" : 38,
+  "dateofbirth" : "2022-01-22",
+  "created_date_time" : "2022-08-04T04:16:00",
+  "status" : true
+}, {
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "email" : "kimTest@test.com",
+  "name" : "김테스트",
+  "phone_number" : "01000000011",
+  "student_id" : "2022000005",
+  "major_id" : 2,
+  "major_name" : "소프트웨어학부 컴퓨터 전공",
+  "rank_id" : 2,
+  "rank_name" : "준OB",
+  "role_id" : 2,
+  "role_name" : "ROLE_DEV",
+  "year" : 37,
+  "dateofbirth" : "2022-08-28",
+  "created_date_time" : "2022-08-28T04:16:00",
+  "status" : false
+} ]</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_sort_options_2_http_request"><a class="link" href="#_sort_options_2_http_request">HTTP request</a></h4>
+<h4 id="_sort_options_3_http_request"><a class="link" href="#_sort_options_3_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/ HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/info/ HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
 Accept: application/json
@@ -2816,14 +3914,48 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_sort_options_2_http_response"><a class="link" href="#_sort_options_2_http_response">HTTP response</a></h4>
+<h4 id="_sort_options_3_http_response"><a class="link" href="#_sort_options_3_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 742
+Content-Length: 921
 
-[{"id":"Th1s1sNotRea1U1DDOY0UKNOWH0S","email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"major_name":"인공지능학과","rank_id":1,"rank_name":"정회원","role_id":1,"role_name":"ROLE_ADMIN","year":38,"leave_absence":false,"dateofbirth":"2022-01-22","created_date_time":"2022-08-04T04:16:00"},{"id":"ThiS1SNotRea1U1DDOY0UKNOWHoS","email":"kimTest@test.com","name":"김테스트","phone_number":"01000000011","student_id":"2022000005","major_id":2,"major_name":"소프트웨어학부 컴퓨터 전공","rank_id":2,"rank_name":"준OB","role_id":2,"role_name":"ROLE_DEV","year":37,"leave_absence":true,"dateofbirth":"2022-08-28","created_date_time":"2022-08-28T04:16:00"}]</code></pre>
+[ {
+  "id" : 1,
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "major_name" : "인공지능학과",
+  "rank_id" : 1,
+  "rank_name" : "정회원",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "year" : 38,
+  "dateofbirth" : "2022-01-22",
+  "created_date_time" : "2022-08-04T04:16:00",
+  "status" : true
+}, {
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "email" : "kimTest@test.com",
+  "name" : "김테스트",
+  "phone_number" : "01000000011",
+  "student_id" : "2022000005",
+  "major_id" : 2,
+  "major_name" : "소프트웨어학부 컴퓨터 전공",
+  "rank_id" : 2,
+  "rank_name" : "준OB",
+  "role_id" : 2,
+  "role_name" : "ROLE_DEV",
+  "year" : 37,
+  "dateofbirth" : "2022-08-28",
+  "created_date_time" : "2022-08-28T04:16:00",
+  "status" : false
+} ]</code></pre>
 </div>
 </div>
 </div>
@@ -2838,7 +3970,7 @@ Content-Length: 742
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_11"><a class="link" href="#_route_options_11">Route Options</a></h3>
+<h3 id="_route_options_16"><a class="link" href="#_route_options_16">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2860,7 +3992,7 @@ Content-Length: 742
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_11_path_parameters"><a class="link" href="#_route_options_11_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_16_path_parameters"><a class="link" href="#_route_options_16_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member/{memberID}</caption>
 <colgroup>
@@ -2882,7 +4014,7 @@ Content-Length: 742
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_response_fields"><a class="link" href="#_route_options_11_response_fields">Response fields</a></h4>
+<h4 id="_route_options_16_response_fields"><a class="link" href="#_route_options_16_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2904,7 +4036,7 @@ Content-Length: 742
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_response_body"><a class="link" href="#_route_options_11_response_body">Response body</a></h4>
+<h4 id="_route_options_16_response_body"><a class="link" href="#_route_options_16_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2914,7 +4046,7 @@ Content-Length: 742
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_http_request"><a class="link" href="#_route_options_11_http_request">HTTP request</a></h4>
+<h4 id="_route_options_16_http_request"><a class="link" href="#_route_options_16_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
@@ -2926,12 +4058,12 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_http_response"><a class="link" href="#_route_options_11_http_response">HTTP response</a></h4>
+<h4 id="_route_options_16_http_response"><a class="link" href="#_route_options_16_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 52
+Content-Length: 50
 
 {
   "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S"
@@ -2950,7 +4082,7 @@ Content-Length: 52
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_12"><a class="link" href="#_route_options_12">Route Options</a></h3>
+<h3 id="_route_options_17"><a class="link" href="#_route_options_17">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2972,7 +4104,7 @@ Content-Length: 52
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_12_request_fields"><a class="link" href="#_route_options_12_request_fields">Request fields</a></h4>
+<h4 id="_route_options_17_request_fields"><a class="link" href="#_route_options_17_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -3000,7 +4132,7 @@ Content-Length: 52
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_request_body"><a class="link" href="#_route_options_12_request_body">Request body</a></h4>
+<h4 id="_route_options_17_request_body"><a class="link" href="#_route_options_17_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -3010,7 +4142,7 @@ Content-Length: 52
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_response_fields"><a class="link" href="#_route_options_12_response_fields">Response fields</a></h4>
+<h4 id="_route_options_17_response_fields"><a class="link" href="#_route_options_17_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3032,7 +4164,7 @@ Content-Length: 52
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_response_body"><a class="link" href="#_route_options_12_response_body">Response body</a></h4>
+<h4 id="_route_options_17_response_body"><a class="link" href="#_route_options_17_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -3042,14 +4174,14 @@ Content-Length: 52
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_http_request"><a class="link" href="#_route_options_12_http_request">HTTP request</a></h4>
+<h4 id="_route_options_17_http_request"><a class="link" href="#_route_options_17_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
 Accept: application/json
-Content-Length: 89
+Content-Length: 87
 Host: docs.api.com:8080
 
 {
@@ -3059,12 +4191,12 @@ Host: docs.api.com:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_http_response"><a class="link" href="#_route_options_12_http_response">HTTP response</a></h4>
+<h4 id="_route_options_17_http_response"><a class="link" href="#_route_options_17_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 81
+Content-Length: 79
 
 {
   "message" : "총 (2)개의 Member를 성공적으로 삭제했습니다!"
@@ -3083,7 +4215,7 @@ Content-Length: 81
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_13"><a class="link" href="#_route_options_13">Route Options</a></h3>
+<h3 id="_route_options_18"><a class="link" href="#_route_options_18">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3105,7 +4237,7 @@ Content-Length: 81
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_13_request_fields"><a class="link" href="#_route_options_13_request_fields">Request fields</a></h4>
+<h4 id="_route_options_18_request_fields"><a class="link" href="#_route_options_18_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -3139,7 +4271,7 @@ Content-Length: 81
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone_number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴대폰 번호</p></td>
 </tr>
@@ -3158,16 +4290,9 @@ Content-Length: 81
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>leave_absence</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true : 휴학 , false : 휴학 아님</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>date_of_birth</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd format을 따라야함.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 생년월일</p></td>
 </tr>
@@ -3196,15 +4321,25 @@ Content-Length: 81
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_13_request_body"><a class="link" href="#_route_options_13_request_body">Request body</a></h4>
+<h4 id="_route_options_18_request_body"><a class="link" href="#_route_options_18_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{"email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"rank_id":1,"role_id":1,"year":38,"leave_absence":false,"date_of_birth":"2022-01-22"}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "rank_id" : 1,
+  "role_id" : 1,
+  "year" : 38,
+  "date_of_birth" : "2022-01-22"
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_13_response_fields"><a class="link" href="#_route_options_13_response_fields">Response fields</a></h4>
+<h4 id="_route_options_18_response_fields"><a class="link" href="#_route_options_18_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3219,6 +4354,11 @@ Content-Length: 81
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 멤버 정보 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
 </tr>
@@ -3248,9 +4388,9 @@ Content-Length: 81
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>leave_absence</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 계정 활성 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>dateofbirth</code></p></td>
@@ -3258,120 +4398,136 @@ Content-Length: 81
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 생년월일</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>created_date_time</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 생성일자(가입일자)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone_number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴대폰 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>student_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 student id(학번)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>year</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>leave_absence</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>major_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major(object)의 ID</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>major_name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major(object)의 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>rank_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank(object)의 ID</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>rank_name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank(object)의 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>role_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role(object)의 ID</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>role_name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role(object)의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>created_date_time</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member가 생성된 시간</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_13_response_body"><a class="link" href="#_route_options_13_response_body">Response body</a></h4>
+<h4 id="_route_options_18_response_body"><a class="link" href="#_route_options_18_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{"id":"Th1s1sNotRea1U1DDOY0UKNOWH0S","email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"major_name":"인공지능학과","rank_id":1,"rank_name":"정회원","role_id":1,"role_name":"ROLE_ADMIN","year":38,"leave_absence":false,"dateofbirth":"2022-01-22","created_date_time":"2022-08-04T04:16:00"}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "id" : 1,
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "major_name" : "인공지능학과",
+  "rank_id" : 1,
+  "rank_name" : "정회원",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "year" : 38,
+  "dateofbirth" : "2022-01-22",
+  "created_date_time" : "2022-08-04T04:16:00",
+  "status" : true
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_13_http_request"><a class="link" href="#_route_options_13_http_request">HTTP request</a></h4>
+<h4 id="_route_options_18_http_request"><a class="link" href="#_route_options_18_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
 Accept: application/json
-Content-Length: 205
+Content-Length: 229
 Host: docs.api.com:8080
 
-{"email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"rank_id":1,"role_id":1,"year":38,"leave_absence":false,"date_of_birth":"2022-01-22"}</code></pre>
+{
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "rank_id" : 1,
+  "role_id" : 1,
+  "year" : 38,
+  "date_of_birth" : "2022-01-22"
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_13_http_response"><a class="link" href="#_route_options_13_http_response">HTTP response</a></h4>
+<h4 id="_route_options_18_http_response"><a class="link" href="#_route_options_18_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 364
+Content-Length: 451
 
-{"id":"Th1s1sNotRea1U1DDOY0UKNOWH0S","email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"major_name":"인공지능학과","rank_id":1,"rank_name":"정회원","role_id":1,"role_name":"ROLE_ADMIN","year":38,"leave_absence":false,"dateofbirth":"2022-01-22","created_date_time":"2022-08-04T04:16:00"}</code></pre>
+{
+  "id" : 1,
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
+  "major_id" : 1,
+  "major_name" : "인공지능학과",
+  "rank_id" : 1,
+  "rank_name" : "정회원",
+  "role_id" : 1,
+  "role_name" : "ROLE_ADMIN",
+  "year" : 38,
+  "dateofbirth" : "2022-01-22",
+  "created_date_time" : "2022-08-04T04:16:00",
+  "status" : true
+}</code></pre>
 </div>
 </div>
 </div>
 </div>
+</div>
+</div>
+<h1 id="MemberLeaveAbsence-API" class="sect0"><a class="link" href="#MemberLeaveAbsence-API">MemberLeaveAbsence-API</a></h1>
+<div class="openblock partintro">
+<div class="content">
+회원 휴학 정보를 조회 및 관리할 수 있는 api 입니다.
 </div>
 </div>
 <div class="sect1">
-<h2 id="Member-Update-Bulk"><a class="link" href="#Member-Update-Bulk">PUT : /mms/api/v1/member</a></h2>
+<h2 id="MemberLeaveAbsence-Add-Single"><a class="link" href="#MemberLeaveAbsence-Add-Single">POST : /mms/api/v1/member-leave-absence</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_다중_member를_업데이트"><a class="link" href="#_다중_member를_업데이트">다중 Member를 업데이트</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="_route_options_14"><a class="link" href="#_route_options_14">Route Options</a></h3>
+<h3 id="_단일_회원_휴학_정보를_등록"><a class="link" href="#_단일_회원_휴학_정보를_등록">단일 회원 휴학 정보를 등록</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3393,7 +4549,7 @@ Content-Length: 364
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_14_request_fields"><a class="link" href="#_route_options_14_request_fields">Request fields</a></h4>
+<h4 id="_단일_회원_휴학_정보를_등록_request_fields"><a class="link" href="#_단일_회원_휴학_정보를_등록_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -3411,95 +4567,722 @@ Content-Length: 364
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">28자 firebase uid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-<em>.]?[0-9a-zA-Z])<strong>@[0-9a-zA-Z]([-</em>.]?[0-9a-zA-Z])</strong>.[a-zA-Z]$</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].phone_number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">- 가 없는 순수 숫자. regrex : (^$|[0-9]{11})</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴대폰 번호</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].student_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">10자리의 student id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 student id(학번)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].year</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 기수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].leave_absence</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true : 휴학 , false : 휴학 아님</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].date_of_birth</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expected_date_return_school</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd format을 따라야함.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 생년월일</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].major_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Major (object)의 ID(PK)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 major id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].rank_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Rank (object)의 ID(PK)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 rank id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].role_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Role (object)의 ID(PK)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 role id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 예정일</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_14_request_body"><a class="link" href="#_route_options_14_request_body">Request body</a></h4>
+<h4 id="_단일_회원_휴학_정보를_등록_request_body"><a class="link" href="#_단일_회원_휴학_정보를_등록_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">[{"id":"ThiS1SNotRea1U1DDOY0UKNOWHoS","email":"kimTest@test.com","name":"김테스트","phone_number":"01000000011","student_id":"2022000005","major_id":2,"rank_id":2,"role_id":2,"year":37,"leave_absence":true,"date_of_birth":"2022-08-28"},{"id":"Th1s1sNotRea1U1DDOY0UKNOWH0S","email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"rank_id":1,"role_id":1,"year":38,"leave_absence":false,"date_of_birth":"2022-01-22"}]</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_14_response_fields"><a class="link" href="#_route_options_14_response_fields">Response fields</a></h4>
+<h4 id="_단일_회원_휴학_정보를_등록_response_fields"><a class="link" href="#_단일_회원_휴학_정보를_등록_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">추가된 member leave absence의 id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_단일_회원_휴학_정보를_등록_response_body"><a class="link" href="#_단일_회원_휴학_정보를_등록_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "id" : 2
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_단일_회원_휴학_정보를_등록_http_request"><a class="link" href="#_단일_회원_휴학_정보를_등록_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member-leave-absence HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Content-Length: 117
+Host: docs.api.com:8080
+
+{
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_단일_회원_휴학_정보를_등록_http_response"><a class="link" href="#_단일_회원_휴학_정보를_등록_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 14
+
+{
+  "id" : 2
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberLeaveAbsence-Get-Single"><a class="link" href="#MemberLeaveAbsence-Get-Single">GET : /mms/api/v1/member-leave-absence/{memberID}</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_회원_휴학_정보를_조회"><a class="link" href="#_단일_회원_휴학_정보를_조회">단일 회원 휴학 정보를 조회</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_19"><a class="link" href="#_route_options_19">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_route_options_19_path_parameters"><a class="link" href="#_route_options_19_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/member-leave-absence/{memberID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 Member의 uid(firebase uid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_19_response_fields"><a class="link" href="#_route_options_19_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member leave absence의 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expected_date_return_school</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 예정일</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_19_response_body"><a class="link" href="#_route_options_19_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_19_http_request"><a class="link" href="#_route_options_19_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member-leave-absence/ThiS1SNotRea1U1DDOY0UKNOWHoS HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+role_pk: 4
+Accept: application/json
+Host: docs.api.com:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_19_http_response"><a class="link" href="#_route_options_19_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 129
+
+{
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberLeaveAbsence-Get-Multiple"><a class="link" href="#MemberLeaveAbsence-Get-Multiple">GET : /mms/api/v1/member-leave-absence/</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_다수_회원_휴학_정보를_조회"><a class="link" href="#_다수_회원_휴학_정보를_조회">다수 회원 휴학 정보를 조회</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_20"><a class="link" href="#_route_options_20">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Query Options, 혹은 Page Options 등을 사용하여 attendance를 조회하거나, pagination 작업을 수행할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p><strong>주의!</strong> 모든 option들은 단 한개의 인자만 수용가능합니다!</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>(O) "?memberID=456465456&amp;timeTableID=1"</p>
+</li>
+<li>
+<p>(X) "?memberID=456465456,456456456465&amp;timeTableID=1,123123"</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>또한 모든 Option들은 And로 동작합니다.</p>
+</div>
+<div class="paragraph">
+<p>만약 "?memberID=456465456&amp;timeTableID=1"라는 인자가 있다면, memberID가 "456465456"이고, timeTableID가 1인 Attendance를 찾습니다.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_equal_query_options_3"><a class="link" href="#_equal_query_options_3">Equal Query Options</a></h3>
+<div class="paragraph">
+<p>해당 옵션들은 입력된 값과 완전히 일치 되는 경우를 탐색합니다.
+예를들어 "timeTableID = 1" 옵션을 제공하면, TimeTable(Object)의 ID가 1인 attendance들을 조회합니다.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">type</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 휴학 여부</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_range_query_options_2"><a class="link" href="#_range_query_options_2">Range Query Options</a></h3>
+<div class="paragraph">
+<p>해당 옵션들을 사용하여 범위를 검색할 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>예를들어, "createdDateTime" 옵션을 검색하고 싶다면,
+"startCreatedDateTime"으로 시작 범위를 설정하고 "endCreatedDateTime"으로 종료 범위를 설정하여 검색할 수 있습니다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>시작 범위와 종료 범위가 모두 입력되었다면, 해당 범위를 탐색합니다.</p>
+</li>
+<li>
+<p>시작 범위만 입력됬을 경우, 해당 시작범위에서 최대 범위(9999-12-31 59:59:59)에 해당하는 범위를 탐색합니다.</p>
+</li>
+<li>
+<p>종료 범위만 입력됬을 경우, 최소 범위("1000-01-01 00:00:00")에서 종료 범위까지에 해당하는 범위를 탐색합니다.</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">name</th>
+<th class="tableblock halign-left valign-top">type</th>
+<th class="tableblock halign-left valign-top">start range param</th>
+<th class="tableblock halign-left valign-top">end range param</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ExpectedDateOfReturnSchool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date(yyyy-MM-dd)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">startExpectedDateOfReturnSchool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">endExpectedDateOfReturnSchool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">해당 Member의 휴학 예정일</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_pagination_options_4"><a class="link" href="#_pagination_options_4">Pagination Options</a></h3>
+<div class="paragraph">
+<p>해당 인자를 통해 pagination처리를 할 수 있습니다. Sort Option은 아래 파트를 참고하세요.</p>
+</div>
+<div class="paragraph">
+<p><strong>주의!</strong> pagination을 설정하지 않더라도, 모든 request는 1000의 Size로 자동으로 pagination처리가 됩니다!
+만약 1000건 보다 많은 양의 데이터가 필요하다면, size를 지정해주어야합니다.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">description</th>
+<th class="tableblock halign-left valign-top">size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Page의 크기</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">page</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Page의 위치</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_sort_options_4"><a class="link" href="#_sort_options_4">Sort Options</a></h3>
+<div class="paragraph">
+<p>Sort Option은 "sort" 인자에 제공해야합니다. 위 옵션들과 다르게 Sort Option은 여러 인자들을 입력해도 됩니다.</p>
+</div>
+<div class="paragraph">
+<p>sort 인자에 모든 Option들을 지정했다면, 마지막 인자로 Sort 방향을 지정해주여야 합니다. ASC(오름차순), DESC(내림차순) 2가지 옵션이 있습니다.
+만약 옵션을 지정해주지 않았다면, DESC로 동작합니다.</p>
+</div>
+<div class="paragraph">
+<p>사용예시 "sort=member,asc", "sort=member,timeTable,desc"</p>
+</div>
+<div class="paragraph">
+<p><strong>주의!</strong> Sort Option을 지정해주지 않더라도, 기본적으로 Id에 대하여 DESC 방향으로 정렬을 진행합니다!</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">memberLeaveAbsence의 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 uid</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 휴학 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">expectedDateOfReturnSchool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">member의 휴학 예정일</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_sort_options_4_response_fields"><a class="link" href="#_sort_options_4_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member leave absence의 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].expected_date_return_school</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 예정일</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_sort_options_4_response_body"><a class="link" href="#_sort_options_4_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">[ {
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}, {
+  "id" : 3,
+  "member_id" : "QWERTYUIOPASDFGHJKLZXCVBNMQQ",
+  "status" : true,
+  "expected_date_return_school" : "2024-03-02"
+} ]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sort_options_4_http_request"><a class="link" href="#_sort_options_4_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member-leave-absence/ HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Host: docs.api.com:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sort_options_4_http_response"><a class="link" href="#_sort_options_4_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 264
+
+[ {
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}, {
+  "id" : 3,
+  "member_id" : "QWERTYUIOPASDFGHJKLZXCVBNMQQ",
+  "status" : true,
+  "expected_date_return_school" : "2024-03-02"
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberLeaveAbsence-Del-Single"><a class="link" href="#MemberLeaveAbsence-Del-Single">DELETE : /mms/api/v1/member-leave-absence/{memberID}</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_회원_휴학_정보를_삭제"><a class="link" href="#_단일_회원_휴학_정보를_삭제">단일 회원 휴학 정보를 삭제</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_21"><a class="link" href="#_route_options_21">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_route_options_21_path_parameters"><a class="link" href="#_route_options_21_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/member-leave-absence/{memberID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 Member의 uid(firebase uid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_21_response_fields"><a class="link" href="#_route_options_21_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 member leave absence의 id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_21_response_body"><a class="link" href="#_route_options_21_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "id" : 2
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_21_http_request"><a class="link" href="#_route_options_21_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member-leave-absence/ThiS1SNotRea1U1DDOY0UKNOWHoS HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Host: docs.api.com:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_21_http_response"><a class="link" href="#_route_options_21_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 14
+
+{
+  "id" : 2
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberLeaveAbsence-Del-Bulk"><a class="link" href="#MemberLeaveAbsence-Del-Bulk">DELETE : /mms/api/v1/member-leave-absence/</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_다수_회원_휴학_정보를_삭제"><a class="link" href="#_다수_회원_휴학_정보를_삭제">다수 회원 휴학 정보를 삭제</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_22"><a class="link" href="#_route_options_22">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_route_options_22_request_fields"><a class="link" href="#_route_options_22_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_leave_absence_ids</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제할 MemberLeaveAbsence의 ids</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_22_request_body"><a class="link" href="#_route_options_22_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "member_leave_absence_ids" : [ 2, 3 ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_22_response_fields"><a class="link" href="#_route_options_22_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3515,43 +5298,213 @@ Content-Length: 364
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">업데이트 된 Member의 갯수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 MemberLeaveAbsence의 개수</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_14_response_body"><a class="link" href="#_route_options_14_response_body">Response body</a></h4>
+<h4 id="_route_options_22_response_body"><a class="link" href="#_route_options_22_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{"message":"총 (2)개의 Member를 성공적으로 업데이트했습니다!"}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "message" : "총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_14_http_request"><a class="link" href="#_route_options_14_http_request">HTTP request</a></h4>
+<h4 id="_route_options_22_http_request"><a class="link" href="#_route_options_22_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/member HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member-leave-absence HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+role_pk: 4
 Accept: application/json
-Content-Length: 482
+Content-Length: 43
 Host: docs.api.com:8080
 
-[{"id":"ThiS1SNotRea1U1DDOY0UKNOWHoS","email":"kimTest@test.com","name":"김테스트","phone_number":"01000000011","student_id":"2022000005","major_id":2,"rank_id":2,"role_id":2,"year":37,"leave_absence":true,"date_of_birth":"2022-08-28"},{"id":"Th1s1sNotRea1U1DDOY0UKNOWH0S","email":"hwangTest@test.com","name":"황테스트","phone_number":"01000000000","student_id":"2022000004","major_id":1,"rank_id":1,"role_id":1,"year":38,"leave_absence":false,"date_of_birth":"2022-01-22"}]</code></pre>
+{
+  "member_leave_absence_ids" : [ 2, 3 ]
+}</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_14_http_response"><a class="link" href="#_route_options_14_http_response">HTTP response</a></h4>
+<h4 id="_route_options_22_http_response"><a class="link" href="#_route_options_22_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 79
+Content-Length: 91
 
-{"message":"총 (2)개의 Member를 성공적으로 업데이트했습니다!"}</code></pre>
+{
+  "message" : "총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberLeaveAbsence-Update-Single"><a class="link" href="#MemberLeaveAbsence-Update-Single">PUT : /mms/api/v1/member-leave-absence/{memberID}</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_회원_휴학_정보를_업데이트"><a class="link" href="#_단일_회원_휴학_정보를_업데이트">단일 회원 휴학 정보를 업데이트</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_23"><a class="link" href="#_route_options_23">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_route_options_23_request_fields"><a class="link" href="#_route_options_23_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true : 휴학 , false : 휴학 아님</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expected_date_return_school</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd format을 따라야함.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 예정일</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_23_request_body"><a class="link" href="#_route_options_23_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_23_response_fields"><a class="link" href="#_route_options_23_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">수정된 member leave absence의 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expected_date_return_school</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 휴학 예정일</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_23_response_body"><a class="link" href="#_route_options_23_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_23_http_request"><a class="link" href="#_route_options_23_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/member-leave-absence/ThiS1SNotRea1U1DDOY0UKNOWHoS HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Content-Length: 69
+Host: docs.api.com:8080
+
+{
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_23_http_response"><a class="link" href="#_route_options_23_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 129
+
+{
+  "id" : 2,
+  "member_id" : "ThiS1SNotRea1U1DDOY0UKNOWHoS",
+  "status" : true,
+  "expected_date_return_school" : "2024-09-01"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -3562,7 +5515,7 @@ Content-Length: 79
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-10-08 18:22:56 +0900
+Last updated 2023-03-20 00:47:52 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">

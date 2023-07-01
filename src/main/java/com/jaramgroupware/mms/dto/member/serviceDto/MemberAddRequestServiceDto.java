@@ -19,28 +19,16 @@ public class MemberAddRequestServiceDto {
     private String id;
     private String email;
     private String name;
-    private String phoneNumber;
-    private String studentID;
-    private Major major;
-    private Rank rank;
     private Role role;
-    private Integer year;
-    private boolean leaveAbsence;
-    private LocalDate dateOfBirth;
+    private boolean status;
 
     public Member toEntity(){
         return Member.builder()
                 .id(id)
                 .email(email)
                 .name(name)
-                .phoneNumber(phoneNumber)
-                .studentID(studentID)
-                .major(major)
-                .rank(rank)
                 .role(role)
-                .year((year != null)? year : LocalDate.now().getYear()-1984)
-                .leaveAbsence(leaveAbsence)
-                .dateOfBirth(dateOfBirth)
+                .status(status)
                 .build();
     }
     @Override

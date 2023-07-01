@@ -20,29 +20,15 @@ public class MemberBulkUpdateRequestServiceDto {
 
     private String id;
     private String name;
-    private String phoneNumber;
-    private Major major;
-    private Rank rank;
     private Role role;
-    private Integer year;
     private String email;
-    private String studentID;
-    private boolean leaveAbsence;
-    private LocalDate dateOfBirth;
 
     public Member toEntity(){
         return Member.builder()
                 .id(id)
                 .email(email)
                 .name(name)
-                .phoneNumber(phoneNumber)
-                .studentID(studentID)
-                .major(major)
-                .rank(rank)
                 .role(role)
-                .year(year)
-                .leaveAbsence(leaveAbsence)
-                .dateOfBirth(dateOfBirth)
                 .build();
     }
     @Override

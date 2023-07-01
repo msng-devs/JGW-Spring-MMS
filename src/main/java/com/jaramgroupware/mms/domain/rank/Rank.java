@@ -6,6 +6,12 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * 회원 등급 정보를 담고 있는 클래스
+ * @since 2023-03-07
+ * @author 황준서(37기) hzser123@gmail.com
+ * @author 이현희(38기) heeit13145@gmail.com
+ */
 @Getter
 @Setter
 @ToString
@@ -16,11 +22,17 @@ import javax.persistence.*;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Rank {
 
+    /**
+     * Rank의 ID (PK)
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RANK_PK")
     private Integer id;
 
+    /**
+     * 회원 등급의 명칭
+     */
     @Column(name = "RANK_NM",nullable = false,unique = true,length = 45)
     private String name;
 

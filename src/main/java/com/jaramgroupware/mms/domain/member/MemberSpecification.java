@@ -8,6 +8,12 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Member(Object)의 다중 조건 조회를 위한 클래스
+ * @since 2023-03-07
+ * @author 황준서(37기) hzser123@gmail.com
+ * @author 이현희(38기) heeit13145@gmail.com
+ */
 //ref : https://attacomsian.com/blog/spring-data-jpa-specifications
 public class MemberSpecification implements Specification<Member>{
 
@@ -21,9 +27,7 @@ public class MemberSpecification implements Specification<Member>{
         //count query error
         //ref : https://starrybleu.github.io/development/2018/08/10/jpa-n+1-fetch-strategy-specification.html
         if (query.getResultType() != Long.class && query.getResultType() != long.class){
-            root.fetch("rank", JoinType.LEFT);
             root.fetch("role", JoinType.LEFT);
-            root.fetch("major", JoinType.LEFT);
         }
 
         return predicatesBuilder.build(root,query,builder,list);

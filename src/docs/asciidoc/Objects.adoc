@@ -102,7 +102,7 @@ __주의! Rank는 회원 등급, Role은 권한 레벨을 나타내고 있습니
 
 *주요 API*
 
-Major API : <<Role-API>>
+Role API : <<Role-API>>
 
 *관련 API*
 
@@ -141,15 +141,15 @@ __주의! Rank는 회원 등급, Role은 권한 레벨을 나타내고 있습니
 
 *주요 API*
 
-Major API : <<Rank-API>>
+Rank API : <<Rank-API>>
 
 *관련 API*
 
 Member API : <<Member-API>>
 
 [[Member]]
-== Member(회원 정보)
-Member는 회원 정보에 대한 정보를 담고 있는 Object입니다.
+== Member(회원)
+Member는 회원에 대한 정보를 담고 있는 Object입니다.
 [cols="1,1,1"]
 |===
 |필드명|설명|타입
@@ -166,6 +166,58 @@ Member는 회원 정보에 대한 정보를 담고 있는 Object입니다.
 |회원의 이메일입니다.
 |String
 
+|role
+|회원의 권한 레벨입니다.
+|<<Role>>(Object)
+
+|status
+|회원의 계정 활성화 여부입니다.
+|Boolean
+|===
+
+ex)
+
+----
+{
+    "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+    "name" : "홍길동",
+    "email": "test@test.com",
+    "role":{
+        "id" : 1,
+        "name" : "ROLE_GUEST"
+    },
+    "status": true
+}
+----
+
+모든 API에서 핵심적으로 사용하는 Member Object입니다. MMS 는 firebase를 사용하고 있기 때문에, 멤버 uid로 firebase uid를 제공해야합니다.
+
+
+=== 연관 API
+
+*주요 API*
+
+Member API : <<Member-API>>
+
+*관련 API*
+
+MemberLeaveAbsence API : <<MemberLeaveAbsence-API>>
+
+[[MemberInfo]]
+== MemberInfo(회원 정보)
+MemberInfo는 회원 정보에 대한 정보를 담고 있는 Object입니다.
+[cols="1,1,1"]
+|===
+|필드명|설명|타입
+
+|id
+|MemberInfo의 ID(PK)입니다.
+|Integer
+
+|member
+|회원 정보의 해당 회원입니다.
+|<<Member>>(Object)
+
 |phoneNumber
 |회원의 휴대폰번호입니다.
 |String
@@ -174,25 +226,17 @@ Member는 회원 정보에 대한 정보를 담고 있는 Object입니다.
 |회원의 studentID(학번)입니다.
 |String
 
-|major
-|회원의 전공입니다.
-|<<Major>>(Object)
+|year
+|회원의 기수입니다.
+|Integer
 
 |rank
 |회원의 회원 등급입니다.
 |<<Rank>>(Object)
 
-|role
-|회원의 권한 레벨입니다.
-|<<Role>>(Object)
-
-|year
-|회원의 기수입니다.
-|Integer
-
-|leaveAbsence
-|회원의 휴학 여부입니다.
-|boolean
+|major
+|회원의 전공입니다.
+|<<Major>>(Object)
 
 |dateOfBirth
 |회원의 생년월일입니다.
@@ -219,25 +263,28 @@ ex)
 
 ----
 {
-    "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
-    "name" : "홍길동",
-    "email": "test@test.com",
+    "id" : 1,
+    "member":{
+        "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+        "name" : "홍길동",
+        "email" : "test@test.com"
+        "role":{
+            "id" : 1,
+            "name" : "ROLE_GUEST"
+        },
+        "status" : true
+    },
     "phoneNumber":"01000000000",
     "studentID":"2022000004",
-    "major" : {
-        "id" : 1,
-        "name" : "인공지능학과"
-    },
-    "role":{
-        "id" : 1,
-        "name" : "ROLE_GUEST"
-    },
+    "year": 38,
     "rank":{
         "id" : 1,
         "name" : "정회원"
     },
-    "year": 38,
-    "leaveAbsence": false,
+    "major":{
+        "id" : 1,
+        "name" : "인공지능학과"
+    },
     "dateOfBirth": "2022-01-22",
     "createdDateTime":"2022-03-01 00:00:00",
     "modifiedDateTime":"2022-03-01 00:00:00",
@@ -246,11 +293,62 @@ ex)
 }
 ----
 
-모든 API에서 핵심적으로 사용하는 Member Object입니다. MMS 는 firebase를 사용하고 있기 때문에, 멤버 uid로 firebase uid를 제공해야합니다.
+=== 연관 API
 
+*관련 API*
+
+Member API : <<Member-API>>
+
+[[MemberLeaveAbsence]]
+== MemberLeaveAbsence(회원 휴학 정보)
+MemberLeaveAbsence는 회원 휴학 정보를 담고 있는 Object입니다.
+[cols="1,1,1"]
+|===
+|필드명|설명|타입
+
+|id
+|MemberLeaveAbsence의 ID(PK)입니다.
+|Integer
+
+|status
+|회원의 휴학 여부입니다.
+|Boolean
+
+|expectedDateReturnSchool
+|회원의 휴학 예정일입니다.
+|Date(yyyy-MM-dd)
+
+|member
+|회원 휴학 정보의 해당 회원입니다.
+|<<Member>>(Object)
+|===
+
+ex)
+
+----
+{
+    "id" : 1,
+    "status" : true,
+    "expectedDateReturnSchool" : "2024-03-02",
+    "member":{
+        "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+        "name" : "홍길동",
+        "email" : "test@test.com"
+        "role":{
+            "id" : 1,
+            "name" : "ROLE_GUEST"
+        },
+        "status" : true
+    }
+}
+----
 
 === 연관 API
 
 *주요 API*
+
+MemberLeaveAbsence API : <<MemberLeaveAbsence-API>>
+
+*관련 API*
 
 Member API : <<Member-API>>

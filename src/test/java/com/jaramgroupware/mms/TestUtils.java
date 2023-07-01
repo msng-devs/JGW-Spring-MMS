@@ -1,8 +1,11 @@
 package com.jaramgroupware.mms;
 
 import com.jaramgroupware.mms.domain.BaseEntity;
+import com.jaramgroupware.mms.domain.authCode.AuthCode;
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.member.Member;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import lombok.Getter;
@@ -19,10 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Component
@@ -42,6 +42,16 @@ public class TestUtils {
     private final LocalDateTime testDateTime2 = LocalDateTime.parse("2022-08-28 04:16:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     private final Member testMember;
     private final Member testMember2;
+    private final Member testMember3;
+    private final Member testMember4;
+    private final MemberInfo testMemberInfo;
+    private final MemberInfo testMemberInfo2;
+    private final MemberLeaveAbsence testMemberLeaveAbsence;
+    private final MemberLeaveAbsence testMemberLeaveAbsence2;
+    private final MemberLeaveAbsence testMemberLeaveAbsence3;
+    private final AuthCode testAuthCode;
+    private final LocalDate testReturnDate;
+    private final LocalDate testReturnDate2;
     public final String testUid;
 
     public boolean isListSame(List<?> targetListA , List<?> targetListB){
@@ -62,6 +72,8 @@ public class TestUtils {
 
         testDate = LocalDate.of(2022,1,22);
         testDate2 = LocalDate.of(2022,8,28);
+        testReturnDate = LocalDate.of(2024,3,2);
+        testReturnDate2 = LocalDate.of(2024,9,1);
         testMajor = Major.builder()
                 .id(1)
                 .name("인공지능학과")
@@ -90,37 +102,80 @@ public class TestUtils {
                 .id("Th1s1sNotRea1U1DDOY0UKNOWH0S")
                 .name("황테스트")
                 .email("hwangTest@test.com")
-                .phoneNumber("01000000000")
-                .studentID("2022000004")
-                .year(38)
                 .role(testRole)
-                .rank(testRank)
-                .major(testMajor)
-                .leaveAbsence(false)
-                .dateOfBirth(testDate)
+                .status(true)
                 .build();
-        testMember.setModifiedBy("system");
-        testMember.setCreateBy("system");
-        testMember.setCreatedDateTime(testDateTime);
-        testMember.setModifiedDateTime(testDateTime);
-
         testMember2 = Member.builder()
                 .id("ThiS1SNotRea1U1DDOY0UKNOWHoS")
                 .name("김테스트")
                 .email("kimTest@test.com")
+                .role(testRole2)
+                .status(false)
+                .build();
+        testMember3 = Member.builder()
+                .id("AASDFGHJKLZXCVBNMQWERTYUIOPS")
+                .name("이테스트")
+                .email("lee@test.com")
+                .role(testRole)
+                .status(false)
+                .build();
+        testMember4 = Member.builder()
+                .id("QWERTYUIOPASDFGHJKLZXCVBNMQQ")
+                .name("희테스트")
+                .email("hee@test.com")
+                .role(testRole2)
+                .status(true)
+                .build();
+        testMemberInfo = MemberInfo.builder()
+                .id(1)
+                .member(testMember)
+                .phoneNumber("01000000000")
+                .studentID("2022000004")
+                .year(38)
+                .rank(testRank)
+                .major(testMajor)
+                .dateOfBirth(testDate)
+                .build();
+        testMemberInfo.setModifiedDateTime(testDateTime);
+        testMemberInfo.setCreatedDateTime(testDateTime);
+        testMemberInfo.setModifiedBy("system");
+        testMemberInfo.setCreateBy("system");
+        testMemberInfo2 = MemberInfo.builder()
+                .id(2)
+                .member(testMember2)
                 .phoneNumber("01000000011")
                 .studentID("2022000005")
                 .year(37)
-                .role(testRole2)
                 .rank(testRank2)
                 .major(testMajor2)
-                .leaveAbsence(true)
                 .dateOfBirth(testDate2)
                 .build();
-        testMember2.setModifiedBy("system2");
-        testMember2.setCreateBy("system2");
-        testMember2.setCreatedDateTime(testDateTime2);
-        testMember2.setModifiedDateTime(testDateTime2);
+        testMemberInfo2.setModifiedDateTime(testDateTime2);
+        testMemberInfo2.setCreatedDateTime(testDateTime2);
+        testMemberInfo2.setModifiedBy("system2");
+        testMemberInfo2.setCreateBy("system2");
+        testMemberLeaveAbsence = MemberLeaveAbsence.builder()
+                .id(1)
+                .member(testMember)
+                .status(false)
+                .expectedDateReturnSchool(null)
+                .build();
+        testMemberLeaveAbsence2 = MemberLeaveAbsence.builder()
+                .id(2)
+                .member(testMember2)
+                .status(true)
+                .expectedDateReturnSchool(testReturnDate2)
+                .build();
+        testMemberLeaveAbsence3 = MemberLeaveAbsence.builder()
+                .id(3)
+                .member(testMember4)
+                .status(true)
+                .expectedDateReturnSchool(testReturnDate)
+                .build();
+        testAuthCode = AuthCode.builder()
+                .id("123e4567-e89b-12d3-a456-426655440000")
+                .memberInfo(testMemberInfo)
+                .build();
         testUid = testMember.getId();
     }
     public HttpEntity<?> createHttpEntity(Object dto,String userUid){
