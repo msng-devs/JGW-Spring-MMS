@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.spec;
+package com.jaramgroupware.mms.utils.spec;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

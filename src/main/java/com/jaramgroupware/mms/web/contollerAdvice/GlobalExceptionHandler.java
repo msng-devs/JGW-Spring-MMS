@@ -1,11 +1,9 @@
 package com.jaramgroupware.mms.web.contollerAdvice;
 
 import com.jaramgroupware.mms.dto.general.ExceptionResponseDto;
-import com.jaramgroupware.mms.utlis.exception.service.ServiceException;
+import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 @Slf4j

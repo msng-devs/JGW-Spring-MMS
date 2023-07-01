@@ -1,9 +1,12 @@
-package com.jaramgroupware.mms.utlis.exception.service;
+package com.jaramgroupware.mms.utils.exception.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Service레이어 에서 발생하는 Exception
+ */
 @Getter
 @AllArgsConstructor
 public enum ServiceErrorCode {

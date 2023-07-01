@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.aop.logging;
+package com.jaramgroupware.mms.utils.aop.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

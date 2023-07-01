@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.spec;
+package com.jaramgroupware.mms.utils.spec;
 
 //ref : https://attacomsian.com/blog/spring-data-jpa-specifications
 public enum SearchOperation {

@@ -1,9 +1,12 @@
-package com.jaramgroupware.mms.utlis.exception.request;
+package com.jaramgroupware.mms.utils.exception.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Request에 대한 validation 체크 및 query param 등 클라이언트가 제공한 정보가 유효하지 않을 경우 발생하는 Exception
+ */
 @Getter
 @AllArgsConstructor
 public enum RequestErrorCode {

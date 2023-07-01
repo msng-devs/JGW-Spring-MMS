@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.exception.service;
+package com.jaramgroupware.mms.utils.exception.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

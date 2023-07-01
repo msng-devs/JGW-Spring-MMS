@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.parse;
+package com.jaramgroupware.mms.utils.parse;
 
 import com.jaramgroupware.mms.domain.member.Member;
 import lombok.RequiredArgsConstructor;

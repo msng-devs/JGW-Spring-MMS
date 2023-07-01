@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.spec;
+package com.jaramgroupware.mms.utils.spec;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

@@ -1,11 +1,11 @@
-package com.jaramgroupware.mms.utlis.spec;
+package com.jaramgroupware.mms.utils.spec;
 
-import com.jaramgroupware.mms.utlis.exception.request.RequestException;
-import com.jaramgroupware.mms.utlis.parse.ParseByNameBuilder;
-import com.jaramgroupware.mms.utlis.spec.keys.DateRangeKey;
-import com.jaramgroupware.mms.utlis.spec.keys.DateTimeRangeKey;
-import com.jaramgroupware.mms.utlis.spec.keys.EqualKey;
-import com.jaramgroupware.mms.utlis.spec.keys.LikeKey;
+import com.jaramgroupware.mms.utils.exception.request.RequestException;
+import com.jaramgroupware.mms.utils.parse.ParseByNameBuilder;
+import com.jaramgroupware.mms.utils.spec.keys.DateRangeKey;
+import com.jaramgroupware.mms.utils.spec.keys.DateTimeRangeKey;
+import com.jaramgroupware.mms.utils.spec.keys.EqualKey;
+import com.jaramgroupware.mms.utils.spec.keys.LikeKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.jaramgroupware.mms.utlis.exception.request.RequestErrorCode.*;
+import static com.jaramgroupware.mms.utils.exception.request.RequestErrorCode.*;
 
 @RequiredArgsConstructor
 @Component

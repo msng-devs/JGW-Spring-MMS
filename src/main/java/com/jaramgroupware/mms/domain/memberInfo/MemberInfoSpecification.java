@@ -1,8 +1,8 @@
 package com.jaramgroupware.mms.domain.memberInfo;
 
 
-import com.jaramgroupware.mms.utlis.spec.PredicatesBuilder;
-import com.jaramgroupware.mms.utlis.spec.SearchCriteria;
+import com.jaramgroupware.mms.utils.spec.PredicatesBuilder;
+import com.jaramgroupware.mms.utils.spec.SearchCriteria;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 

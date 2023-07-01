@@ -1,8 +1,8 @@
 package com.jaramgroupware.mms.domain.major;
 
 
-import com.jaramgroupware.mms.utlis.spec.PredicatesBuilder;
-import com.jaramgroupware.mms.utlis.spec.SearchCriteria;
+import com.jaramgroupware.mms.utils.spec.PredicatesBuilder;
+import com.jaramgroupware.mms.utils.spec.SearchCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

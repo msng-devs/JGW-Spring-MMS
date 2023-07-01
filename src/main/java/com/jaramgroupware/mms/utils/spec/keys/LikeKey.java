@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.spec.keys;
+package com.jaramgroupware.mms.utils.spec.keys;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -6,17 +6,15 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * 해당 필드가 쿼리라파미터의 내용과 같은지 확인하는 키 종류
+ * 문자열 필드에 한하여 해당 단어를 포함하는 데이터를 찾음.
  * queryParamName : 파싱할 쿼리 파라미터명
  * tableName : 해당 테이블의 컬럼명
- * type : 해당 컬럼의 데이터 타입
  */
 @EqualsAndHashCode
 @Getter
 @ToString
 @AllArgsConstructor
-public class EqualKey {
+public class LikeKey {
     private String queryParamName;
     private String tableName;
-    private String type;
 }

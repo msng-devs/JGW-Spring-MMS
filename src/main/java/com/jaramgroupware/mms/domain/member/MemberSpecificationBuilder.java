@@ -3,11 +3,11 @@ package com.jaramgroupware.mms.domain.member;
 
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
-import com.jaramgroupware.mms.utlis.spec.SearchCriteria;
-import com.jaramgroupware.mms.utlis.spec.SearchOperation;
-import com.jaramgroupware.mms.utlis.spec.SpecificationBuilder;
-import com.jaramgroupware.mms.utlis.spec.keys.EqualKey;
-import com.jaramgroupware.mms.utlis.spec.keys.LikeKey;
+import com.jaramgroupware.mms.utils.spec.SearchCriteria;
+import com.jaramgroupware.mms.utils.spec.SearchOperation;
+import com.jaramgroupware.mms.utils.spec.SpecificationBuilder;
+import com.jaramgroupware.mms.utils.spec.keys.EqualKey;
+import com.jaramgroupware.mms.utils.spec.keys.LikeKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;

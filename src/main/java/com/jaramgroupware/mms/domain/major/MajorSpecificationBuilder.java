@@ -1,8 +1,8 @@
 package com.jaramgroupware.mms.domain.major;
 
 
-import com.jaramgroupware.mms.utlis.spec.SpecificationBuilder;
-import com.jaramgroupware.mms.utlis.spec.keys.LikeKey;
+import com.jaramgroupware.mms.utils.spec.SpecificationBuilder;
+import com.jaramgroupware.mms.utils.spec.keys.LikeKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -31,6 +31,8 @@ public class MajorSpecificationBuilder {
 
 
         var specification = new MajorSpecification();
+
+        if(queryParam.isEmpty()) return specification;
 
         var spec = specificationBuilder.buildSearchCriteria(
                 Collections.emptyList(),

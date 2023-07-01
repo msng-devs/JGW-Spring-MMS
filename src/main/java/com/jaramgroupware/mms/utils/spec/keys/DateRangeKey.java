@@ -1,4 +1,4 @@
-package com.jaramgroupware.mms.utlis.spec.keys;
+package com.jaramgroupware.mms.utils.spec.keys;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
