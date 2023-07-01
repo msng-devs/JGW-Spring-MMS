@@ -6,4 +6,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ControllerException extends RuntimeException{
+    private final ControllerErrorCode errorCode;
+    private final String message;
 }
