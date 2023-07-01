@@ -478,7 +478,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#Member-API">Member-API</a>
 <ul class="sectlevel1">
-<li><a href="#Member-Register">POST : /mms/api/v1/member/register</a></li>
+<li><a href="#Member-Info-Register">POST : /mms/api/v1/member/register</a></li>
+<li><a href="#Member-Register">POST : /mms/api/v1/member/register/auth</a></li>
 <li><a href="#Member-Add">POST : /mms/api/v1/member</a></li>
 <li><a href="#Member-Get-Single">GET : /mms/api/v1/member/{memberID}</a></li>
 <li><a href="#Member-Get-Single-Tiny">GET : /mms/api/v1/member/{memberID}</a></li>
@@ -1866,10 +1867,10 @@ Content-Length: 37
 </div>
 </div>
 <div class="sect1">
-<h2 id="Member-Register"><a class="link" href="#Member-Register">POST : /mms/api/v1/member/register</a></h2>
+<h2 id="Member-Info-Register"><a class="link" href="#Member-Info-Register">POST : /mms/api/v1/member/register</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_신규_member을_가입"><a class="link" href="#_신규_member을_가입">신규 Member을 가입</a></h3>
+<h3 id="_회원가입을_위한_신규_회원_정보_등록"><a class="link" href="#_회원가입을_위한_신규_회원_정보_등록">회원가입을 위한 신규 회원 정보 등록</a></h3>
 
 </div>
 <div class="sect2">
@@ -1886,7 +1887,7 @@ Content-Length: 37
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
@@ -1919,7 +1920,10 @@ Content-Length: 37
 </tbody>
 </table>
 <div class="paragraph">
-<p>새로운 Member을 가입할 때 사용하는 API 입니다. 위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.</p>
+<p>새로운 Member가 인증코드를 받아 최종적으로 회원가입에 성공하기 전에, 임원진이 신규 회원의 정보를 미리 등록할 때 사용하는 API 입니다.</p>
+</div>
+<div class="paragraph">
+<p>위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.</p>
 </div>
 <div class="paragraph">
 <p>만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며</p>
@@ -1928,7 +1932,7 @@ Content-Length: 37
 <p>만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.</p>
 </div>
 <div class="paragraph">
-<p>해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role과 rank를 임시로 갖게 됩니다.</p>
+<p>해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 rank를 임시로 갖게 됩니다.</p>
 </div>
 <div class="sect3">
 <h4 id="_query_params_request_fields"><a class="link" href="#_query_params_request_fields">Request fields</a></h4>
@@ -1947,27 +1951,6 @@ Content-Length: 37
 <td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">28자 firebase uid</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-<em>.]?[0-9a-zA-Z])<strong>@[0-9a-zA-Z]([-</em>.]?[0-9a-zA-Z])</strong>.[a-zA-Z]$</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>phone_number</code></p></td>
@@ -2005,11 +1988,8 @@ Content-Length: 37
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
-  "id" : "QWERASDFZXCVPOIULKJHMNBVQAWS",
-  "email" : "test@test.com",
-  "name" : "황테스트",
-  "phone_number" : "01011112222",
-  "student_id" : "2023001122",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
   "major_id" : 1,
   "date_of_birth" : "2022-01-22"
 }</code></pre>
@@ -2031,9 +2011,9 @@ Content-Length: 37
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">가입 완료된 member의 UID (firebase uid)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">가입 완료된 memberInfo의 Id(PK)</p></td>
 </tr>
 </tbody>
 </table>
@@ -2043,7 +2023,7 @@ Content-Length: 37
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
-  "member_id" : "QWERASDFZXCVPOIULKJHMNBVQAWS"
+  "id" : 1
 }</code></pre>
 </div>
 </div>
@@ -2056,15 +2036,12 @@ Content-Length: 37
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
 Accept: application/json
-Content-Length: 216
+Content-Length: 119
 Host: docs.api.com:8080
 
 {
-  "id" : "QWERASDFZXCVPOIULKJHMNBVQAWS",
-  "email" : "test@test.com",
-  "name" : "황테스트",
-  "phone_number" : "01011112222",
-  "student_id" : "2023001122",
+  "phone_number" : "01000000000",
+  "student_id" : "2022000004",
   "major_id" : 1,
   "date_of_birth" : "2022-01-22"
 }</code></pre>
@@ -2077,10 +2054,209 @@ Host: docs.api.com:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
+Content-Length: 14
+
+{
+  "id" : 1
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Member-Register"><a class="link" href="#Member-Register">POST : /mms/api/v1/member/register/auth</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_신규_회원의_회원가입_코드_인증_및_회원가입_진행"><a class="link" href="#_신규_회원의_회원가입_코드_인증_및_회원가입_진행">신규 회원의 회원가입 코드 인증 및 회원가입 진행</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_8"><a class="link" href="#_route_options_8">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_query_params_2"><a class="link" href="#_query_params_2">Query Params</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">param name</th>
+<th class="tableblock halign-left valign-top">options</th>
+<th class="tableblock halign-left valign-top">description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">isNew</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true,false (기본 값 true)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신규 학회원(가두 모집 등)인지 아니면, 기존 학회원인지 여부</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>새로운 Member를 가입할 때 사용하는 API입니다. 신규 회원은 임원진에게 회원 가입 코드를 받아 해당 API를 통해 인증을 할 수 있고, 인증 코드와 함께 부가적인 멤버 정보를 입력해 최종적으로 회원가입을 마칠 수 있습니다.</p>
+</div>
+<div class="paragraph">
+<p>위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.</p>
+</div>
+<div class="paragraph">
+<p>만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며</p>
+</div>
+<div class="paragraph">
+<p>만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.</p>
+</div>
+<div class="paragraph">
+<p>해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role을 임시로 갖게 됩니다.</p>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_request_fields"><a class="link" href="#_query_params_2_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auth_code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 회원가입 인증코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">28자 firebase uid</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 UID (firebase uid)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">email 양식을 지켜야함. regrex : [0-9a-zA-Z]([-<em>.]?[0-9a-zA-Z])<strong>@[0-9a-zA-Z]([-</em>.]?[0-9a-zA-Z])</strong>.[a-zA-Z]$</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 email</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 member의 name(실명)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_request_body"><a class="link" href="#_query_params_2_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "auth_code" : "123e4567-e89b-12d3-a456-426655440000",
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_response_fields"><a class="link" href="#_query_params_2_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">새롭게 추가된 Member의 UID (firebase uid)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_response_body"><a class="link" href="#_query_params_2_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_http_request"><a class="link" href="#_query_params_2_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member/register/auth HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+Accept: application/json
+Content-Length: 160
+Host: docs.api.com:8080
+
+{
+  "auth_code" : "123e4567-e89b-12d3-a456-426655440000",
+  "id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S",
+  "email" : "hwangTest@test.com",
+  "name" : "황테스트"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_query_params_2_http_response"><a class="link" href="#_query_params_2_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
 Content-Length: 50
 
 {
-  "member_id" : "QWERASDFZXCVPOIULKJHMNBVQAWS"
+  "member_id" : "Th1s1sNotRea1U1DDOY0UKNOWH0S"
 }</code></pre>
 </div>
 </div>
@@ -2096,7 +2272,7 @@ Content-Length: 50
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_8"><a class="link" href="#_route_options_8">Route Options</a></h3>
+<h3 id="_route_options_9"><a class="link" href="#_route_options_9">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2118,7 +2294,7 @@ Content-Length: 50
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_8_request_fields"><a class="link" href="#_route_options_8_request_fields">Request fields</a></h4>
+<h4 id="_route_options_9_request_fields"><a class="link" href="#_route_options_9_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -2209,7 +2385,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_8_request_body"><a class="link" href="#_route_options_8_request_body">Request body</a></h4>
+<h4 id="_route_options_9_request_body"><a class="link" href="#_route_options_9_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2228,7 +2404,7 @@ Content-Length: 50
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_8_response_fields"><a class="link" href="#_route_options_8_response_fields">Response fields</a></h4>
+<h4 id="_route_options_9_response_fields"><a class="link" href="#_route_options_9_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2250,7 +2426,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_8_response_body"><a class="link" href="#_route_options_8_response_body">Response body</a></h4>
+<h4 id="_route_options_9_response_body"><a class="link" href="#_route_options_9_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2260,7 +2436,7 @@ Content-Length: 50
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_8_http_request"><a class="link" href="#_route_options_8_http_request">HTTP request</a></h4>
+<h4 id="_route_options_9_http_request"><a class="link" href="#_route_options_9_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/member HTTP/1.1
@@ -2286,7 +2462,7 @@ Host: docs.api.com:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_8_http_response"><a class="link" href="#_route_options_8_http_response">HTTP response</a></h4>
+<h4 id="_route_options_9_http_response"><a class="link" href="#_route_options_9_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2310,7 +2486,7 @@ Content-Length: 50
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_9"><a class="link" href="#_route_options_9">Route Options</a></h3>
+<h3 id="_route_options_10"><a class="link" href="#_route_options_10">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2332,7 +2508,7 @@ Content-Length: 50
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_9_path_parameters"><a class="link" href="#_route_options_9_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_10_path_parameters"><a class="link" href="#_route_options_10_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member/{memberID}</caption>
 <colgroup>
@@ -2354,7 +2530,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_response_fields"><a class="link" href="#_route_options_9_response_fields">Response fields</a></h4>
+<h4 id="_route_options_10_response_fields"><a class="link" href="#_route_options_10_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2401,7 +2577,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_response_body"><a class="link" href="#_route_options_9_response_body">Response body</a></h4>
+<h4 id="_route_options_10_response_body"><a class="link" href="#_route_options_10_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2416,7 +2592,7 @@ Content-Length: 50
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_http_request"><a class="link" href="#_route_options_9_http_request">HTTP request</a></h4>
+<h4 id="_route_options_10_http_request"><a class="link" href="#_route_options_10_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
@@ -2429,7 +2605,7 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_9_http_response"><a class="link" href="#_route_options_9_http_response">HTTP response</a></h4>
+<h4 id="_route_options_10_http_response"><a class="link" href="#_route_options_10_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2458,7 +2634,7 @@ Content-Length: 170
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_10"><a class="link" href="#_route_options_10">Route Options</a></h3>
+<h3 id="_route_options_11"><a class="link" href="#_route_options_11">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2483,7 +2659,7 @@ Content-Length: 170
 <p>권한이 없는 유저가 자기 자신이 아닌 타 유저의 정보를 조회 시도할 경우 유저 정보의 일부만 반환합니다.</p>
 </div>
 <div class="sect3">
-<h4 id="_route_options_10_path_parameters"><a class="link" href="#_route_options_10_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_11_path_parameters"><a class="link" href="#_route_options_11_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member/{memberID}</caption>
 <colgroup>
@@ -2505,7 +2681,7 @@ Content-Length: 170
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_10_response_fields"><a class="link" href="#_route_options_10_response_fields">Response fields</a></h4>
+<h4 id="_route_options_11_response_fields"><a class="link" href="#_route_options_11_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2537,7 +2713,7 @@ Content-Length: 170
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_10_response_body"><a class="link" href="#_route_options_10_response_body">Response body</a></h4>
+<h4 id="_route_options_11_response_body"><a class="link" href="#_route_options_11_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2549,7 +2725,7 @@ Content-Length: 170
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_10_http_request"><a class="link" href="#_route_options_10_http_request">HTTP request</a></h4>
+<h4 id="_route_options_11_http_request"><a class="link" href="#_route_options_11_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
@@ -2562,7 +2738,7 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_10_http_response"><a class="link" href="#_route_options_10_http_response">HTTP response</a></h4>
+<h4 id="_route_options_11_http_response"><a class="link" href="#_route_options_11_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2588,7 +2764,7 @@ Content-Length: 82
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_11"><a class="link" href="#_route_options_11">Route Options</a></h3>
+<h3 id="_route_options_12"><a class="link" href="#_route_options_12">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2610,7 +2786,7 @@ Content-Length: 82
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_11_path_parameters"><a class="link" href="#_route_options_11_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_12_path_parameters"><a class="link" href="#_route_options_12_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member/info/{memberID}</caption>
 <colgroup>
@@ -2632,7 +2808,7 @@ Content-Length: 82
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_response_fields"><a class="link" href="#_route_options_11_response_fields">Response fields</a></h4>
+<h4 id="_route_options_12_response_fields"><a class="link" href="#_route_options_12_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2729,7 +2905,7 @@ Content-Length: 82
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_response_body"><a class="link" href="#_route_options_11_response_body">Response body</a></h4>
+<h4 id="_route_options_12_response_body"><a class="link" href="#_route_options_12_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2754,7 +2930,7 @@ Content-Length: 82
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_http_request"><a class="link" href="#_route_options_11_http_request">HTTP request</a></h4>
+<h4 id="_route_options_12_http_request"><a class="link" href="#_route_options_12_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/info/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
@@ -2767,7 +2943,7 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_11_http_response"><a class="link" href="#_route_options_11_http_response">HTTP response</a></h4>
+<h4 id="_route_options_12_http_response"><a class="link" href="#_route_options_12_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2806,7 +2982,7 @@ Content-Length: 451
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_12"><a class="link" href="#_route_options_12">Route Options</a></h3>
+<h3 id="_route_options_13"><a class="link" href="#_route_options_13">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2831,7 +3007,7 @@ Content-Length: 451
 <p>권한이 없는 유저가 자기 자신이 아닌 타 유저의 정보를 조회 시도할 경우 유저 정보의 일부만 반환합니다.</p>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_path_parameters"><a class="link" href="#_route_options_12_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_13_path_parameters"><a class="link" href="#_route_options_13_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member/info/{memberID}</caption>
 <colgroup>
@@ -2853,7 +3029,7 @@ Content-Length: 451
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_response_fields"><a class="link" href="#_route_options_12_response_fields">Response fields</a></h4>
+<h4 id="_route_options_13_response_fields"><a class="link" href="#_route_options_13_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2910,7 +3086,7 @@ Content-Length: 451
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_response_body"><a class="link" href="#_route_options_12_response_body">Response body</a></h4>
+<h4 id="_route_options_13_response_body"><a class="link" href="#_route_options_13_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -2927,7 +3103,7 @@ Content-Length: 451
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_http_request"><a class="link" href="#_route_options_12_http_request">HTTP request</a></h4>
+<h4 id="_route_options_13_http_request"><a class="link" href="#_route_options_13_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member/info/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
@@ -2940,7 +3116,7 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_12_http_response"><a class="link" href="#_route_options_12_http_response">HTTP response</a></h4>
+<h4 id="_route_options_13_http_response"><a class="link" href="#_route_options_13_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -2971,7 +3147,7 @@ Content-Length: 196
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_13"><a class="link" href="#_route_options_13">Route Options</a></h3>
+<h3 id="_route_options_14"><a class="link" href="#_route_options_14">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3284,7 +3460,7 @@ Content-Length: 343
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_14"><a class="link" href="#_route_options_14">Route Options</a></h3>
+<h3 id="_route_options_15"><a class="link" href="#_route_options_15">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3794,7 +3970,7 @@ Content-Length: 921
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_15"><a class="link" href="#_route_options_15">Route Options</a></h3>
+<h3 id="_route_options_16"><a class="link" href="#_route_options_16">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3816,7 +3992,7 @@ Content-Length: 921
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_15_path_parameters"><a class="link" href="#_route_options_15_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_16_path_parameters"><a class="link" href="#_route_options_16_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member/{memberID}</caption>
 <colgroup>
@@ -3838,7 +4014,7 @@ Content-Length: 921
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_15_response_fields"><a class="link" href="#_route_options_15_response_fields">Response fields</a></h4>
+<h4 id="_route_options_16_response_fields"><a class="link" href="#_route_options_16_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3860,7 +4036,7 @@ Content-Length: 921
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_15_response_body"><a class="link" href="#_route_options_15_response_body">Response body</a></h4>
+<h4 id="_route_options_16_response_body"><a class="link" href="#_route_options_16_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -3870,7 +4046,7 @@ Content-Length: 921
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_15_http_request"><a class="link" href="#_route_options_15_http_request">HTTP request</a></h4>
+<h4 id="_route_options_16_http_request"><a class="link" href="#_route_options_16_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
@@ -3882,7 +4058,7 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_15_http_response"><a class="link" href="#_route_options_15_http_response">HTTP response</a></h4>
+<h4 id="_route_options_16_http_response"><a class="link" href="#_route_options_16_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -3906,7 +4082,7 @@ Content-Length: 50
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_16"><a class="link" href="#_route_options_16">Route Options</a></h3>
+<h3 id="_route_options_17"><a class="link" href="#_route_options_17">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -3928,7 +4104,7 @@ Content-Length: 50
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_16_request_fields"><a class="link" href="#_route_options_16_request_fields">Request fields</a></h4>
+<h4 id="_route_options_17_request_fields"><a class="link" href="#_route_options_17_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -3956,7 +4132,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_16_request_body"><a class="link" href="#_route_options_16_request_body">Request body</a></h4>
+<h4 id="_route_options_17_request_body"><a class="link" href="#_route_options_17_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -3966,7 +4142,7 @@ Content-Length: 50
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_16_response_fields"><a class="link" href="#_route_options_16_response_fields">Response fields</a></h4>
+<h4 id="_route_options_17_response_fields"><a class="link" href="#_route_options_17_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -3988,7 +4164,7 @@ Content-Length: 50
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_16_response_body"><a class="link" href="#_route_options_16_response_body">Response body</a></h4>
+<h4 id="_route_options_17_response_body"><a class="link" href="#_route_options_17_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -3998,7 +4174,7 @@ Content-Length: 50
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_16_http_request"><a class="link" href="#_route_options_16_http_request">HTTP request</a></h4>
+<h4 id="_route_options_17_http_request"><a class="link" href="#_route_options_17_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member HTTP/1.1
@@ -4015,7 +4191,7 @@ Host: docs.api.com:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_16_http_response"><a class="link" href="#_route_options_16_http_response">HTTP response</a></h4>
+<h4 id="_route_options_17_http_response"><a class="link" href="#_route_options_17_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -4039,7 +4215,7 @@ Content-Length: 79
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_17"><a class="link" href="#_route_options_17">Route Options</a></h3>
+<h3 id="_route_options_18"><a class="link" href="#_route_options_18">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -4061,7 +4237,7 @@ Content-Length: 79
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_17_request_fields"><a class="link" href="#_route_options_17_request_fields">Request fields</a></h4>
+<h4 id="_route_options_18_request_fields"><a class="link" href="#_route_options_18_request_fields">Request fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -4145,7 +4321,7 @@ Content-Length: 79
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_17_request_body"><a class="link" href="#_route_options_17_request_body">Request body</a></h4>
+<h4 id="_route_options_18_request_body"><a class="link" href="#_route_options_18_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -4163,7 +4339,7 @@ Content-Length: 79
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_17_response_fields"><a class="link" href="#_route_options_17_response_fields">Response fields</a></h4>
+<h4 id="_route_options_18_response_fields"><a class="link" href="#_route_options_18_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4260,7 +4436,7 @@ Content-Length: 79
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_17_response_body"><a class="link" href="#_route_options_17_response_body">Response body</a></h4>
+<h4 id="_route_options_18_response_body"><a class="link" href="#_route_options_18_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -4285,7 +4461,7 @@ Content-Length: 79
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_17_http_request"><a class="link" href="#_route_options_17_http_request">HTTP request</a></h4>
+<h4 id="_route_options_18_http_request"><a class="link" href="#_route_options_18_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/member/Th1s1sNotRea1U1DDOY0UKNOWH0S HTTP/1.1
@@ -4310,7 +4486,7 @@ Host: docs.api.com:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_17_http_response"><a class="link" href="#_route_options_17_http_response">HTTP response</a></h4>
+<h4 id="_route_options_18_http_response"><a class="link" href="#_route_options_18_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -4502,7 +4678,7 @@ Content-Length: 14
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_18"><a class="link" href="#_route_options_18">Route Options</a></h3>
+<h3 id="_route_options_19"><a class="link" href="#_route_options_19">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -4524,7 +4700,7 @@ Content-Length: 14
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_18_path_parameters"><a class="link" href="#_route_options_18_path_parameters">Path parameters</a></h4>
+<h4 id="_route_options_19_path_parameters"><a class="link" href="#_route_options_19_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/member-leave-absence/{memberID}</caption>
 <colgroup>
@@ -4546,7 +4722,7 @@ Content-Length: 14
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_18_response_fields"><a class="link" href="#_route_options_18_response_fields">Response fields</a></h4>
+<h4 id="_route_options_19_response_fields"><a class="link" href="#_route_options_19_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -4583,7 +4759,7 @@ Content-Length: 14
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_18_response_body"><a class="link" href="#_route_options_18_response_body">Response body</a></h4>
+<h4 id="_route_options_19_response_body"><a class="link" href="#_route_options_19_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -4596,7 +4772,7 @@ Content-Length: 14
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_18_http_request"><a class="link" href="#_route_options_18_http_request">HTTP request</a></h4>
+<h4 id="_route_options_19_http_request"><a class="link" href="#_route_options_19_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/member-leave-absence/ThiS1SNotRea1U1DDOY0UKNOWHoS HTTP/1.1
@@ -4609,7 +4785,7 @@ Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_18_http_response"><a class="link" href="#_route_options_18_http_response">HTTP response</a></h4>
+<h4 id="_route_options_19_http_response"><a class="link" href="#_route_options_19_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
@@ -4636,7 +4812,7 @@ Content-Length: 129
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_19"><a class="link" href="#_route_options_19">Route Options</a></h3>
+<h3 id="_route_options_20"><a class="link" href="#_route_options_20">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -4934,118 +5110,6 @@ Content-Length: 264
 
 </div>
 <div class="sect2">
-<h3 id="_route_options_20"><a class="link" href="#_route_options_20">Route Options</a></h3>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-</tr>
-</tbody>
-</table>
-<div class="sect3">
-<h4 id="_route_options_20_path_parameters"><a class="link" href="#_route_options_20_path_parameters">Path parameters</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /api/v1/member-leave-absence/{memberID}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberID</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">대상 Member의 uid(firebase uid)</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_route_options_20_response_fields"><a class="link" href="#_route_options_20_response_fields">Response fields</a></h4>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 member leave absence의 id</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_route_options_20_response_body"><a class="link" href="#_route_options_20_response_body">Response body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
-  "id" : 2
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_route_options_20_http_request"><a class="link" href="#_route_options_20_http_request">HTTP request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member-leave-absence/ThiS1SNotRea1U1DDOY0UKNOWHoS HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
-Accept: application/json
-Host: docs.api.com:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_route_options_20_http_response"><a class="link" href="#_route_options_20_http_response">HTTP response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 14
-
-{
-  "id" : 2
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="MemberLeaveAbsence-Del-Bulk"><a class="link" href="#MemberLeaveAbsence-Del-Bulk">DELETE : /mms/api/v1/member-leave-absence/</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_다수_회원_휴학_정보를_삭제"><a class="link" href="#_다수_회원_휴학_정보를_삭제">다수 회원 휴학 정보를 삭제</a></h3>
-
-</div>
-<div class="sect2">
 <h3 id="_route_options_21"><a class="link" href="#_route_options_21">Route Options</a></h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -5068,42 +5132,26 @@ Content-Length: 14
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_route_options_21_request_fields"><a class="link" href="#_route_options_21_request_fields">Request fields</a></h4>
+<h4 id="_route_options_21_path_parameters"><a class="link" href="#_route_options_21_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/member-leave-absence/{memberID}</caption>
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_leave_absence_ids</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">삭제할 MemberLeaveAbsence의 ids</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">대상 Member의 uid(firebase uid)</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_route_options_21_request_body"><a class="link" href="#_route_options_21_request_body">Request body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
-  "member_leave_absence_ids" : [ 2, 3 ]
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_route_options_21_response_fields"><a class="link" href="#_route_options_21_response_fields">Response fields</a></h4>
@@ -5120,9 +5168,9 @@ Content-Length: 14
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 MemberLeaveAbsence의 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 member leave absence의 id</p></td>
 </tr>
 </tbody>
 </table>
@@ -5132,7 +5180,7 @@ Content-Length: 14
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
-  "message" : "총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"
+  "id" : 2
 }</code></pre>
 </div>
 </div>
@@ -5141,17 +5189,11 @@ Content-Length: 14
 <h4 id="_route_options_21_http_request"><a class="link" href="#_route_options_21_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member-leave-absence HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member-leave-absence/ThiS1SNotRea1U1DDOY0UKNOWHoS HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
-role_pk: 4
 Accept: application/json
-Content-Length: 43
-Host: docs.api.com:8080
-
-{
-  "member_leave_absence_ids" : [ 2, 3 ]
-}</code></pre>
+Host: docs.api.com:8080</code></pre>
 </div>
 </div>
 </div>
@@ -5161,10 +5203,10 @@ Host: docs.api.com:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 91
+Content-Length: 14
 
 {
-  "message" : "총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"
+  "id" : 2
 }</code></pre>
 </div>
 </div>
@@ -5173,10 +5215,10 @@ Content-Length: 91
 </div>
 </div>
 <div class="sect1">
-<h2 id="MemberLeaveAbsence-Update-Single"><a class="link" href="#MemberLeaveAbsence-Update-Single">PUT : /mms/api/v1/member-leave-absence/{memberID}</a></h2>
+<h2 id="MemberLeaveAbsence-Del-Bulk"><a class="link" href="#MemberLeaveAbsence-Del-Bulk">DELETE : /mms/api/v1/member-leave-absence/</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_단일_회원_휴학_정보를_업데이트"><a class="link" href="#_단일_회원_휴학_정보를_업데이트">단일 회원 휴학 정보를 업데이트</a></h3>
+<h3 id="_다수_회원_휴학_정보를_삭제"><a class="link" href="#_다수_회원_휴학_정보를_삭제">다수 회원 휴학 정보를 삭제</a></h3>
 
 </div>
 <div class="sect2">
@@ -5220,6 +5262,140 @@ Content-Length: 91
 <td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>member_leave_absence_ids</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제할 MemberLeaveAbsence의 ids</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_22_request_body"><a class="link" href="#_route_options_22_request_body">Request body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "member_leave_absence_ids" : [ 2, 3 ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_22_response_fields"><a class="link" href="#_route_options_22_response_fields">Response fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제된 MemberLeaveAbsence의 개수</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_route_options_22_response_body"><a class="link" href="#_route_options_22_response_body">Response body</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
+  "message" : "총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_22_http_request"><a class="link" href="#_route_options_22_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/member-leave-absence HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+user_pk: Th1s1sNotRea1U1DDOY0UKNOWH0S
+role_pk: 4
+Accept: application/json
+Content-Length: 43
+Host: docs.api.com:8080
+
+{
+  "member_leave_absence_ids" : [ 2, 3 ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_route_options_22_http_response"><a class="link" href="#_route_options_22_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 91
+
+{
+  "message" : "총 (2)개의 MemberLeaveAbsence를 성공적으로 삭제했습니다!"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="MemberLeaveAbsence-Update-Single"><a class="link" href="#MemberLeaveAbsence-Update-Single">PUT : /mms/api/v1/member-leave-absence/{memberID}</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_단일_회원_휴학_정보를_업데이트"><a class="link" href="#_단일_회원_휴학_정보를_업데이트">단일 회원 휴학 정보를 업데이트</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_route_options_23"><a class="link" href="#_route_options_23">Route Options</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">authorization</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Role</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">admin</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add user info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_route_options_23_request_fields"><a class="link" href="#_route_options_23_request_fields">Request fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필드명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">타입</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제약요건</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설명</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -5237,7 +5413,7 @@ Content-Length: 91
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_22_request_body"><a class="link" href="#_route_options_22_request_body">Request body</a></h4>
+<h4 id="_route_options_23_request_body"><a class="link" href="#_route_options_23_request_body">Request body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -5248,7 +5424,7 @@ Content-Length: 91
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_22_response_fields"><a class="link" href="#_route_options_22_response_fields">Response fields</a></h4>
+<h4 id="_route_options_23_response_fields"><a class="link" href="#_route_options_23_response_fields">Response fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -5285,7 +5461,7 @@ Content-Length: 91
 </table>
 </div>
 <div class="sect3">
-<h4 id="_route_options_22_response_body"><a class="link" href="#_route_options_22_response_body">Response body</a></h4>
+<h4 id="_route_options_23_response_body"><a class="link" href="#_route_options_23_response_body">Response body</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-none hljs">{
@@ -5298,7 +5474,7 @@ Content-Length: 91
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_22_http_request"><a class="link" href="#_route_options_22_http_request">HTTP request</a></h4>
+<h4 id="_route_options_23_http_request"><a class="link" href="#_route_options_23_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/member-leave-absence/ThiS1SNotRea1U1DDOY0UKNOWHoS HTTP/1.1
@@ -5316,7 +5492,7 @@ Host: docs.api.com:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_route_options_22_http_response"><a class="link" href="#_route_options_22_http_response">HTTP response</a></h4>
+<h4 id="_route_options_23_http_response"><a class="link" href="#_route_options_23_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK

@@ -1,10 +1,14 @@
 package com.jaramgroupware.mms.web;
 
 
+import com.jaramgroupware.mms.domain.authCode.AuthCode;
+import com.jaramgroupware.mms.domain.authCode.AuthCodeRepository;
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberSpecification;
 import com.jaramgroupware.mms.domain.member.MemberSpecificationBuilder;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoSpecification;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoSpecificationBuilder;
 import com.jaramgroupware.mms.domain.rank.Rank;
@@ -13,6 +17,8 @@ import com.jaramgroupware.mms.dto.general.controllerDto.MessageDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.*;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.controllerDto.MemberInfoFullResponseControllerDto;
+import com.jaramgroupware.mms.dto.memberInfo.controllerDto.MemberInfoIdResponseControllerDto;
+import com.jaramgroupware.mms.dto.memberInfo.controllerDto.MemberInfoRegisterRequestControllerDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
 import com.jaramgroupware.mms.service.*;
 import com.jaramgroupware.mms.utils.validation.PageableValid;
@@ -51,6 +57,8 @@ public class MemberApiController {
     private final RankService rankService;
     private final RoleService roleService;
     private final ConfigService configService;
+    private final AuthCodeRepository authCodeRepository;
+    private final MemberInfoRepository memberInfoRepository;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final MemberSpecificationBuilder memberSpecificationBuilder;
     private final MemberInfoSpecificationBuilder memberInfoSpecificationBuilder;
@@ -64,26 +72,55 @@ public class MemberApiController {
     private final Role adminRole = Role.builder().id(4).build();
 
     /**
-     * 신규 Member를 가입시키는 함수
+     * 회원가입을 위한 신규 회원의 정보를 등록시키는 함수
      * @param isNew 어떤 종류의 회원인지 구분, 새롭게 학회에 등록한 회원 = true, 기존 학회원 혹은 OB = false
-     * @param memberRegisterRequestControllerDto Member(Object)와 MemberInfo(Object)의 신규 가입 요청을 담은 dto
-     * @param uid 회원의 신규 가입을 요청한 Member(Object)의 UID(Firebase uid)
-     * @return 신규 가입 완료된 Member(Object)의 UID(Firebase uid)를 반환
+     * @param memberInfoRegisterRequestControllerDto 등록하고자 하는 신규 회원의 정보를 담은 dto
+     * @param uid 신규 회원의 정보 등록을 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 등록이 완료된 MemberInfo(Object)의 ID(PK) 반환
      */
     @PostMapping("/register")
-    public ResponseEntity<MemberIdResponseControllerDto> registerMember(
+    public ResponseEntity<MemberInfoIdResponseControllerDto> addNewMemberInfo(
+            @RequestParam(defaultValue = "true",name = "isNew") Boolean isNew,
+            @RequestBody @Valid MemberInfoRegisterRequestControllerDto memberInfoRegisterRequestControllerDto,
+            @RequestHeader("user_pk") String uid){
+
+        Integer id;
+        if(isNew) {
+            id = memberInfoService.register(memberInfoRegisterRequestControllerDto.toServiceDto(defaultNewRank),"system");
+        } else{
+            id = memberInfoService.register(memberInfoRegisterRequestControllerDto.toServiceDto(defaultRank),"system");
+        }
+
+        return ResponseEntity.ok(new MemberInfoIdResponseControllerDto(id));
+    }
+
+    /**
+     * 인증 코드를 통해 최종적으로 신규 회원가입을 완료시키는 함수
+     * @param isNew 어떤 종류의 회원인지 구분, 새롭게 학회에 등록한 회원 = true, 기존 학회원 혹은 OB = false
+     * @param memberRegisterRequestControllerDto 회원가입 인증 코드와 신규 회원의 정보를 담은 dto
+     * @param uid 코드 인증과 신규 멤버 등록을 요청한 Member(Object)의 UID(Firebase uid)
+     * @return 신규 회원가입 완료된 Member(Object)의 UID(Firebase uid)를 반환
+     */
+    @PostMapping("/register/auth")
+    public ResponseEntity<MemberIdResponseControllerDto> registerNewMember(
             @RequestParam(defaultValue = "true",name = "isNew") Boolean isNew,
             @RequestBody @Valid MemberRegisterRequestControllerDto memberRegisterRequestControllerDto,
             @RequestHeader("user_pk") String uid){
 
+        AuthCode targetAuthCode = authCodeRepository.findById(memberRegisterRequestControllerDto.getAuthCode())
+                .orElseThrow(()->new IllegalArgumentException(""));
+
+        MemberInfo targetMemberInfo = memberInfoRepository.findMemberInfoById(targetAuthCode.getMemberInfo().getId())
+                .orElseThrow(()->new IllegalArgumentException(""));
+
         String id;
         if(isNew){
-            id = memberService.add(memberRegisterRequestControllerDto.toServiceDto(defaultNewMemberRole));
-            memberInfoService.add(memberRegisterRequestControllerDto.toServiceDto(defaultNewRank),"system");
+            id = memberService.register(memberRegisterRequestControllerDto.toServiceDto(defaultNewMemberRole,targetMemberInfo));
         } else{
-            id = memberService.add(memberRegisterRequestControllerDto.toServiceDto(defaultMemberRole));
-            memberInfoService.add(memberRegisterRequestControllerDto.toServiceDto(defaultRank),"system");
+            id = memberService.register(memberRegisterRequestControllerDto.toServiceDto(defaultMemberRole,targetMemberInfo));
         }
+
+        authCodeRepository.delete(targetAuthCode);
 
         return ResponseEntity.ok(new MemberIdResponseControllerDto(id));
     }

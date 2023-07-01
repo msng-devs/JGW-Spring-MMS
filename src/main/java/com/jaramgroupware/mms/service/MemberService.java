@@ -2,10 +2,9 @@ package com.jaramgroupware.mms.service;
 
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
+import com.jaramgroupware.mms.dto.member.serviceDto.*;
 import com.jaramgroupware.mms.utils.exception.CustomException;
 import com.jaramgroupware.mms.utils.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +37,9 @@ public class MemberService {
 
     @Autowired
     private final MemberRepository memberRepository;
+
+    @Autowired
+    private final MemberInfoRepository memberInfoRepository;
 
     /**
      * 단일 멤버를 조회하는 함수
@@ -97,6 +99,28 @@ public class MemberService {
                 .map(MemberResponseServiceDto::new)
                 .collect(Collectors.toList());
 
+    }
+
+    /**
+     * 신규 회원을 최종으로 등록 완료하는 함수
+     * @param memberRegisterRequestServiceDto 신규 회원의 등록 정보를 담은 dto
+     * @return 등록된 Member(Object)의 UID(Firebase uid), email 중복시 DUPLICATED_EMAIL 예외 처리
+     */
+    @Transactional
+    public String register(MemberRegisterRequestServiceDto memberRegisterRequestServiceDto) {
+
+        if (memberRepository.existsByEmail(memberRegisterRequestServiceDto.getEmail())) {
+            throw new CustomException(ErrorCode.DUPLICATED_EMAIL);
+        }
+
+        Member targetMember = memberRegisterRequestServiceDto.toEntity();
+        Member result = memberRepository.save(targetMember);
+
+        MemberInfo targetMemberInfo = memberRegisterRequestServiceDto.getMemberInfo();
+        targetMemberInfo.setMember(result);
+        memberInfoRepository.save(targetMemberInfo);
+
+        return result.getId();
     }
 
     /**

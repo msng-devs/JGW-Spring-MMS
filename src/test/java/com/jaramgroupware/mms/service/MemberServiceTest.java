@@ -4,11 +4,9 @@ import com.jaramgroupware.mms.TestUtils;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
 import com.jaramgroupware.mms.domain.member.MemberSpecification;
-import com.jaramgroupware.mms.domain.rank.Rank;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberAddRequestServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberBulkUpdateRequestServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberResponseServiceDto;
-import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
+import com.jaramgroupware.mms.dto.member.serviceDto.*;
 import com.jaramgroupware.mms.utils.exception.CustomException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -44,6 +42,9 @@ class MemberServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private MemberInfoRepository memberInfoRepository;
+
     private final TestUtils testUtils = new TestUtils();
 
     @BeforeEach
@@ -78,6 +79,52 @@ class MemberServiceTest {
         Assertions.assertNotNull(resultID);
         Assertions.assertEquals(resultID, Objects.requireNonNull(resultID));
         verify(memberRepository).save(any());
+    }
+
+    @Test
+    void register() {
+        //given
+        MemberRegisterRequestServiceDto testServiceDto = MemberRegisterRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMember().getId())
+                .email(testUtils.getTestMember().getEmail())
+                .name(testUtils.getTestMember().getName())
+                .role(testUtils.getTestMember().getRole())
+                .status(testUtils.getTestMember().isStatus())
+                .memberInfo(testUtils.getTestMemberInfo())
+                .build();
+
+        doReturn(testServiceDto.toEntity()).when(memberRepository).save(any(Member.class));
+        doReturn(testUtils.getTestMemberInfo()).when(memberInfoRepository).save(any(MemberInfo.class));
+
+        //when
+        String resultID = memberService.register(testServiceDto);
+
+        //then
+        Assertions.assertNotNull(resultID);
+        Assertions.assertEquals(resultID, Objects.requireNonNull(resultID));
+        verify(memberRepository).save(any(Member.class));
+    }
+
+    @Test
+    void duplicatedEmailErrorWhenRegisterMember() {
+        //given
+        MemberRegisterRequestServiceDto testServiceDto = MemberRegisterRequestServiceDto
+                .builder()
+                .id(testUtils.getTestMember().getId())
+                .email(testUtils.getTestMember().getEmail())
+                .name(testUtils.getTestMember().getName())
+                .role(testUtils.getTestMember().getRole())
+                .status(testUtils.getTestMember().isStatus())
+                .memberInfo(testUtils.getTestMemberInfo())
+                .build();
+
+        doReturn(true).when(memberRepository).existsByEmail(testServiceDto.getEmail());
+
+        //when then
+        assertThrows(CustomException.class, () -> {
+            memberService.register(testServiceDto);
+        });
     }
 
 //    @Test

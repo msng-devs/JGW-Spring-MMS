@@ -1,6 +1,7 @@
 package com.jaramgroupware.mms;
 
 import com.jaramgroupware.mms.domain.BaseEntity;
+import com.jaramgroupware.mms.domain.authCode.AuthCode;
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
@@ -21,10 +22,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Component
@@ -51,6 +49,7 @@ public class TestUtils {
     private final MemberLeaveAbsence testMemberLeaveAbsence;
     private final MemberLeaveAbsence testMemberLeaveAbsence2;
     private final MemberLeaveAbsence testMemberLeaveAbsence3;
+    private final AuthCode testAuthCode;
     private final LocalDate testReturnDate;
     private final LocalDate testReturnDate2;
     public final String testUid;
@@ -172,6 +171,10 @@ public class TestUtils {
                 .member(testMember4)
                 .status(true)
                 .expectedDateReturnSchool(testReturnDate)
+                .build();
+        testAuthCode = AuthCode.builder()
+                .id("123e4567-e89b-12d3-a456-426655440000")
+                .memberInfo(testMemberInfo)
                 .build();
         testUid = testMember.getId();
     }

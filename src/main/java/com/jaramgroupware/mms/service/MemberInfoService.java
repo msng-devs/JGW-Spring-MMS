@@ -1,9 +1,12 @@
 package com.jaramgroupware.mms.service;
 
+import com.jaramgroupware.mms.domain.authCode.AuthCode;
+import com.jaramgroupware.mms.domain.authCode.AuthCodeRepository;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoAddRequestServiceDto;
+import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoRegisterRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoResponseServiceDto;
 import com.jaramgroupware.mms.dto.memberInfo.serviceDto.MemberInfoUpdateRequestServiceDto;
 import com.jaramgroupware.mms.utils.exception.CustomException;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +41,9 @@ public class MemberInfoService {
 
     @Autowired
     private final MemberInfoRepository memberInfoRepository;
+
+    @Autowired
+    private final AuthCodeRepository authCodeRepository;
 
     /**
      * 단일 멤버정보를 조회하기 위한 함수
@@ -96,6 +103,34 @@ public class MemberInfoService {
                 .map(MemberInfoResponseServiceDto::new)
                 .collect(Collectors.toList());
 
+    }
+
+    /**
+     * 신규 회원의 정보를 등록하는 함수
+     * @param memberInfoRegisterRequestServiceDto 등록할 MemberInfo(Object)의 정보를 담은 dto
+     * @param who 해당 신규 회원 정보를 등록한 Member(Object)의 UID(Firebase uid)
+     * @return 등록된 MemberInfo(Object)의 ID, 등록 요청 dto 내의 학번이 이미 존재한다면 DUPLICATED_STUDENT_ID 예외 처리
+     */
+    @Transactional
+    public Integer register(MemberInfoRegisterRequestServiceDto memberInfoRegisterRequestServiceDto, String who){
+
+        if(memberInfoRepository.existsByStudentID(memberInfoRegisterRequestServiceDto.getStudentID())) {
+            throw new CustomException(ErrorCode.DUPLICATED_STUDENT_ID);
+        }
+
+        MemberInfo targetMemberInfo = memberInfoRegisterRequestServiceDto.toEntity();
+        targetMemberInfo.setCreateBy(who);
+        targetMemberInfo.setModifiedBy(who);
+        MemberInfo result = memberInfoRepository.save(targetMemberInfo);
+
+        UUID uuid = UUID.randomUUID();
+        AuthCode targetAuthCode = AuthCode.builder()
+                .id(uuid.toString())
+                .memberInfo(targetMemberInfo)
+                .build();
+        authCodeRepository.save(targetAuthCode);
+
+        return result.getId();
     }
 
     /**

@@ -2,9 +2,48 @@
 = Member-API
 회원 정보를 조회 및 관리할 수 있는 api 입니다.
 
-[[Member-Register]]
+[[Member-Info-Register]]
 == POST : /mms/api/v1/member/register
-=== 신규 Member을 가입
+=== 회원가입을 위한 신규 회원 정보 등록
+=== Route Options
+[cols="1,1"]
+|===
+|authorization
+|true
+
+|Role
+|admin
+
+|add user info
+|false
+|===
+
+=== Query Params
+
+[cols="1,1,1"]
+|===
+|param name|options|description
+
+|isNew
+|true,false (기본 값 true)
+|신규 학회원(가두 모집 등)인지 아니면, 기존 학회원인지 여부
+|===
+
+새로운 Member가 인증코드를 받아 최종적으로 회원가입에 성공하기 전에, 임원진이 신규 회원의 정보를 미리 등록할 때 사용하는 API 입니다.
+
+위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.
+
+만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며
+
+만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.
+
+해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 rank를 임시로 갖게 됩니다.
+
+operation::member-info-register-single[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
+
+[[Member-Register]]
+== POST : /mms/api/v1/member/register/auth
+=== 신규 회원의 회원가입 코드 인증 및 회원가입 진행
 === Route Options
 [cols="1,1"]
 |===
@@ -29,15 +68,17 @@
 |신규 학회원(가두 모집 등)인지 아니면, 기존 학회원인지 여부
 |===
 
-새로운 Member을 가입할 때 사용하는 API 입니다. 위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.
+새로운 Member를 가입할 때 사용하는 API입니다. 신규 회원은 임원진에게 회원 가입 코드를 받아 해당 API를 통해 인증을 할 수 있고, 인증 코드와 함께 부가적인 멤버 정보를 입력해 최종적으로 회원가입을 마칠 수 있습니다.
+
+위에서 언급한 "isNew" query parameter 를 사용하여 어떤 종류의 회원인지 구분해주어야 합니다.
 
 만약 가두 모집 등으로 새롭게 학회에 등록하고자 하는 회원은 true로 지정해야하며
 
 만약 기존 학회원, 혹은 OB 분들 경우에는 false로 지정해주어야합니다.
 
-해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role과 rank를 임시로 갖게 됩니다.
+해당 API로 가입된 유저는, isNew parameter 에 종류에 따라, 설정에 등록되어있는 role을 임시로 갖게 됩니다.
 
-operation::member-register[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
+operation::member-register-single[snippets='request-fields,request-body,response-fields,response-body,http-request,http-response,']
 
 [[Member-Add]]
 == POST : /mms/api/v1/member

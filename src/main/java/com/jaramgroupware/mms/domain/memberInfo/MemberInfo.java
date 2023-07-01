@@ -47,7 +47,7 @@ public class MemberInfo extends BaseEntity {
      * 회원정보의 대상 회원
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_MEMBER_PK",nullable = false)
+    @JoinColumn(name = "MEMBER_MEMBER_PK")
     private Member member;
 
     /**

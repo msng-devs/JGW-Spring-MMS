@@ -21,6 +21,9 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.validation.ConstraintViolationException;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static com.jaramgroupware.mms.utils.exception.ErrorCode.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
@@ -38,10 +41,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.NOT_FOUND)
-                .type(null)
-                .title("HttpMediaTypeNotSupportedException")
-                .detail(exception.getMessage())
+                .error("HttpMediaTypeNotSupportedException")
+                .code(null)
+                .message(exception.getMessage())
+                .path(request.getContextPath())
                 .build()
                 , HttpStatus.NOT_FOUND);
     }
@@ -56,10 +61,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.NOT_FOUND)
-                .type(null)
-                .title("NOT_FOUND")
-                .detail("해당 Path를 찾을 수 없습니다.")
+                .error("NOT_FOUND")
+                .code(null)
+                .message("해당 Path를 찾을 수 없습니다.")
+                .path(request.getContextPath())
                 .build()
                 , HttpStatus.NOT_FOUND);
     }
@@ -73,10 +80,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(exception.getErrorCode().getHttpStatus())
-                .type(exception.getErrorCode().getErrorCode())
-                .title(exception.getErrorCode().getTitle())
-                .detail(exception.getErrorCode().getDetail() + " " +exception.getMessage())
+                .error(exception.getErrorCode().getError())
+                .code(exception.getErrorCode().getErrorCode())
+                .message(exception.getErrorCode().getMessage() + " " +exception.getMessage())
+                .path(request.getContextPath())
                 .build()
                 , exception.getErrorCode().getHttpStatus());
     }
@@ -90,10 +99,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.BAD_REQUEST)
-                .type(null)
-                .title("BAD_REQUEST_PARAMS")
-                .detail(exception.getMessage())
+                .error("BAD_REQUEST_PARAMS")
+                .code(null)
+                .message(exception.getMessage())
+                .path(request.getContextPath())
                 .build()
                 , HttpStatus.BAD_REQUEST);
     }
@@ -108,10 +119,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.BAD_REQUEST)
-                .type(null)
-                .title("BAD_REQUEST_PARAMS")
-                .detail("잘못된 외래키가 존재합니다. id를 다시 확인해주세요")
+                .error("BAD_REQUEST_PARAMS")
+                .code(null)
+                .message("잘못된 외래키가 존재합니다. id를 다시 확인해주세요")
+                .path(request.getContextPath())
                 .build()
                 , HttpStatus.BAD_REQUEST);
     }
@@ -126,10 +139,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.BAD_REQUEST)
-                .type(null)
-                .title("DUPLICATE_KEY")
-                .detail("중복되는 키가 존재합니다!"+exception.getRootCause().getMessage())
+                .error("DUPLICATE_KEY")
+                .code(null)
+                .message("중복되는 키가 존재합니다!"+exception.getRootCause().getMessage())
+                .path(request.getContextPath())
                 .build()
                 , HttpStatus.BAD_REQUEST);
     }
@@ -144,10 +159,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(INTERNAL_SERVER_ERROR.getHttpStatus())
-                .type(INTERNAL_SERVER_ERROR.getErrorCode())
-                .title(INTERNAL_SERVER_ERROR.getTitle())
-                .detail(INTERNAL_SERVER_ERROR.getDetail())
+                .error(INTERNAL_SERVER_ERROR.getError())
+                .code(INTERNAL_SERVER_ERROR.getErrorCode())
+                .message(INTERNAL_SERVER_ERROR.getMessage())
+                .path(request.getContextPath())
                 .build()
                 ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -160,10 +177,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.BAD_REQUEST)
-                .type(null)
-                .title("BAD_REQUEST_PARAMS")
-                .detail(exception.getMessage())
+                .error("BAD_REQUEST_PARAMS")
+                .code(null)
+                .message(exception.getMessage())
+                .path(request.getContextPath())
                 .build()
                 , HttpStatus.BAD_REQUEST);
     }
@@ -188,10 +207,12 @@ public class GlobalExceptionHandler {
         }
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.BAD_REQUEST)
-                .type(null)
-                .title("METHOD_ARGUMENT_NOT_VALID")
-                .detail(builder.toString())
+                .error("METHOD_ARGUMENT_NOT_VALID")
+                .code(null)
+                .message(builder.toString())
+                .path(request.getContextPath())
                 .build()
                 ,HttpStatus.BAD_REQUEST);
     }
@@ -204,10 +225,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.BAD_REQUEST)
-                .type(null)
-                .title("REQUEST_ARGUMENT_NOT_VALID")
-                .detail(exception.getMessage())
+                .error("REQUEST_ARGUMENT_NOT_VALID")
+                .code(null)
+                .message(exception.getMessage())
+                .path(request.getContextPath())
                 .build()
                 ,HttpStatus.BAD_REQUEST);
     }
@@ -221,10 +244,12 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(ExceptionMessageDto.builder()
+                .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now()))
                 .status(HttpStatus.BAD_REQUEST)
-                .type(null)
-                .title("HttpMessageNotReadableException")
-                .detail("입력 형식이 잘못됬습니다. 다시 확인하세요")
+                .error("HttpMessageNotReadableException")
+                .code(null)
+                .message("입력 형식이 잘못됬습니다. 다시 확인하세요")
+                .path(request.getContextPath())
                 .build()
                 ,HttpStatus.BAD_REQUEST);
     }
