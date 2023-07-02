@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -41,12 +42,12 @@ public class RegisterCode {
     private MemberInfo memberInfo;
 
     @Column(name = "REGISTER_CODE_EXPIRE", nullable = false)
-    private LocalDateTime expiredAt;
+    private LocalDate expiredAt;
 
     @Column(name = "REGISTER_CODE_CREATE_BY", nullable = false)
     private String createBy;
 
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(this.expiredAt);
+        return LocalDate.now().isAfter(this.expiredAt);
     }
 }

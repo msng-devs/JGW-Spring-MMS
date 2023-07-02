@@ -35,8 +35,7 @@ public class MajorSpecification implements Specification<Major>{
         list.add(criteria);
     }
 
-    public void set(List<SearchCriteria> newList) {
-        list.clear();
+    public void addAll(List<SearchCriteria> newList) {
         list.addAll(newList);
     }
 

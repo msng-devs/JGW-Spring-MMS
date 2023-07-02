@@ -1,5 +1,7 @@
 package com.jaramgroupware.mms.utils.spec.keys;
 
+import com.jaramgroupware.mms.utils.parse.ParseByNameBuilder;
+import com.jaramgroupware.mms.utils.parse.ParseByNameType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,5 +20,5 @@ import lombok.ToString;
 public class EqualKey {
     private String queryParamName;
     private String tableName;
-    private String type;
+    private ParseByNameType type;
 }

@@ -42,7 +42,7 @@ public class MajorSpecificationBuilder {
                 queryParam
         );
 
-        specification.set(spec);
+        specification.addAll(spec);
 
         return specification;
     }

@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ParseByNameBuilder {
-    public Object parse(String target,String targetClass){
+    public Object parse(String target,ParseByNameType targetClass){
         return switch (targetClass) {
-            case "Integer" -> Integer.parseInt(target);
-            case "Member" -> Member.builder().id(target).build();
-            case "Long" -> Long.parseLong(target);
-            case "Bool", "Boolean" -> Boolean.parseBoolean(target);
+            case INTEGER -> Integer.parseInt(target);
+            case MEMBER -> Member.builder().id(target).build();
+            case LONG -> Long.parseLong(target);
+            case BOOLEAN -> Boolean.parseBoolean(target);
             default -> target;
         };
     }

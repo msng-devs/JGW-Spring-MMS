@@ -23,7 +23,6 @@ import org.hibernate.annotations.ColumnDefault;
 @AllArgsConstructor
 @Builder
 @Entity(name = "MEMBER")
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Member {
 
     /**

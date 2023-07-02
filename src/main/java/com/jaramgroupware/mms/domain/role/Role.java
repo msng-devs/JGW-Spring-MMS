@@ -20,7 +20,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity(name = "ROLE")
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Role {
 
     /**
