@@ -65,7 +65,8 @@ public class Member {
      * @param member 업데이트 하고자 하는 Member 객체
      */
     public void update(Member member) {
-        name = member.getName();
-        role = member.getRole();
+        if(member.getName() != null) name = member.getName();
+        if(member.getEmail() != null) email = member.getEmail();
+        if(member.getRole() != null) role = member.getRole();
     }
 }

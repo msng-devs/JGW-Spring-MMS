@@ -3,6 +3,10 @@ package com.jaramgroupware.mms.web;
 
 
 import com.jaramgroupware.mms.domain.memberView.MemberViewSpecificationBuilder;
+import com.jaramgroupware.mms.dto.member.MemberResponseDto;
+import com.jaramgroupware.mms.dto.member.controllerDto.MemberEditRequestControllerDto;
+import com.jaramgroupware.mms.dto.member.controllerDto.MemberUpdateRequestControllerDto;
+import com.jaramgroupware.mms.dto.member.serviceDto.MemberEditRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberView.MemberViewDatailResponseDto;
 import com.jaramgroupware.mms.dto.withdrawal.WithdrawalResponseDto;
 import com.jaramgroupware.mms.service.*;
@@ -11,6 +15,7 @@ import com.jaramgroupware.mms.utils.aop.routeOption.rbac.RbacOption;
 import com.jaramgroupware.mms.utils.exception.controller.ControllerErrorCode;
 import com.jaramgroupware.mms.utils.exception.controller.ControllerException;
 import com.jaramgroupware.mms.utils.validation.page.PageableSortKeyCheck;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -92,10 +97,13 @@ public class MemberApiController {
     //어드민용
     @RbacOption(role = 4)
     @PutMapping("{memberID}")
-    public ResponseEntity<MemberViewDatailResponseDto> updateMember(
+    public ResponseEntity<MemberResponseDto> updateMember(
             @PathVariable String memberID,
-            @RequestBody MemberViewDatailResponseDto memberViewDatailResponseDto){
+            @RequestHeader("user_pk") String uid,
+            @RequestBody @Valid MemberUpdateRequestControllerDto requestDto){
+        var result = memberService.update(requestDto.toServiceDto(uid,memberID));
 
+        return ResponseEntity.ok(result);
     }
 
     //자기자신용
@@ -110,9 +118,12 @@ public class MemberApiController {
     @AuthOption
     @RbacOption(role = 4)
     @PutMapping("/edit")
-    public ResponseEntity<MemberViewDatailResponseDto> editMember(
+    public ResponseEntity<MemberResponseDto> editMember(
             @RequestHeader("user_pk") String uid,
-            @RequestBody MemberViewDatailResponseDto memberViewDatailResponseDto){
+            @RequestBody MemberEditRequestControllerDto requestDto){
+
+        var result = memberService.edit(requestDto.toServiceDto(uid,uid));
+        return ResponseEntity.ok(result);
 
     }
 

@@ -3,6 +3,7 @@ package com.jaramgroupware.mms.dto.member.controllerDto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.jaramgroupware.mms.domain.role.Role;
+import com.jaramgroupware.mms.dto.member.serviceDto.MemberEditRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode
 @ToString
 @Getter
 @AllArgsConstructor
@@ -30,5 +32,16 @@ public class MemberEditRequestControllerDto {
 
     @NotNull(message = "전공 정보가 비여있습니다!")
     private Integer majorId;
+
+    public MemberEditRequestServiceDto toServiceDto(String modifiedBy,String targetMember) {
+        return MemberEditRequestServiceDto.builder()
+                .targetId(targetMember)
+                .modifiedBy(modifiedBy)
+                .email(email)
+                .name(name)
+                .phoneNumber(phoneNumber)
+                .majorId(majorId)
+                .build();
+    }
 
 }

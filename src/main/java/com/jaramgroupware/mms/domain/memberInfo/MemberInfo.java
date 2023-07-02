@@ -90,17 +90,14 @@ public class MemberInfo extends BaseEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
-    /**
-     * MemberInfo 객체의 업데이트를 위한 함수
-     * @param memberInfo 업데이트 하고자 하는 MemberInfo(Object)
-     * @param who 업데이트 요청한 Member(Object)의 ID
-     */
-    public void update(MemberInfo memberInfo,String who){
-        phoneNumber = memberInfo.getPhoneNumber();
-        major = memberInfo.getMajor();
-        rank = memberInfo.getRank();
-        year = memberInfo.getYear();
-        modifiedDateTime = LocalDateTime.now();
-        modifiedBy = who;
+    public void update(MemberInfo memberInfo){
+        if(memberInfo.getPhoneNumber()!=null) this.phoneNumber = memberInfo.getPhoneNumber();
+        if(memberInfo.getStudentID()!=null) this.studentID = memberInfo.getStudentID();
+        if(memberInfo.getYear()!=null) this.year = memberInfo.getYear();
+        if(memberInfo.getRank()!=null) this.rank = memberInfo.getRank();
+        if(memberInfo.getMajor()!=null) this.major = memberInfo.getMajor();
+        if(memberInfo.getDateOfBirth()!=null) this.dateOfBirth = memberInfo.getDateOfBirth();
+        this.modifiedBy = memberInfo.getModifiedBy();
+        this.modifiedDateTime = LocalDateTime.now();
     }
 }

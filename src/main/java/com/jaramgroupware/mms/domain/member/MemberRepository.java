@@ -23,26 +23,7 @@ import java.util.Set;
 public interface MemberRepository extends JpaRepository<Member, String>, JpaSpecificationExecutor<Member> {
     Optional<Member> findMemberById(String id);
 
-    Optional<List<Member>> findAllBy();
-
     boolean existsByEmail(String email);
 
-    /**
-     * 검색하고자 하는 Member(Object)와 연관된 Role(Object)을 함께 로드하기 위한 메서드
-     *
-     * @param ids 검색하고자 하는 엔티티들의 PK들 (Set type)
-     * @return 검색된 Member(Object)의 List를 반환
-     */
-    @Query("SELECT m FROM MEMBER m JOIN FETCH m.role WHERE m.id IN :ids")
-    List<Member> findAllByIdIn(@Param("ids") Set<String> ids);
 
-    /**
-     * 인자로 받은 ids의 Member(Object)를 모두 삭제하기 위한 메서드
-     *
-     * @param ids 삭제하고자 하는 Member(Object)의 PK들 (Set type)
-     * @return 삭제된 Member(Object)의 개수를 반환
-     */
-    @Modifying(clearAutomatically = true)
-    @Query("DELETE FROM MEMBER m WHERE m.id IN :ids")
-    int deleteAllByIdInQuery(@Param("ids") Set<String> ids);
 }

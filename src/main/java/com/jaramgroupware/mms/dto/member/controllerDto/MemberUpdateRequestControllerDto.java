@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode
 @ToString
 @Getter
 @AllArgsConstructor
@@ -47,11 +48,19 @@ public class MemberUpdateRequestControllerDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
-    public MemberUpdateRequestServiceDto toServiceDto(Role role) {
+    public MemberUpdateRequestServiceDto toServiceDto(String modifiedBy,String targetMember) {
         return MemberUpdateRequestServiceDto.builder()
-                .name(name)
+                .targetId(targetMember)
+                .modifiedBy(modifiedBy)
                 .email(email)
-                .role(role)
+                .name(name)
+                .phoneNumber(phoneNumber)
+                .studentID(studentID)
+                .majorId(majorId)
+                .rankId(rankId)
+                .roleId(roleId)
+                .year(year)
+                .dateOfBirth(dateOfBirth)
                 .build();
     }
 }
