@@ -35,7 +35,7 @@ public class MajorService {
      * @throws ServiceException 해당 전공 정보가 없을 시 NOT_FOUND 예외 발생
      */
     @Transactional(readOnly = true)
-    public MajorResponseDto findById(Integer id){
+    public MajorResponseDto findById(Long id){
         var targetMajor = majorRepository.findById(id).orElseThrow(() -> new ServiceException(NOT_FOUND,"해당 전공을 찾을 수 없습니다."));
         return new MajorResponseDto(targetMajor);
     }

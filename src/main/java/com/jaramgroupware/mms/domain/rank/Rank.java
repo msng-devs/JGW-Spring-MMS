@@ -20,7 +20,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity(name = "RANK")
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Rank {
 
     /**
@@ -29,7 +28,7 @@ public class Rank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RANK_PK")
-    private Integer id;
+    private Long id;
 
     /**
      * 회원 등급의 명칭

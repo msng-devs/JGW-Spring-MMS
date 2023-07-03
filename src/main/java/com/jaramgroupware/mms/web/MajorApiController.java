@@ -35,7 +35,7 @@ public class MajorApiController {
      */
     @GetMapping("{majorId}")
     public ResponseEntity<MajorResponseDto> getMajorById(
-            @PathVariable Integer majorId){
+            @PathVariable Long majorId){
 
         var result = majorService.findById(majorId);
 

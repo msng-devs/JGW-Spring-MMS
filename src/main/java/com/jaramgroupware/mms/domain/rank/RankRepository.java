@@ -13,7 +13,7 @@ import java.util.Optional;
  * @author 이현희(38기) heeit13145@gmail.com
  */
 @Repository
-public interface RankRepository extends JpaRepository<Rank,Integer> {
-    Optional<Rank> findRankById (Integer id);
+public interface RankRepository extends JpaRepository<Rank,Long> {
+    Optional<Rank> findRankById (Long id);
     List<Rank> findAllBy();
 }

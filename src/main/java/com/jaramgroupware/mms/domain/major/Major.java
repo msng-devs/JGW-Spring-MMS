@@ -25,7 +25,7 @@ public class Major {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MAJOR_PK")
-    private Integer id;
+    private Long id;
 
     /**
      * 전공 명칭

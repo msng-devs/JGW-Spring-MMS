@@ -14,7 +14,7 @@ import lombok.*;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class RankResponseDto {
 
-    private Integer id;
+    private Long id;
     private String name;
 
     public RankResponseDto(Rank rank){

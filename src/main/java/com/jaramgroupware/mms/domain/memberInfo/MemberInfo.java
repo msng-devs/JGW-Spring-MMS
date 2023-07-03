@@ -33,7 +33,6 @@ import java.time.LocalDateTime;
         @AttributeOverride(name = "createBy",column = @Column(name = "MEMBER_INFO_CREATED_BY",length = 30)),
 })
 @Entity(name = "MEMBER_INFO")
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberInfo extends BaseEntity {
 
     /**

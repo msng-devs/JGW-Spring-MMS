@@ -31,7 +31,7 @@ public class MemberEditRequestControllerDto {
     private String phoneNumber;
 
     @NotNull(message = "전공 정보가 비여있습니다!")
-    private Integer majorId;
+    private Long majorId;
 
     public MemberEditRequestServiceDto toServiceDto(String modifiedBy,String targetMember) {
         return MemberEditRequestServiceDto.builder()

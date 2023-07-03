@@ -28,7 +28,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ROLE_PK")
-    private Integer id;
+    private Long id;
 
     /**
      * 권한 레벨의 명칭

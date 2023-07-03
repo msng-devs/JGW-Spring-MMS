@@ -14,7 +14,7 @@ import java.util.Optional;
  * @author 이현희(38기) heeit13145@gmail.com
  */
 @Repository
-public interface MajorRepository extends JpaRepository<Major,Integer>, JpaSpecificationExecutor<Major> {
-    Optional<Major> findMajorById (Integer id);
+public interface MajorRepository extends JpaRepository<Major,Long>, JpaSpecificationExecutor<Major> {
+    Optional<Major> findMajorById (Long id);
     List<Major> findAllBy();
 }

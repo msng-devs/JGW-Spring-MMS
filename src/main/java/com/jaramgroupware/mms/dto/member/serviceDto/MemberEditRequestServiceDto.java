@@ -20,7 +20,7 @@ public class MemberEditRequestServiceDto {
     private String email;
     private String name;
     private String phoneNumber;
-    private Integer majorId;
+    private Long majorId;
 
     public Member toMemberEntity(){
         return Member.builder()

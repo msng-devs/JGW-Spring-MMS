@@ -24,6 +24,7 @@ public class MemberUpdateRequestControllerDto {
     private String email;
 
     @NotEmpty(message = "이름이 비여있습니다!")
+    @Size(max = 45, message = "이름은 최대 45자까지 가능합니다.")
     private String name;
 
     @Pattern(regexp = "(^$|[0-9]{11})")
@@ -34,13 +35,13 @@ public class MemberUpdateRequestControllerDto {
     private String studentID;
 
     @NotNull(message = "전공 정보가 비여있습니다!")
-    private Integer majorId;
+    private Long majorId;
 
     @NotNull(message = "회원 등급 정보가 없습니다!")
-    private Integer rankId;
+    private Long rankId;
 
     @NotNull(message = "Role 등급이 비여있습니다!")
-    private Integer roleId;
+    private Long roleId;
 
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;

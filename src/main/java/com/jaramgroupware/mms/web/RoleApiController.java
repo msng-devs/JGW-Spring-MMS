@@ -35,7 +35,7 @@ public class RoleApiController {
     @AuthOption
     @GetMapping("{roleId}")
     public ResponseEntity<RoleResponseDto> getRoleById(
-            @PathVariable Integer roleId){
+            @PathVariable Long roleId){
 
         var result = roleService.findById(roleId);
 

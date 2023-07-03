@@ -27,9 +27,9 @@ public class MemberUpdateRequestServiceDto {
     private String name;
     private String phoneNumber;
     private String studentID;
-    private Integer majorId;
-    private Integer rankId;
-    private Integer roleId;
+    private Long majorId;
+    private Long rankId;
+    private Long roleId;
     private Integer year;
     private LocalDate dateOfBirth;
     private String modifiedBy;

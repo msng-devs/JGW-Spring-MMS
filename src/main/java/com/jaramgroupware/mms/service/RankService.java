@@ -33,7 +33,7 @@ public class RankService {
      * @throws ServiceException 해당 데이터가 없을 시 NOT_FOUND 에러 발생
      */
     @Transactional(readOnly = true)
-    public RankResponseDto findById(Integer id){
+    public RankResponseDto findById(Long id){
         Rank targetRank = rankRepository.findById(id).orElseThrow(() -> new ServiceException(NOT_FOUND,"해당 Rank를 찾을 수 없습니다."));
         return new RankResponseDto(targetRank);
     }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
+import com.jaramgroupware.mms.domain.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,19 +29,13 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class RegisterCode {
 
-    /**
-     * 신규 회원가입을 위한 인증코드 (UUID, PK)
-     */
     @Id
     @Column(name = "REGISTER_CODE_PK", nullable = false, length = 36)
     private String code;
 
-    /**
-     * 인증코드에 해당되는 멤버 정보
-     */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_INFO_MEMBER_INFO_PK", nullable = false, unique = true)
-    private MemberInfo memberInfo;
+    @JoinColumn(name = "PRE_MEMBER_INFO_PRE_MEMBER_INFO_PK", nullable = false, unique = true)
+    private PreMemberInfo preMemberInfo;
 
     @Column(name = "REGISTER_CODE_EXPIRE", nullable = false)
     private LocalDate expiredAt;

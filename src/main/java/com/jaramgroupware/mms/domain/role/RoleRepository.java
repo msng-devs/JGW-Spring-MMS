@@ -13,7 +13,7 @@ import java.util.Optional;
  * @author 이현희(38기) heeit13145@gmail.com
  */
 @Repository
-public interface RoleRepository extends JpaRepository<Role,Integer> {
-    Optional<Role> findRoleById (Integer id);
+public interface RoleRepository extends JpaRepository<Role,Long> {
+    Optional<Role> findRoleById (Long id);
     List<Role> findAllBy();
 }

@@ -14,6 +14,8 @@ import com.jaramgroupware.mms.dto.member.MemberStat;
 import com.jaramgroupware.mms.dto.member.StatusResponseDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberEditRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
+import com.jaramgroupware.mms.dto.registerCode.RegisterResponseDto;
+import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequestServiceDto;
 import com.jaramgroupware.mms.dto.withdrawal.WithdrawalResponseDto;
 import com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
@@ -41,6 +43,7 @@ public class MemberService {
     private final RoleRepository roleRepository;
     private final RankRepository rankRepository;
     private final MajorRepository majorRepository;
+    private final RegisterCodeService registerCodeService;
 
     @Transactional
     public String deleteById(String id) {
@@ -145,6 +148,9 @@ public class MemberService {
         var status = checkStatus(targetMember, targetMemberInfo, withdrawal);
         return new StatusResponseDto(status);
     }
+
+
+
 
     private MemberStat checkStatus(Member member, MemberInfo memberInfo, Withdrawal withdrawal) {
         if (notRegistered(member, memberInfo)) {

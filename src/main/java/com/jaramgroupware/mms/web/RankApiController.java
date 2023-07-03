@@ -33,7 +33,7 @@ public class RankApiController {
      */
     @GetMapping("{rankId}")
     public ResponseEntity<RankResponseDto> getRankById(
-            @PathVariable Integer rankId){
+            @PathVariable Long rankId){
 
         var result = rankService.findById(rankId);
 

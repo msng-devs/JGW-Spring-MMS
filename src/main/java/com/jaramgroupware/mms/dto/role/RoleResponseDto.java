@@ -14,7 +14,7 @@ import lombok.*;
 @Builder
 public class RoleResponseDto {
 
-    private Integer id;
+    private Long id;
     private String name;
 
     public RoleResponseDto(Role role){
