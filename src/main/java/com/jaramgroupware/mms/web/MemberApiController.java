@@ -149,7 +149,7 @@ public class MemberApiController {
      */
     private void checkCanUseDetailOption(String memberId, String uid, Integer roleID){
 
-        if(!uid.equals(memberId) || roleID < 4 ){
+        if(!uid.equals(memberId) && roleID < 4 ){
             throw new ControllerException(ControllerErrorCode.NOT_AUTHORIZED,"해당 옵션을 사용할 권한이 없습니다.");
         }
 

@@ -20,24 +20,5 @@ import java.util.Set;
  */
 @Repository
 public interface MemberLeaveAbsenceRepository extends JpaRepository<MemberLeaveAbsence,Integer>, JpaSpecificationExecutor<MemberLeaveAbsence> {
-    Optional<MemberLeaveAbsence> findMemberLeaveAbsenceById(Integer id);
-    Optional<MemberLeaveAbsence> findMemberLeaveAbsenceByMember(Member member);
-    Optional<List<MemberLeaveAbsence>> findAllBy();
-
-    /**
-     * 검색하고자 하는 MemberLeaveAbsence(Object)와 연관된 Member(Object)를 함께 로드하기 위한 메서드
-     * @param ids 검색하고자 하는 엔티티들의 PK들 (Set type)
-     * @return 검색된 MemberLeaveAbsence(Object)의 List를 반환
-     */
-    @Query("SELECT m FROM MEMBER_LEAVE_ABSENCE m JOIN FETCH m.member WHERE m.id IN :ids")
-    List<MemberLeaveAbsence> findAllByIdIn(@Param("ids") Set<Integer> ids);
-
-    /**
-     * 인자로 받은 ids의 MemberLeaveAbsence(Object)를 모두 삭제하기 위한 메서드
-     * @param ids 삭제하고자 하는 MemberLeaveAbsence(Object)의 PK들 (Set type)
-     * @return 삭제된 MemberLeaveAbsence(Object)의 개수를 반환
-     */
-    @Modifying(clearAutomatically = true)
-    @Query("DELETE FROM MEMBER_LEAVE_ABSENCE m WHERE m.id IN :ids")
-    int deleteAllByIdInQuery(@Param("ids") Set<Integer> ids);
+    Optional<MemberLeaveAbsence> findByMember(Member member);
 }
