@@ -2,6 +2,7 @@ package com.jaramgroupware.mms.domain.preMemberInfo;
 
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.rank.Rank;
+import com.jaramgroupware.mms.domain.registerCode.RegisterCode;
 import com.jaramgroupware.mms.domain.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +40,9 @@ public class PreMemberInfo {
     @ManyToOne
     @JoinColumn(name = "ROLE_ROLE_PK", nullable = false)
     private Role role;
+
+    @OneToOne(mappedBy = "preMemberInfo")
+    private RegisterCode registerCode;
 
     public void update(PreMemberInfo newPreMemberInfo){
         this.studentId = newPreMemberInfo.getStudentId();

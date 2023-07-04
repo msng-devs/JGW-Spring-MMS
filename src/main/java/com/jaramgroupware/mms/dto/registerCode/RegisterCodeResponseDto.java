@@ -21,15 +21,12 @@ import java.time.LocalDate;
 public class RegisterCodeResponseDto {
     private String code;
     private LocalDate expiredDateTime;
-    private Integer memberInfoId;
-    private String name;
-    private RoleResponseDto role;
+    private Long preMemberInfoId;
+
 
     public RegisterCodeResponseDto(RegisterCode registerCode){
         this.code = registerCode.getCode();
         this.expiredDateTime = registerCode.getExpiredAt();
-        this.memberInfoId = registerCode.getMemberInfo().getId();
-        this.name = registerCode.getTargetName();
-        this.role = new RoleResponseDto(registerCode.getTargetRole());
+        this.preMemberInfoId = registerCode.getPreMemberInfo().getId();
     }
 }

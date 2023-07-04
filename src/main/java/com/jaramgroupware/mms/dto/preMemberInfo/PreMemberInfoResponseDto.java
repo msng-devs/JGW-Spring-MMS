@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
 import com.jaramgroupware.mms.dto.major.MajorResponseDto;
 import com.jaramgroupware.mms.dto.rank.RankResponseDto;
+import com.jaramgroupware.mms.dto.registerCode.RegisterCodeResponseDto;
 import com.jaramgroupware.mms.dto.role.RoleResponseDto;
 import lombok.*;
 
@@ -24,6 +25,8 @@ public class PreMemberInfoResponseDto {
     private RoleResponseDto roleResponseDto;
     private RankResponseDto rankResponseDto;
 
+    private RegisterCodeResponseDto registerCode;
+
     public PreMemberInfoResponseDto(PreMemberInfo preMemberInfo){
         this.id = preMemberInfo.getId();
         this.studentId = preMemberInfo.getStudentId();
@@ -32,5 +35,7 @@ public class PreMemberInfoResponseDto {
         this.year = preMemberInfo.getYear();
         this.roleResponseDto = new RoleResponseDto(preMemberInfo.getRole());
         this.rankResponseDto = new RankResponseDto(preMemberInfo.getRank());
+
+        this.registerCode = (preMemberInfo.getRegisterCode() == null) ? null : new RegisterCodeResponseDto(preMemberInfo.getRegisterCode());
     }
 }

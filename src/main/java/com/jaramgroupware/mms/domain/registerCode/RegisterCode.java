@@ -33,7 +33,7 @@ public class RegisterCode {
     @Column(name = "REGISTER_CODE_PK", nullable = false, length = 36)
     private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRE_MEMBER_INFO_PRE_MEMBER_INFO_PK", nullable = false, unique = true)
     private PreMemberInfo preMemberInfo;
 

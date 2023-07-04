@@ -21,20 +21,17 @@ import java.time.LocalDate;
 public class RegisterCodeAddRequestControllerDto {
 
 
-
     @Min(value = 1, message = "만료일은 1일 이상이여야 합니다!")
     @Max(value = 30, message = "만료일은 30일 이하여야 합니다!")
     @NotNull(message = "만료일 정보가 없습니다!")
     private Long expireDay;
 
-    @NotNull(message = "사전 회원 정보가 없습니다!")
-    @Positive(message = "사전 회원 정보 형식이 잘못되었습니다.")
-    private Long preMemberInfoId;
 
-    public RegisterCodeAddRequestServiceDto toServiceDto(String createdBy) {
+    public RegisterCodeAddRequestServiceDto toServiceDto(String createdBy, Long preMemberInfoId) {
         return RegisterCodeAddRequestServiceDto.builder()
-
+                .expireDay(expireDay)
                 .createdBy(createdBy)
+                .preMemberInfoId(preMemberInfoId)
                 .build();
     }
 }

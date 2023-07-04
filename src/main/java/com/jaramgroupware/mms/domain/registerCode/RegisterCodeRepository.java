@@ -1,5 +1,6 @@
 package com.jaramgroupware.mms.domain.registerCode;
 
+import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,5 @@ import java.util.Optional;
 @Repository
 public interface RegisterCodeRepository extends JpaRepository<RegisterCode, String> {
     Optional<RegisterCode> findByCode(String code);
+    Optional<RegisterCode> findByPreMemberInfo(PreMemberInfo preMemberInfo);
 }

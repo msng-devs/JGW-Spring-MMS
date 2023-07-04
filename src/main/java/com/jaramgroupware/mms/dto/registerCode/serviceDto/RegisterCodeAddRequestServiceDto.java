@@ -28,7 +28,7 @@ public class RegisterCodeAddRequestServiceDto {
     private Long preMemberInfoId;
     private String createdBy;
 
-    public RegisterCode toRegisterCodeEntity(String code, Long expireDay, PreMemberInfo preMemberInfo){
+    public RegisterCode toRegisterCodeEntity(String code,PreMemberInfo preMemberInfo){
         return RegisterCode.builder()
                 .code(code)
                 .preMemberInfo(preMemberInfo)

@@ -1,6 +1,7 @@
 package com.jaramgroupware.mms.service;
 
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfoRepository;
 import com.jaramgroupware.mms.domain.registerCode.RegisterCode;
 import com.jaramgroupware.mms.domain.registerCode.RegisterCodeRepository;
 import com.jaramgroupware.mms.domain.role.Role;
@@ -21,6 +22,8 @@ import static com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode.*;
 public class RegisterCodeService {
     private final RegisterCodeRepository registerCodeRepository;
     private final RoleRepository roleRepository;
+    private final PreMemberInfoRepository preMemberInfoRepository;
+
     /**
      * 코드를 검증하고 유저 정보를 반환하는 함수
      * @param registerCode 검증할 코드
@@ -43,18 +46,26 @@ public class RegisterCodeService {
     }
 
     @Transactional
-    public void deleteRegisterCode(String registerCode){
-        var targetRegisterCode = registerCodeRepository.findByCode(registerCode)
+    public void deleteRegisterCode(Long preMemberInfoId){
+        var targetPreMemberInfo = preMemberInfoRepository.findById(preMemberInfoId)
+                .orElseThrow(() -> new ServiceException(NOT_FOUND,"해당 사전 회원 정보가 존재하지 않습니다."));
+
+        var targetRegisterCode = registerCodeRepository.findByPreMemberInfo(targetPreMemberInfo)
                 .orElseThrow(() -> new ServiceException(NOT_FOUND,"해당 코드가 존재하지 않습니다."));
 
         registerCodeRepository.delete(targetRegisterCode);
     }
 
     @Transactional
-    public RegisterCodeResponseDto createRegisterCode(RegisterCodeAddRequestServiceDto dto, Role targetRole, MemberInfo memberInfo,Long expireDay){
+    public RegisterCodeResponseDto createRegisterCode(RegisterCodeAddRequestServiceDto dto){
+        var targetPreMemberInfo = preMemberInfoRepository.findById(dto.getPreMemberInfoId())
+                .orElseThrow(() -> new ServiceException(NOT_FOUND,"해당 사전 회원 정보가 존재하지 않습니다."));
+
+        registerCodeRepository.findByPreMemberInfo(targetPreMemberInfo).ifPresent(registerCodeRepository::delete);
+
         var code = UUID.randomUUID().toString();
-        var registerCode = dto.toRegisterCodeEntity(code,targetRole,expireDay,memberInfo);
-        registerCodeRepository.save(registerCode);
-        return new RegisterCodeResponseDto(registerCode);
+        var registerCode = dto.toRegisterCodeEntity(code,targetPreMemberInfo);
+        var newRegisterCode = registerCodeRepository.save(registerCode);
+        return new RegisterCodeResponseDto(newRegisterCode);
     }
 }
