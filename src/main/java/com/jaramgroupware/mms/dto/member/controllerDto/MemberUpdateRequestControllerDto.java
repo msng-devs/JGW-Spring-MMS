@@ -10,12 +10,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@EqualsAndHashCode
 @ToString
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Data
+@EqualsAndHashCode
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberUpdateRequestControllerDto {
 

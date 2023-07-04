@@ -6,6 +6,8 @@ import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @EqualsAndHashCode
 @ToString
 @Getter
@@ -22,7 +24,7 @@ public class PreMemberInfoUpdateRequestServiceDto {
     private Long majorId;
     private Integer year;
     private Long expireDay;
-
+    private LocalDate expectedDateReturnSchool;
     public PreMemberInfo toEntity(Role role, Rank rank, Major major){
         return PreMemberInfo.builder()
                 .studentId(studentId)
@@ -31,6 +33,7 @@ public class PreMemberInfoUpdateRequestServiceDto {
                 .rank(rank)
                 .major(major)
                 .year(year)
+                .expectedDateReturnSchool(expectedDateReturnSchool)
                 .build();
     }
 }

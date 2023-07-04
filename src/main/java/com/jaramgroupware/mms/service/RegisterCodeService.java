@@ -37,7 +37,6 @@ public class RegisterCodeService {
                 .orElseThrow(() -> new ServiceException(NOT_FOUND_CODE,"올바르지 않은 코드입니다."));
 
         if(targetRegisterCode.isExpired()) {
-            //active 방식으로 만료된 코드에 접근하면 삭제 처리
             registerCodeRepository.delete(targetRegisterCode);
             throw new ServiceException(CODE_EXPIRED,"해당 코드는 만료되었습니다.");
         }

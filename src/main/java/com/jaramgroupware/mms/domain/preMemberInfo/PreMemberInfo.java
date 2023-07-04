@@ -7,6 +7,8 @@ import com.jaramgroupware.mms.domain.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @ToString
@@ -36,6 +38,10 @@ public class PreMemberInfo {
 
     @Column(name = "PRE_MEMBER_INFO_NM", nullable = false)
     private String name;
+
+    //null이면 휴학상태가 아닌 상태.
+    @Column(name = "PRE_MEMBER_INFO_EXPECTED_DATE_RETURN_SCHOOL", nullable = false)
+    private LocalDate expectedDateReturnSchool;
 
     @ManyToOne
     @JoinColumn(name = "ROLE_ROLE_PK", nullable = false)

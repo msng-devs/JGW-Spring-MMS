@@ -14,7 +14,8 @@ public enum ServiceErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND, "Item Not Found", "MM-SERVICE-001"),
     NOT_FOUND_CODE(HttpStatus.FORBIDDEN, "Code Not Found", "MM-SERVICE-002"),
     CODE_EXPIRED(HttpStatus.FORBIDDEN, "Register Code is Expired", "MM-SERVICE-003"),
-    ALREADY_EXISTS(HttpStatus.CONFLICT, "Item Already Exists", "MM-SERVICE-004");
+    ALREADY_EXISTS(HttpStatus.CONFLICT, "Item Already Exists", "MM-SERVICE-004"),
+    UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "unknown Error", "MM-SERVICE-005");
 
     private final HttpStatus httpStatus;
     private final String title;

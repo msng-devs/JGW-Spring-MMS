@@ -7,12 +7,14 @@ import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequest
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@EqualsAndHashCode
+import java.time.LocalDate;
+
 @ToString
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@EqualsAndHashCode
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PreMemberInfoAddRequestControllerDto {
 
@@ -36,6 +38,8 @@ public class PreMemberInfoAddRequestControllerDto {
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;
 
+    private LocalDate expectedDateReturnSchool;
+
     public PreMemberInfoAddRequestServiceDto toServiceDto() {
         return PreMemberInfoAddRequestServiceDto.builder()
                 .studentId(studentId)
@@ -44,6 +48,7 @@ public class PreMemberInfoAddRequestControllerDto {
                 .rankId(rankId)
                 .majorId(majorId)
                 .year(year)
+                .expectedDateReturnSchool(expectedDateReturnSchool)
                 .build();
     }
 }

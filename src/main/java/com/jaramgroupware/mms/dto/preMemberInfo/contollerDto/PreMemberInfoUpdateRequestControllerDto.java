@@ -10,12 +10,14 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@EqualsAndHashCode
+import java.time.LocalDate;
+
 @ToString
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@EqualsAndHashCode
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class PreMemberInfoUpdateRequestControllerDto {
 
@@ -38,7 +40,7 @@ public class PreMemberInfoUpdateRequestControllerDto {
 
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;
-
+    private LocalDate expectedDateReturnSchool;
     public PreMemberInfoUpdateRequestServiceDto toServiceDto(Long id) {
         return PreMemberInfoUpdateRequestServiceDto.builder()
                 .id(id)
@@ -48,6 +50,7 @@ public class PreMemberInfoUpdateRequestControllerDto {
                 .rankId(rankId)
                 .majorId(majorId)
                 .year(year)
+                .expectedDateReturnSchool(expectedDateReturnSchool)
                 .build();
     }
 }

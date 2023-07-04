@@ -5,14 +5,20 @@ import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfoRepository;
+import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
+import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsenceRepository;
+import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
+import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfoRepository;
 import com.jaramgroupware.mms.domain.rank.RankRepository;
 import com.jaramgroupware.mms.domain.role.RoleRepository;
 import com.jaramgroupware.mms.domain.withdrawal.Withdrawal;
 import com.jaramgroupware.mms.domain.withdrawal.WithdrawalRepository;
+import com.jaramgroupware.mms.dto.member.MemberRegisteredResponseDto;
 import com.jaramgroupware.mms.dto.member.MemberResponseDto;
 import com.jaramgroupware.mms.dto.member.MemberStat;
 import com.jaramgroupware.mms.dto.member.StatusResponseDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberEditRequestServiceDto;
+import com.jaramgroupware.mms.dto.member.serviceDto.MemberRegisterRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
 import com.jaramgroupware.mms.dto.registerCode.RegisterResponseDto;
 import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequestServiceDto;
@@ -44,7 +50,9 @@ public class MemberService {
     private final RankRepository rankRepository;
     private final MajorRepository majorRepository;
     private final RegisterCodeService registerCodeService;
+    private final PreMemberInfoRepository preMemberInfoRepository;
 
+    private final MemberLeaveAbsenceRepository memberLeaveAbsenceRepository;
     @Transactional
     public String deleteById(String id) {
         var targetMember = memberRepository.findById(id)
@@ -149,7 +157,24 @@ public class MemberService {
         return new StatusResponseDto(status);
     }
 
+    @Transactional
+    public MemberRegisteredResponseDto registerMember(MemberRegisterRequestServiceDto dto){
+        var registerCode = registerCodeService.readRegisterCode(dto.getCode());
+        var targetPreMember = preMemberInfoRepository.findById(registerCode.getPreMemberInfoId())
+                .orElseThrow(() -> new ServiceException(ServiceErrorCode.UNKNOWN_ERROR, "해당 코드에 해당하는 사전 회원 정보를 찾을 수 없습니다. 관리자에게 문의하세요."));
 
+        var member = dto.toMemberEntity(targetPreMember);
+        var newMember = memberRepository.saveAndFlush(member);
+
+        var memberInfo = dto.toMemberInfoEntity(targetPreMember,newMember);
+        var newMemberInfo = memberInfoRepository.saveAndFlush(memberInfo);
+
+        var leaveAbsence = createLeaveAbsence(newMember,targetPreMember);
+        var newLeaveAbsence = memberLeaveAbsenceRepository.saveAndFlush(leaveAbsence);
+
+        return new MemberRegisteredResponseDto(newMember,newMemberInfo,newLeaveAbsence);
+
+    }
 
 
     private MemberStat checkStatus(Member member, MemberInfo memberInfo, Withdrawal withdrawal) {
@@ -189,4 +214,18 @@ public class MemberService {
             throw new ServiceException(ServiceErrorCode.ALREADY_EXISTS, "이미 존재하는 학번입니다.");
     }
 
+    public MemberLeaveAbsence createLeaveAbsence(Member member, PreMemberInfo preMemberInfo){
+        if(preMemberInfo.getExpectedDateReturnSchool() != null) {
+            return MemberLeaveAbsence.builder()
+                    .member(member)
+                    .status(true)
+                    .expectedDateReturnSchool(preMemberInfo.getExpectedDateReturnSchool())
+                    .build();
+        }
+        return MemberLeaveAbsence.builder()
+                .member(member)
+                .status(false)
+                .expectedDateReturnSchool(null)
+                .build();
+    }
 }

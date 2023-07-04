@@ -11,12 +11,12 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@EqualsAndHashCode
 @ToString
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@EqualsAndHashCode
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class RegisterCodeAddRequestControllerDto {
 

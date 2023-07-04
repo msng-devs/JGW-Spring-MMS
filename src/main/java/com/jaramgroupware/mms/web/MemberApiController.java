@@ -6,6 +6,7 @@ import com.jaramgroupware.mms.domain.memberView.MemberViewSpecificationBuilder;
 import com.jaramgroupware.mms.dto.member.MemberResponseDto;
 import com.jaramgroupware.mms.dto.member.StatusResponseDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.MemberEditRequestControllerDto;
+import com.jaramgroupware.mms.dto.member.controllerDto.MemberRegisterRequestControllerDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.MemberUpdateRequestControllerDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberEditRequestServiceDto;
 import com.jaramgroupware.mms.dto.memberView.MemberViewDatailResponseDto;
@@ -42,6 +43,19 @@ public class MemberApiController {
     private final MemberService memberService;
     private final MemberViewService memberViewService;
     private final MemberViewSpecificationBuilder memberViewSpecificationBuilder;
+
+
+    @OnlyTokenOption
+    @PostMapping("/register/{registerCode}")
+    public ResponseEntity<?> registerMember(
+            @PathVariable String registerCode,
+            @RequestBody @Valid MemberRegisterRequestControllerDto dto,
+            @RequestHeader("user_pk") String uid){
+
+        var result = memberService.registerMember(dto.toServiceDto(uid,registerCode));
+
+        return ResponseEntity.ok(result);
+    }
 
 
     @AuthOption

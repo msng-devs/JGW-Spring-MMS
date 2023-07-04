@@ -26,7 +26,7 @@ public class PreMemberInfoAddRequestServiceDto {
     private Long majorId;
     private Integer year;
     private Long expireDay;
-
+    private LocalDate expectedDateReturnSchool;
     public PreMemberInfo toEntity(Role role, Rank rank, Major major){
         return PreMemberInfo.builder()
                 .studentId(studentId)
@@ -35,6 +35,7 @@ public class PreMemberInfoAddRequestServiceDto {
                 .rank(rank)
                 .major(major)
                 .year(year)
+                .expectedDateReturnSchool(expectedDateReturnSchool)
                 .build();
     }
 }
