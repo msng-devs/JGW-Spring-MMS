@@ -19,16 +19,12 @@ import java.time.LocalDate;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberRegisterRequestControllerDto {
 
-    @NotNull(message = "email이 비여있습니다!")
-    @Email(message = "email 형식이 잘못되었습니다!")
-    private String email;
-
     @Pattern(regexp = "(^$|[0-9]{11})")
     private String phoneNumber;
 
     private LocalDate dateOfBirth;
 
-    public MemberRegisterRequestServiceDto toServiceDto(String uid, String code) {
+    public MemberRegisterRequestServiceDto toServiceDto(String uid, String code,String email) {
         return MemberRegisterRequestServiceDto.builder()
                 .email(email)
                 .phoneNumber((phoneNumber.isEmpty())?phoneNumber:"")

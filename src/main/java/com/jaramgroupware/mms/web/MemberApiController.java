@@ -50,9 +50,10 @@ public class MemberApiController {
     public ResponseEntity<?> registerMember(
             @PathVariable String registerCode,
             @RequestBody @Valid MemberRegisterRequestControllerDto dto,
-            @RequestHeader("user_pk") String uid){
+            @RequestHeader("user_pk") String uid,
+            @RequestHeader("user_email") String email){
 
-        var result = memberService.registerMember(dto.toServiceDto(uid,registerCode));
+        var result = memberService.registerMember(dto.toServiceDto(uid,registerCode,email));
 
         return ResponseEntity.ok(result);
     }

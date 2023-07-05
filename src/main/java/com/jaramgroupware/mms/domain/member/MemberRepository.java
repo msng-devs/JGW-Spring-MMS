@@ -20,7 +20,7 @@ import java.util.Set;
  * @since 2023-03-07
  */
 @Repository
-public interface MemberRepository extends JpaRepository<Member, String>, JpaSpecificationExecutor<Member> {
+public interface MemberRepository extends JpaRepository<Member, String>{
     Optional<Member> findMemberById(String id);
 
     boolean existsByEmail(String email);

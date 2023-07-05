@@ -19,6 +19,6 @@ import java.util.Set;
  * @author 이현희(38기) heeit13145@gmail.com
  */
 @Repository
-public interface MemberLeaveAbsenceRepository extends JpaRepository<MemberLeaveAbsence,Integer>, JpaSpecificationExecutor<MemberLeaveAbsence> {
+public interface MemberLeaveAbsenceRepository extends JpaRepository<MemberLeaveAbsence,Integer>{
     Optional<MemberLeaveAbsence> findByMember(Member member);
 }

@@ -7,7 +7,6 @@ import com.jaramgroupware.mms.domain.registerCode.RegisterCodeRepository;
 import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.domain.role.RoleRepository;
 import com.jaramgroupware.mms.dto.registerCode.RegisterCodeResponseDto;
-import com.jaramgroupware.mms.dto.registerCode.RegisterResponseDto;
 import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequestServiceDto;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import lombok.RequiredArgsConstructor;

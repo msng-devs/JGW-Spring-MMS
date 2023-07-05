@@ -19,10 +19,9 @@ import java.util.Set;
  * @author 이현희(38기) heeit13145@gmail.com
  */
 @Repository
-public interface MemberInfoRepository extends JpaRepository<MemberInfo,Integer>, JpaSpecificationExecutor<MemberInfo> {
+public interface MemberInfoRepository extends JpaRepository<MemberInfo,Integer> {
 
     boolean existsByStudentID(String studentID);
     boolean existsByPhoneNumber(String phoneNumber);
-
     Optional<MemberInfo> findByMember(Member member);
 }

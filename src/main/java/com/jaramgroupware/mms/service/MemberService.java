@@ -20,8 +20,7 @@ import com.jaramgroupware.mms.dto.member.StatusResponseDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberEditRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberRegisterRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
-import com.jaramgroupware.mms.dto.registerCode.RegisterResponseDto;
-import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequestServiceDto;
+
 import com.jaramgroupware.mms.dto.withdrawal.WithdrawalResponseDto;
 import com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;

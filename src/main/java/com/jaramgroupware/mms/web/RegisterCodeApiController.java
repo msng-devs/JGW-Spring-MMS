@@ -1,7 +1,6 @@
 package com.jaramgroupware.mms.web;
 
 import com.jaramgroupware.mms.dto.registerCode.RegisterCodeResponseDto;
-import com.jaramgroupware.mms.dto.registerCode.RegisterResponseDto;
 import com.jaramgroupware.mms.dto.registerCode.controllerDto.RegisterCodeAddRequestControllerDto;
 import com.jaramgroupware.mms.service.MemberService;
 import com.jaramgroupware.mms.service.RegisterCodeService;

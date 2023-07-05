@@ -33,8 +33,8 @@ public class MemberViewResponseDto {
         email = memberView.getEmail();
         studentId = memberView.getStudentId().substring(1, 3);
         year = memberView.getYear();
-        rank = new RankResponseDto(Math.toIntExact(memberView.getRank()), memberView.getRankName());
-        major = new MajorResponseDto(Math.toIntExact(memberView.getMajor()), memberView.getMajorName());
+        rank = new RankResponseDto(memberView.getRank(), memberView.getRankName());
+        major = new MajorResponseDto(memberView.getMajor(), memberView.getMajorName());
 
     }
 }

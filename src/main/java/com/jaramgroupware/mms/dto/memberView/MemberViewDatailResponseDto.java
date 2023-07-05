@@ -42,9 +42,9 @@ public class MemberViewDatailResponseDto {
         year = memberView.getYear();
         dateOfBirth = memberView.getDateOfBirth();
         isLeaveAbsence = memberView.getIsLeaveAbsence();
-        role = new RoleResponseDto(Math.toIntExact(memberView.getRole()), memberView.getRoleName());
-        rank = new RankResponseDto(Math.toIntExact(memberView.getRank()), memberView.getRankName());
-        major = new MajorResponseDto(Math.toIntExact(memberView.getMajor()), memberView.getMajorName());
+        role = new RoleResponseDto(memberView.getRole(), memberView.getRoleName());
+        rank = new RankResponseDto(memberView.getRank(), memberView.getRankName());
+        major = new MajorResponseDto(memberView.getMajor(), memberView.getMajorName());
 
     }
 }

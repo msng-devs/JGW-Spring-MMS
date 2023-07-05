@@ -38,6 +38,7 @@ out/
 
 application-dev.properties
 application-product.properties
+application-test.properties
 logback-product.xml
 logback-dev.xml
 *.sql
