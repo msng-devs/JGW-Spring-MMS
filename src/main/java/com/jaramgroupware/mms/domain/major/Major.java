@@ -7,15 +7,13 @@ import lombok.*;
 
 
 
-/**
- * 전공에 대한 정보를 담고 있는 클래스
- * @since 2023-03-07
- * @author 황준서(37기) hzser123@gmail.com
- * @author 이현희(38기) heeit13145@gmail.com
- */
-@Getter
-@ToString
 @EqualsAndHashCode
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity(name = "MAJOR")
 public class Major {
 

@@ -11,6 +11,7 @@ import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequest
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import static com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode.*;
 @Slf4j
 @RequiredArgsConstructor
+@Service
 public class RegisterCodeService {
     private final RegisterCodeRepository registerCodeRepository;
     private final RoleRepository roleRepository;

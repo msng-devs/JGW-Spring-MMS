@@ -47,7 +47,7 @@ public class PreMemberInfo {
     @JoinColumn(name = "ROLE_ROLE_PK", nullable = false)
     private Role role;
 
-    @OneToOne(mappedBy = "preMemberInfo")
+    @OneToOne(mappedBy = "preMemberInfo",fetch = FetchType.LAZY)
     private RegisterCode registerCode;
 
     public void update(PreMemberInfo newPreMemberInfo){

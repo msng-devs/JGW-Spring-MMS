@@ -42,15 +42,6 @@ public class MajorService {
 
     /**
      * 모든 전공을 조회하는 함수
-     * @return 조회된 major 정보
-     */
-    @Transactional(readOnly = true)
-    public List<MajorResponseDto> findAll(){
-        return majorRepository.findAllBy().stream().map(MajorResponseDto::new).collect(Collectors.toList());
-    }
-
-    /**
-     * 모든 전공을 조회하는 함수
      * @param specification (쿼리 정보, 이름 등)
      * @param pageable 페이징 정보
      * @return 조회된 major 정보

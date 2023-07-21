@@ -1,7 +1,6 @@
 package com.jaramgroupware.mms.domain.rank;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +12,7 @@ import lombok.*;
  * @author 황준서(37기) hzser123@gmail.com
  * @author 이현희(38기) heeit13145@gmail.com
  */
+@EqualsAndHashCode
 @Getter
 @Setter
 @ToString

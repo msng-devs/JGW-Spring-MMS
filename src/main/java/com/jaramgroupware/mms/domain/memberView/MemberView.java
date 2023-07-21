@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class MemberView {
     @Id
     @Column(name = "MEMBER_PK")
-    private Long uid;
+    private String uid;
 
     @Column(name = "NAME")
     private String name;
@@ -42,7 +42,7 @@ public class MemberView {
     @Column(name = "STUDENT_ID")
     private String studentId;
 
-    @Column(name = "YEAR")
+    @Column(name = "`YEAR`")
     private Integer year;
 
     @Column(name = "RANK")

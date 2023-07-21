@@ -15,5 +15,4 @@ import java.util.Optional;
  */
 @Repository
 public interface MajorRepository extends JpaRepository<Major,Long>, JpaSpecificationExecutor<Major> {
-    List<Major> findAllBy();
 }

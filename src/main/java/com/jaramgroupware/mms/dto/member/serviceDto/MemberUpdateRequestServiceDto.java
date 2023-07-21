@@ -7,6 +7,7 @@ import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.role.Role;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -54,7 +55,7 @@ public class MemberUpdateRequestServiceDto {
                 .build();
 
         memberInfo.setModifiedBy(modifiedBy);
-        memberInfo.setModifiedDateTime(LocalDateTime.now());
+        memberInfo.setModifiedDateTime(TimeUtility.nowDateTime());
 
         return memberInfo;
     }

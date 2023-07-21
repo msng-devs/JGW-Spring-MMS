@@ -1,7 +1,6 @@
 package com.jaramgroupware.mms.web;
 
 
-
 import com.jaramgroupware.mms.domain.memberView.MemberViewSpecificationBuilder;
 import com.jaramgroupware.mms.dto.member.MemberResponseDto;
 import com.jaramgroupware.mms.dto.member.StatusResponseDto;
@@ -31,9 +30,10 @@ import java.util.List;
 
 /**
  * Member Api Controller 클래스
- * @since 2023-03-07
+ *
  * @author 황준서(37기) hzser123@gmail.com
  * @author 이현희(38기) heeit13145@gmail.com
+ * @since 2023-03-07
  */
 @RequiredArgsConstructor
 @RestController
@@ -51,9 +51,9 @@ public class MemberApiController {
             @PathVariable String registerCode,
             @RequestBody @Valid MemberRegisterRequestControllerDto dto,
             @RequestHeader("user_pk") String uid,
-            @RequestHeader("user_email") String email){
+            @RequestHeader("user_email") String email) {
 
-        var result = memberService.registerMember(dto.toServiceDto(uid,registerCode,email));
+        var result = memberService.registerMember(dto.toServiceDto(uid, registerCode, email));
 
         return ResponseEntity.ok(result);
     }
@@ -65,10 +65,10 @@ public class MemberApiController {
             @PathVariable String memberId,
             @RequestHeader("user_pk") String uid,
             @RequestHeader("role_pk") Integer roleID,
-            @RequestParam(required = false,name = "isDetail") boolean isDetail){
+            @RequestParam(required = false, name = "isDetail") boolean isDetail) {
 
-        if(isDetail){
-            checkCanUseDetailOption(memberId,uid,roleID);
+        if (isDetail) {
+            checkCanUseDetailOption(memberId, uid, roleID);
             return ResponseEntity.ok(memberViewService.findByIdDetail(memberId));
         } else {
             return ResponseEntity.ok(memberViewService.findById(memberId));
@@ -79,14 +79,13 @@ public class MemberApiController {
     @RbacOption(role = 4)
     @GetMapping
     public ResponseEntity<List<MemberViewDatailResponseDto>> getMemberAll(
-            @PageableDefault(page = 0,size = 100,sort = "uid",direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size = 100, sort = "uid", direction = Sort.Direction.DESC)
             @PageableSortKeyCheck(sortKeys =
-                    {"uid","name","email","role","status","cellPhoneNumber","studentId","year","rank","major","dateOfBirth","isLeaveAbsence"}
+                    {"uid", "name", "email", "role", "status", "cellPhoneNumber", "studentId", "year", "rank", "major", "dateOfBirth", "isLeaveAbsence"}
             ) Pageable pageable,
-            @RequestParam(required = false) MultiValueMap<String, String> queryParam)
-    {
+            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
         var spec = memberViewSpecificationBuilder.toSpec(queryParam);
-        var results = memberViewService.findAll(spec,pageable);
+        var results = memberViewService.findAll(spec, pageable);
 
         return ResponseEntity.ok(results);
     }
@@ -94,7 +93,7 @@ public class MemberApiController {
 
     @RbacOption(role = 4)
     @DeleteMapping("{memberID}")
-    public ResponseEntity<String> deleteMember(@PathVariable String memberID){
+    public ResponseEntity<String> deleteMember(@PathVariable String memberID) {
         memberService.deleteById(memberID);
         return ResponseEntity.ok("OK");
     }
@@ -105,22 +104,22 @@ public class MemberApiController {
     public ResponseEntity<MemberResponseDto> updateMember(
             @PathVariable String memberID,
             @RequestHeader("user_pk") String uid,
-            @RequestBody @Valid MemberUpdateRequestControllerDto requestDto){
-        var result = memberService.update(requestDto.toServiceDto(uid,memberID));
+            @RequestBody @Valid MemberUpdateRequestControllerDto requestDto) {
+        var result = memberService.update(requestDto.toServiceDto(uid, memberID));
 
         return ResponseEntity.ok(result);
     }
 
     @AuthOption
     @PostMapping("/withdrawal")
-    public ResponseEntity<WithdrawalResponseDto> withdrawalMember(@RequestHeader("user_pk") String uid){
+    public ResponseEntity<WithdrawalResponseDto> withdrawalMember(@RequestHeader("user_pk") String uid) {
         var result = memberService.withdrawal(uid);
         return ResponseEntity.ok(result);
     }
 
     @OnlyTokenOption
     @DeleteMapping("/withdrawal")
-    public ResponseEntity<String> cancelWithdrawalMember(@RequestHeader("user_pk") String uid){
+    public ResponseEntity<String> cancelWithdrawalMember(@RequestHeader("user_pk") String uid) {
         memberService.cancelWithdrawal(uid);
         return ResponseEntity.ok("OK");
     }
@@ -130,16 +129,16 @@ public class MemberApiController {
     @PutMapping("/edit")
     public ResponseEntity<MemberResponseDto> editMember(
             @RequestHeader("user_pk") String uid,
-            @RequestBody MemberEditRequestControllerDto requestDto){
+            @RequestBody MemberEditRequestControllerDto requestDto) {
 
-        var result = memberService.edit(requestDto.toServiceDto(uid,uid));
+        var result = memberService.edit(requestDto.toServiceDto(uid, uid));
         return ResponseEntity.ok(result);
 
     }
 
     @OnlyTokenOption
     @GetMapping("/status")
-    public ResponseEntity<StatusResponseDto> getStatus(@RequestHeader("user_pk") String uid){
+    public ResponseEntity<StatusResponseDto> getStatus(@RequestHeader("user_pk") String uid) {
         var result = memberService.getStatusById(uid);
         return ResponseEntity.ok(result);
     }
@@ -148,10 +147,10 @@ public class MemberApiController {
      * Detail 기능을 사용하기에 적절한 role 과 정보인지 확인하는 함수.
      * 자기 자신이거나, admin이 아닐경우 detail 정보를 받을 수 없다.
      */
-    private void checkCanUseDetailOption(String memberId, String uid, Integer roleID){
+    private void checkCanUseDetailOption(String memberId, String uid, Integer roleID) {
 
-        if(!uid.equals(memberId) && roleID < 4 ){
-            throw new ControllerException(ControllerErrorCode.NOT_AUTHORIZED,"해당 옵션을 사용할 권한이 없습니다.");
+        if (!uid.equals(memberId) && roleID < 4) {
+            throw new ControllerException(ControllerErrorCode.NOT_AUTHORIZED, "해당 옵션을 사용할 권한이 없습니다.");
         }
 
     }

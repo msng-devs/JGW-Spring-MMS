@@ -1,6 +1,7 @@
 package com.jaramgroupware.mms.domain.withdrawal;
 
 import com.jaramgroupware.mms.domain.member.Member;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,8 +33,8 @@ public class Withdrawal {
 
     public Withdrawal(Member member,Integer deleteDay){
         this.member = member;
-        this.withdrawalDate = LocalDate.now().plusDays(deleteDay);
-        this.createDate = LocalDate.now();
+        this.withdrawalDate = TimeUtility.nowDate().plusDays(deleteDay);
+        this.createDate = TimeUtility.nowDate();
 
     }
 }

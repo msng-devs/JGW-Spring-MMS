@@ -6,6 +6,7 @@ import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.memberLeaveAbsence.MemberLeaveAbsence;
 import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -49,10 +50,10 @@ public class MemberRegisterRequestServiceDto {
                 .dateOfBirth(dateOfBirth)
                 .build();
 
-        newMemberInfo.setCreatedDateTime(LocalDateTime.now());
+        newMemberInfo.setCreatedDateTime(TimeUtility.nowDateTime());
         newMemberInfo.setCreateBy("system");
 
-        newMemberInfo.setModifiedDateTime(LocalDateTime.now());
+        newMemberInfo.setModifiedDateTime(TimeUtility.nowDateTime());
         newMemberInfo.setModifiedBy("system");
 
         return newMemberInfo;

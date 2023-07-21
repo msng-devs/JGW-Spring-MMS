@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberViewDatailResponseDto {
 
-    private Long uid;
+    private String uid;
     private String name;
     private String email;
     private RoleResponseDto role;

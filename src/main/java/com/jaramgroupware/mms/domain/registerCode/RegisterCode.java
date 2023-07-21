@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
 import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
 import com.jaramgroupware.mms.domain.role.Role;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,13 +38,13 @@ public class RegisterCode {
     @JoinColumn(name = "PRE_MEMBER_INFO_PRE_MEMBER_INFO_PK", nullable = false, unique = true)
     private PreMemberInfo preMemberInfo;
 
-    @Column(name = "REGISTER_CODE_EXPIRE", nullable = false)
+    @Column(name = "REGISTER_CODE_EXPIRED", nullable = false)
     private LocalDate expiredAt;
 
     @Column(name = "REGISTER_CODE_CREATE_BY", nullable = false)
     private String createBy;
 
     public boolean isExpired() {
-        return LocalDate.now().isAfter(this.expiredAt);
+        return TimeUtility.nowDate().isAfter(this.expiredAt);
     }
 }

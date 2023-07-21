@@ -3,6 +3,7 @@ package com.jaramgroupware.mms.dto.member.serviceDto;
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.memberInfo.MemberInfo;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -36,7 +37,7 @@ public class MemberEditRequestServiceDto {
                 .major(major)
                 .build();
         memberInfo.setModifiedBy(modifiedBy);
-        memberInfo.setModifiedDateTime(LocalDateTime.now());
+        memberInfo.setModifiedDateTime(TimeUtility.nowDateTime());
         return memberInfo;
     }
 }

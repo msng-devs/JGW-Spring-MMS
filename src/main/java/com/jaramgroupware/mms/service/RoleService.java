@@ -42,7 +42,7 @@ public class RoleService {
      */
     @Transactional(readOnly = true)
     public List<RoleResponseDto> findAll(){
-        return roleRepository.findAllBy()
+        return roleRepository.findAllByOrderByIdDesc()
                 .stream()
                 .map(RoleResponseDto::new)
                 .collect(Collectors.toList());

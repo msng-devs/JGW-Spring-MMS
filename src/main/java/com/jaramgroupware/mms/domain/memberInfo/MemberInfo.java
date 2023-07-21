@@ -6,6 +6,7 @@ import com.jaramgroupware.mms.domain.BaseEntity;
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.rank.Rank;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -97,6 +98,6 @@ public class MemberInfo extends BaseEntity {
         if(memberInfo.getMajor()!=null) this.major = memberInfo.getMajor();
         if(memberInfo.getDateOfBirth()!=null) this.dateOfBirth = memberInfo.getDateOfBirth();
         this.modifiedBy = memberInfo.getModifiedBy();
-        this.modifiedDateTime = LocalDateTime.now();
+        this.modifiedDateTime = TimeUtility.nowDateTime();
     }
 }

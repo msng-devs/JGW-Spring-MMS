@@ -5,6 +5,8 @@ import com.jaramgroupware.mms.domain.memberView.MemberView;
 import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
 import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfoRepository;
 import com.jaramgroupware.mms.domain.rank.RankRepository;
+import com.jaramgroupware.mms.domain.registerCode.RegisterCode;
+import com.jaramgroupware.mms.domain.registerCode.RegisterCodeRepository;
 import com.jaramgroupware.mms.domain.role.RoleRepository;
 import com.jaramgroupware.mms.dto.preMemberInfo.PreMemberInfoResponseDto;
 import com.jaramgroupware.mms.dto.preMemberInfo.serviceDto.PreMemberInfoAddRequestServiceDto;
@@ -29,6 +31,7 @@ public class PreMemberInfoService {
     private RankRepository rankRepository;
     private RoleRepository roleRepository;
     private MemberService memberService;
+    private RegisterCodeRepository registerCodeRepository;
 
     @Transactional(readOnly = true)
     public PreMemberInfoResponseDto findById(Long id) {

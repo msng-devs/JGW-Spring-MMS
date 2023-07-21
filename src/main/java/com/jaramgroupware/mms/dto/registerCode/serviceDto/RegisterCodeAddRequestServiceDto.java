@@ -6,6 +6,7 @@ import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfo;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.registerCode.RegisterCode;
 import com.jaramgroupware.mms.domain.role.Role;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -33,7 +34,7 @@ public class RegisterCodeAddRequestServiceDto {
                 .code(code)
                 .preMemberInfo(preMemberInfo)
                 .createBy(createdBy)
-                .expiredAt(LocalDate.now().plusDays(expireDay))
+                .expiredAt(TimeUtility.nowDate().plusDays(expireDay))
                 .build();
     }
 
