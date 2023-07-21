@@ -15,6 +15,7 @@ import java.time.LocalDate;
  * @author 이현희(38기) heeit13145@gmail.com
  * @since 2023-03-07
  */
+@EqualsAndHashCode
 @Getter
 @Setter
 @ToString

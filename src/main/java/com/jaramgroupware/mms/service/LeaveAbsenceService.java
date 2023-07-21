@@ -37,7 +37,6 @@ public class LeaveAbsenceService {
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.UNKNOWN_ERROR,"휴학 정보가 존재하지 않습니다. 관리자에게 문의하세요."));
 
         targetLeaveAbsence.update(dto.toEntity());
-        memberLeaveAbsenceRepository.save(targetLeaveAbsence);
 
         var newMemberLeaveAbsence = memberLeaveAbsenceRepository.save(targetLeaveAbsence);
         return new MemberLeaveAbsenceResponseDto(newMemberLeaveAbsence);
