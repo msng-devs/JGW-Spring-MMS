@@ -1,7 +1,7 @@
 package com.jaramgroupware.mms.web;
 
 
-import com.jaramgroupware.mms.domain.memberView.MemberViewSpecificationBuilder;
+
 import com.jaramgroupware.mms.dto.member.MemberResponseDto;
 import com.jaramgroupware.mms.dto.member.StatusResponseDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.MemberEditRequestControllerDto;
@@ -28,13 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Member Api Controller 클래스
- *
- * @author 황준서(37기) hzser123@gmail.com
- * @author 이현희(38기) heeit13145@gmail.com
- * @since 2023-03-07
- */
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/member")
@@ -42,7 +36,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
     private final MemberViewService memberViewService;
-    private final MemberViewSpecificationBuilder memberViewSpecificationBuilder;
+
 
 
     @OnlyTokenOption
@@ -76,19 +70,19 @@ public class MemberApiController {
 
     }
 
-    @RbacOption(role = 4)
-    @GetMapping
-    public ResponseEntity<List<MemberViewDatailResponseDto>> getMemberAll(
-            @PageableDefault(page = 0, size = 100, sort = "uid", direction = Sort.Direction.DESC)
-            @PageableSortKeyCheck(sortKeys =
-                    {"uid", "name", "email", "role", "status", "cellPhoneNumber", "studentId", "year", "rank", "major", "dateOfBirth", "isLeaveAbsence"}
-            ) Pageable pageable,
-            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
-        var spec = memberViewSpecificationBuilder.toSpec(queryParam);
-        var results = memberViewService.findAll(spec, pageable);
-
-        return ResponseEntity.ok(results);
-    }
+//    @RbacOption(role = 4)
+//    @GetMapping
+//    public ResponseEntity<List<MemberViewDatailResponseDto>> getMemberAll(
+//            @PageableDefault(page = 0, size = 100, sort = "uid", direction = Sort.Direction.DESC)
+//            @PageableSortKeyCheck(sortKeys =
+//                    {"uid", "name", "email", "role", "status", "cellPhoneNumber", "studentId", "year", "rank", "major", "dateOfBirth", "isLeaveAbsence"}
+//            ) Pageable pageable,
+//            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
+//        var spec = memberViewSpecificationBuilder.toSpec(queryParam);
+//        var results = memberViewService.findAll(spec, pageable);
+//
+//        return ResponseEntity.ok(results);
+//    }
 
 
     @RbacOption(role = 4)

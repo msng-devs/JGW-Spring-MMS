@@ -1,6 +1,6 @@
 package com.jaramgroupware.mms.web;
 
-import com.jaramgroupware.mms.domain.preMemberInfo.PreMemberInfoSpecificationBuilder;
+
 import com.jaramgroupware.mms.dto.preMemberInfo.PreMemberInfoResponseDto;
 import com.jaramgroupware.mms.dto.preMemberInfo.contollerDto.PreMemberInfoAddRequestControllerDto;
 import com.jaramgroupware.mms.dto.preMemberInfo.contollerDto.PreMemberInfoUpdateRequestControllerDto;
@@ -23,7 +23,7 @@ import java.util.List;
 public class PreMemberInfoApiService {
 
     private final PreMemberInfoService preMemberInfoService;
-    private final PreMemberInfoSpecificationBuilder preMemberInfoSpecificationBuilder;
+
 
     @RbacOption(role = 4)
     @GetMapping("{preMemberInfoId}")
@@ -35,19 +35,19 @@ public class PreMemberInfoApiService {
         return ResponseEntity.ok(result);
     }
 
-    @RbacOption(role = 4)
-    @GetMapping
-    public ResponseEntity<List<PreMemberInfoResponseDto>> getPreMemberInfoAll(
-            @PageableDefault(page = 0, size = 100, sort = "id", direction = Sort.Direction.DESC)
-            @PageableSortKeyCheck(sortKeys =
-                    {"id", "name", "role", "studentId", "year", "rank", "major"}
-            ) Pageable pageable,
-            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
-        var spec = preMemberInfoSpecificationBuilder.toSpec(queryParam);
-        var results = preMemberInfoService.findAll(spec, pageable);
-
-        return ResponseEntity.ok(results);
-    }
+//    @RbacOption(role = 4)
+//    @GetMapping
+//    public ResponseEntity<List<PreMemberInfoResponseDto>> getPreMemberInfoAll(
+//            @PageableDefault(page = 0, size = 100, sort = "id", direction = Sort.Direction.DESC)
+//            @PageableSortKeyCheck(sortKeys =
+//                    {"id", "name", "role", "studentId", "year", "rank", "major"}
+//            ) Pageable pageable,
+//            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
+//        var spec = preMemberInfoSpecificationBuilder.toSpec(queryParam);
+//        var results = preMemberInfoService.findAll(spec, pageable);
+//
+//        return ResponseEntity.ok(results);
+//    }
 
     @RbacOption(role = 4)
     @PostMapping

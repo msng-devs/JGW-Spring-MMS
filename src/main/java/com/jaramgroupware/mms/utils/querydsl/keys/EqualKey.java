@@ -1,6 +1,8 @@
-package com.jaramgroupware.mms.utils.spec.keys;
+package com.jaramgroupware.mms.utils.querydsl.keys;
 
+import com.jaramgroupware.mms.utils.parse.ParseByNameBuilder;
 import com.jaramgroupware.mms.utils.parse.ParseByNameType;
+import com.querydsl.core.types.dsl.StringPath;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,6 +20,6 @@ import lombok.ToString;
 @AllArgsConstructor
 public class EqualKey {
     private String queryParamName;
-    private String tableName;
+    private String targetColumn;
     private ParseByNameType type;
 }
