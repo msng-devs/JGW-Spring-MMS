@@ -29,7 +29,6 @@ public class MajorQueryDslRepositoryImpl implements MajorQueryDslRepository {
         var jpaQuery = queryFactory.selectFrom(QMajor.major);
         applyQueryParams(jpaQuery, params);
         queryDslRepositoryUtils.applyPageable(jpaQuery,pageable,qMajorSortKey);
-        log.debug("jpaQuery : {}", jpaQuery.toString());
         return jpaQuery.fetch().stream().toList();
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class QMajorSortKey extends QSortKey<QMajor> {
 
-    private static final QMajor major = QMajor.major;
+    private final QMajor major = QMajor.major;
 
     @Override
     public OrderSpecifier<?> getOrderSpecifier(String property, Sort.Direction direction) {
