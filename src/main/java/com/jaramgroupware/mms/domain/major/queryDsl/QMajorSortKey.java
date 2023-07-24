@@ -14,8 +14,8 @@ public class QMajorSortKey extends QSortKey<QMajor> {
 
     private static final QMajor major = QMajor.major;
 
-
-    public static OrderSpecifier<?> getOrderSpecifier(String property, Sort.Direction direction) {
+    @Override
+    public OrderSpecifier<?> getOrderSpecifier(String property, Sort.Direction direction) {
         return switch (property) {
             case "id" -> (direction.isAscending()) ? major.id.asc() : major.id.desc();
             case "name" -> (direction.isAscending()) ? major.name.asc() : major.name.desc();
@@ -23,7 +23,8 @@ public class QMajorSortKey extends QSortKey<QMajor> {
         };
     }
 
-    public static List<String> getProperties() {
+    @Override
+    public List<String> getProperties() {
         return List.of("id", "name");
     }
 }

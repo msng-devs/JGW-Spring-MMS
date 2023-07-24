@@ -7,11 +7,11 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 public class QSortKey<T extends EntityPathBase<?>> {
-    public static OrderSpecifier<?> getOrderSpecifier(String property, Sort.Direction direction){
+    public OrderSpecifier<?> getOrderSpecifier(String property, Sort.Direction direction){
         throw new UnsupportedOperationException("getOrderSpecifier() must be overridden");
     }
 
-    public static List<String> getProperties(){
+    public List<String> getProperties(){
         throw new UnsupportedOperationException("getProperties() must be overridden");
     }
 }

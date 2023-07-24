@@ -10,17 +10,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.MultiValueMap;
 
 @NoArgsConstructor
-public class QueryDslRepositoryUtils<T extends QSortKey<?>,M> {
+public class QueryDslRepositoryUtils<M> {
 
 
-    public void applyPageable(JPAQuery<M> jpaQuery, Pageable pageable) {
-        applySort(jpaQuery, pageable.getSort());
+    public void applyPageable(JPAQuery<M> jpaQuery, Pageable pageable,QSortKey<?> sortKey) {
+        applySort(jpaQuery, sortKey,pageable.getSort());
         jpaQuery.offset(pageable.getOffset()).limit(pageable.getPageSize());
     }
 
-    private void applySort(JPAQuery<M> jpaQuery, Sort sort) {
+    private void applySort(JPAQuery<M> jpaQuery,QSortKey<?> sortKey, Sort sort) {
         for (Sort.Order order : sort) {
-            jpaQuery.orderBy(T.getOrderSpecifier(order.getProperty(), order.getDirection()));
+            jpaQuery.orderBy(sortKey.getOrderSpecifier(order.getProperty(), order.getDirection()));
         }
     }
 }
