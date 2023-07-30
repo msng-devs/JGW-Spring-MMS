@@ -70,56 +70,61 @@ public class MemberViewQueryDslRepositoryImpl implements MemberViewQueryDslRepos
 
         //integer keys
         if (params.containsKey("year")) {
+            var yearBase = new HashSet<BooleanExpression>();
             for (var value : params.get("year")) {
-                whereBase.add(qMemberView.year.eq(parseInt(value)));
+                yearBase.add(qMemberView.year.eq(parseInt(value)));
             }
+            whereBase.add(yearBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
 
         //long keys
         if (params.containsKey("role")) {
+            var roleBase = new HashSet<BooleanExpression>();
             for (var value : params.get("role")) {
-                whereBase.add(qMemberView.role.eq(parseLong(value)));
+                roleBase.add(qMemberView.role.eq(parseLong(value)));
             }
+            whereBase.add(roleBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
         if (params.containsKey("rank")) {
+            var rankBase = new HashSet<BooleanExpression>();
             for (var value : params.get("rank")) {
-                whereBase.add(qMemberView.rank.eq(parseLong(value)));
+                rankBase.add(qMemberView.rank.eq(parseLong(value)));
             }
+            whereBase.add(rankBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
         if (params.containsKey("major")) {
+            var majorBase = new HashSet<BooleanExpression>();
             for (var value : params.get("major")) {
-                whereBase.add(qMemberView.major.eq(parseLong(value)));
+                majorBase.add(qMemberView.major.eq(parseLong(value)));
             }
+            whereBase.add(majorBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
 
         //boolean keys
         if (params.containsKey("status")) {
-            for (var value : params.get("status")) {
-                whereBase.add(qMemberView.status.eq(parseBoolean(value)));
-            }
+            var value = params.getFirst("status");
+            whereBase.add(qMemberView.status.eq(parseBoolean(value)));
         }
         if (params.containsKey("isLeaveAbsence")) {
-            for (var value : params.get("isLeaveAbsence")) {
-                whereBase.add(qMemberView.isLeaveAbsence.eq(parseBoolean(value)));
-            }
+            var value = params.getFirst("isLeaveAbsence");
+            whereBase.add(qMemberView.status.eq(parseBoolean(value)));
         }
 
         //like keys
         if (params.containsKey("name")) {
-            for (var value : params.get("name")) {
-                whereBase.add(qMemberView.name.like(value));
-            }
+            var value = params.getFirst("name");
+            whereBase.add(qMemberView.name.like("%"+value+"%"));
         }
 
         if (params.containsKey("email")) {
             for (var value : params.get("email")) {
-                whereBase.add(qMemberView.email.like(value));
+                whereBase.add(qMemberView.email.like("%"+value+"%"));
             }
         }
 
         if (params.containsKey("studentId")) {
             for (var value : params.get("studentId")) {
-                whereBase.add(qMemberView.studentId.like(value));
+                whereBase.add(qMemberView.studentId.like("%"+value+"%"));
             }
         }
 

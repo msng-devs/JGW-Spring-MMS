@@ -34,9 +34,8 @@ public class MajorQueryDslRepositoryImpl implements MajorQueryDslRepository {
 
     private void applyQueryParams(JPAQuery<Major> jpqQuery, MultiValueMap<String, String> params) {
         if (params.containsKey("name")) {
-            for (var value : params.get("name")) {
-                jpqQuery.where(QMajor.major.name.like("%" + value + "%"));
-            }
+            var value = params.getFirst("name");
+            jpqQuery.where(QMajor.major.name.like("%" + value + "%"));
         }
     }
 
