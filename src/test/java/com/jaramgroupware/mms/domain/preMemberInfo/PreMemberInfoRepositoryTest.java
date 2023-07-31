@@ -1,5 +1,6 @@
 package com.jaramgroupware.mms.domain.preMemberInfo;
 
+import com.jaramgroupware.mms.config.TestQueryDslConfig;
 import com.jaramgroupware.mms.domain.major.Major;
 import com.jaramgroupware.mms.domain.rank.Rank;
 import com.jaramgroupware.mms.domain.registerCode.RegisterCode;
@@ -12,15 +13,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.util.LinkedMultiValueMap;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Import({TestQueryDslConfig.class})
 @ExtendWith(SpringExtension.class)
 @SqlGroup({
         @Sql(scripts = "classpath:DDL.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
@@ -100,16 +106,81 @@ class PreMemberInfoRepositoryTest {
     }
 
     @Test
-    void findAll(){
+    void findAllWithQueryParams(){
+        //given
+        var queryParams = new LinkedMultiValueMap<String,String>();
+        queryParams.add("rank","5");
+        queryParams.add("rank","4");
+        queryParams.add("major","5");
+        var pageable = PageRequest.of(0,10, Sort.by("id").descending());
 
+        var exceptedPreMemberInfo = PreMemberInfo.builder()
+                .id(1L)
+                .studentId("2021000003")
+                .year(37)
+                .role(new Role(3L,"ROLE_USER1"))
+                .name("신규휴학")
+                .major(new Major(5L,"산업경영공학과"))
+                .rank(new Rank(5L,"OB"))
+                .expectedDateReturnSchool(LocalDate.of(2023,7,6))
+                .build();
+
+        //when
+        var result = preMemberInfoRepository.findAllWithQueryParams(pageable,queryParams);
+
+        //then
+        assertEquals(1,result.size());
+        assertEquals(exceptedPreMemberInfo.toString(),result.get(0).toString());
     }
 
     @Test
     void save(){
+        //given
+        var target = PreMemberInfo.builder()
+                .studentId("2021000005")
+                .year(37)
+                .role(new Role(3L,"ROLE_USER1"))
+                .name("신규휴학")
+                .major(new Major(5L,"산업경영공학과"))
+                .rank(new Rank(5L,"OB"))
+                .expectedDateReturnSchool(LocalDate.of(2023,7,6))
+                .build();
+
+        //when
+        var result = preMemberInfoRepository.save(target);
+
+        //then
+        assertEquals(target.toString(),result.toString());
 
     }
 
     @Test
     void existsByStudentId() {
+        //given
+        var target = "2021000003";
+        //when
+        var result = preMemberInfoRepository.existsByStudentId(target);
+        //then
+        assertTrue(result);
+
+    }
+
+    @Test
+    void delete(){
+        //given
+        var target = PreMemberInfo.builder()
+                .id(1L)
+                .studentId("2021000003")
+                .year(37)
+                .role(new Role(3L,"ROLE_USER1"))
+                .name("신규휴학")
+                .major(new Major(5L,"산업경영공학과"))
+                .rank(new Rank(5L,"OB"))
+                .expectedDateReturnSchool(LocalDate.of(2023,7,6))
+                .build();
+        //when
+        preMemberInfoRepository.delete(target);
+        //then
+
     }
 }

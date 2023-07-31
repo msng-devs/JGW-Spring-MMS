@@ -47,40 +47,46 @@ public class PreMemberInfoQueryDslRepositoryImpl implements PreMemberInfoQueryDs
 
         //equal keys
         if (params.containsKey("role")){
+            var roleBase = new HashSet<BooleanExpression>();
             for (var value : params.get("role")) {
-                whereBase.add(QPreMemberInfo.preMemberInfo.role.id.eq(parseLong(value)));
+                roleBase.add(QPreMemberInfo.preMemberInfo.role.id.eq(parseLong(value)));
             }
+            whereBase.add(roleBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
 
         if (params.containsKey("major")){
+            var majorBase = new HashSet<BooleanExpression>();
             for (var value : params.get("major")) {
-                whereBase.add(QPreMemberInfo.preMemberInfo.major.id.eq(parseLong(value)));
+                majorBase.add(QPreMemberInfo.preMemberInfo.major.id.eq(parseLong(value)));
             }
+            whereBase.add(majorBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
 
         if (params.containsKey("year")){
+            var yearBase = new HashSet<BooleanExpression>();
             for (var value : params.get("year")) {
-                whereBase.add(QPreMemberInfo.preMemberInfo.year.eq(parseInt(value)));
+                yearBase.add(QPreMemberInfo.preMemberInfo.year.eq(parseInt(value)));
             }
+            whereBase.add(yearBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
 
         if (params.containsKey("rank")){
+            var rankBase = new HashSet<BooleanExpression>();
             for (var value : params.get("rank")) {
-                whereBase.add(QPreMemberInfo.preMemberInfo.rank.id.eq(parseLong(value)));
+                rankBase.add(QPreMemberInfo.preMemberInfo.rank.id.eq(parseLong(value)));
             }
+            whereBase.add(rankBase.stream().reduce(BooleanExpression::or).orElse(null));
         }
 
         //like keys
         if (params.containsKey("name")){
-            for (var value : params.get("name")) {
-                whereBase.add(QPreMemberInfo.preMemberInfo.name.like("%"+value+"%"));
-            }
+            var value = params.getFirst("name");
+            whereBase.add(QPreMemberInfo.preMemberInfo.name.like("%"+value+"%"));
         }
 
         if (params.containsKey("studentId")){
-            for (var value : params.get("studentId")) {
-                whereBase.add(QPreMemberInfo.preMemberInfo.studentId.like("%"+value+"%"));
-            }
+            var value = params.getFirst("studentId");
+            whereBase.add(QPreMemberInfo.preMemberInfo.studentId.like("%"+value+"%"));
         }
 
         //특수 옵션
