@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,13 +29,13 @@ public class MajorService {
         return new MajorResponseDto(targetMajor);
     }
 
-//    @Transactional(readOnly = true)
-//    public List<MajorResponseDto> findAll(Specification<Major> specification, Pageable pageable){
-//
-//        return majorRepository.findAll(specification,pageable)
-//                .stream()
-//                .map(MajorResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
+    @Transactional(readOnly = true)
+    public List<MajorResponseDto> findAll(MultiValueMap<String,String> queryParam, Pageable pageable){
+
+        return majorRepository.findAllWithQueryParams(pageable,queryParam)
+                .stream()
+                .map(MajorResponseDto::new)
+                .toList();
+    }
 
 }
