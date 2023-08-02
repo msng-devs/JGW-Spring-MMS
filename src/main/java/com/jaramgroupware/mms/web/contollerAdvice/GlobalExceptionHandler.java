@@ -4,6 +4,7 @@ import com.jaramgroupware.mms.dto.general.ExceptionResponseDto;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -28,6 +29,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final TimeUtility timeUtility = new TimeUtility();
 
     @ExceptionHandler(ServiceException.class)
     protected ResponseEntity<ExceptionResponseDto> handleServiceException(ServiceException exception,WebRequest request){
@@ -44,7 +46,7 @@ public class GlobalExceptionHandler {
                                 .code(exception.getErrorCode().getErrorCode())
                                 .message(exception.getMessage())
                                 .status(exception.getErrorCode().getHttpStatus())
-                                .timestamp(TimeUtility.nowDateTime())
+                                .timestamp(timeUtility.nowDateTime())
                                 .path(request.getContextPath())
                                 .build()
                 );
@@ -66,7 +68,7 @@ public class GlobalExceptionHandler {
                                 .code("Not Defined Error")
                                 .message("해당 요청 타입을 지원하지 않습니다.")
                                 .status(HttpStatus.NOT_FOUND)
-                                .timestamp(TimeUtility.nowDateTime())
+                                .timestamp(timeUtility.nowDateTime())
                                 .path(request.getContextPath())
                                 .build()
                 );
@@ -87,7 +89,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("해당 요청 메소드를 지원하지 않습니다.")
                         .status(HttpStatus.NOT_FOUND)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -107,7 +109,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("잘못된 요청입니다.")
                         .status(HttpStatus.NOT_FOUND)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -129,7 +131,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("DB에 요청을 처리하는 중 오류가 발생했습니다.")
                         .status(HttpStatus.NOT_FOUND)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -151,7 +153,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("DB에 요청을 처리하는 중 알 수 없는 에러가 발생했습니다.")
                         .status(HttpStatus.NOT_FOUND)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -173,7 +175,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("알 수 없는 에러가 발생했습니다.")
                         .status(HttpStatus.NOT_FOUND)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -193,7 +195,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("잘못된 입력값이 존재합니다.")
                         .status(HttpStatus.BAD_REQUEST)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -225,7 +227,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message(builder.toString())
                         .status(HttpStatus.BAD_REQUEST)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -246,7 +248,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("잘못된 입력값이 존재합니다.")
                         .status(HttpStatus.BAD_REQUEST)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );
@@ -267,7 +269,7 @@ public class GlobalExceptionHandler {
                         .code("Not Defined Error")
                         .message("잘못된 입력값이 존재합니다.")
                         .status(HttpStatus.BAD_REQUEST)
-                        .timestamp(TimeUtility.nowDateTime())
+                        .timestamp(timeUtility.nowDateTime())
                         .path(request.getContextPath())
                         .build()
         );

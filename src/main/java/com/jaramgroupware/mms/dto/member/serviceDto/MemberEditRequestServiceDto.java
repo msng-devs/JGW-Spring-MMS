@@ -30,14 +30,14 @@ public class MemberEditRequestServiceDto {
                 .build();
     }
 
-    public MemberInfo toMemberInfoEntity(Member member, Major major){
+    public MemberInfo toMemberInfoEntity(Member member, Major major,LocalDateTime nowDateTime){
         var memberInfo =  MemberInfo.builder()
                 .member(member)
                 .phoneNumber(phoneNumber)
                 .major(major)
                 .build();
         memberInfo.setModifiedBy(modifiedBy);
-        memberInfo.setModifiedDateTime(TimeUtility.nowDateTime());
+        memberInfo.setModifiedDateTime(nowDateTime);
         return memberInfo;
     }
 }

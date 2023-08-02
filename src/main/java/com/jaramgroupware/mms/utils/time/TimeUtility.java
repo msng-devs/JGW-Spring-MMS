@@ -17,11 +17,11 @@ public class TimeUtility {
 
     private static final Clock clock = Clock.system(ZoneId.of("Asia/Seoul"));
 
-    public static LocalDateTime nowDateTime() {
+    public LocalDateTime nowDateTime() {
         return LocalDateTime.now(clock);
     }
 
-    public static LocalDate nowDate() {
+    public LocalDate nowDate() {
         return LocalDate.now(clock);
     }
 }

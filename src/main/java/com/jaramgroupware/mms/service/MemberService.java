@@ -24,6 +24,7 @@ import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDt
 import com.jaramgroupware.mms.dto.withdrawal.WithdrawalResponseDto;
 import com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
+import com.jaramgroupware.mms.utils.time.TimeUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-
+    private final TimeUtility timeUtility;
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final WithdrawalRepository withdrawalRepository;
@@ -70,10 +71,17 @@ public class MemberService {
         targetMember.setStatus(false);
         memberRepository.save(targetMember);
 
-        var withdrawal = new Withdrawal(targetMember, 7);
-        withdrawalRepository.save(withdrawal);
+        var now = timeUtility.nowDate();
 
-        return new WithdrawalResponseDto(withdrawal);
+        var withdrawal = Withdrawal.builder()
+                .member(targetMember)
+                .createDate(now)
+                .withdrawalDate(now.plusDays(7))
+                .build();
+
+        var newWithdrawal = withdrawalRepository.save(withdrawal);
+
+        return new WithdrawalResponseDto(newWithdrawal);
     }
 
     @Transactional
@@ -97,11 +105,11 @@ public class MemberService {
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "회원 정보가 존재하지 않습니다."));
 
         //중복 체크
-        isExistsEmail(requestDto.getEmail());
-        isExistsPhone(requestDto.getPhoneNumber());
-        isExistsStudentId(requestDto.getStudentID());
+        if(!requestDto.getEmail().equals(targetMember.getEmail())) isExistsEmail(requestDto.getEmail());
+        if(!requestDto.getPhoneNumber().equals(targetMemberInfo.getPhoneNumber())) isExistsPhone(requestDto.getPhoneNumber());
+        if(!requestDto.getStudentID().equals(targetMemberInfo.getStudentID())) isExistsStudentId(requestDto.getStudentID());
 
-        var targetRole = roleRepository.findRoleById(requestDto.getRoleId())
+        var targetRole = roleRepository.findById(requestDto.getRoleId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
         var targetRank = rankRepository.findById(requestDto.getRankId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Rank입니다."));
@@ -109,7 +117,7 @@ public class MemberService {
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Major입니다."));
 
         targetMember.update(requestDto.toMemberEntity(targetRole));
-        targetMemberInfo.update(requestDto.toMemberInfoEntity(targetMember, targetMajor, targetRank));
+        targetMemberInfo.update(requestDto.toMemberInfoEntity(targetMember, targetMajor, targetRank, timeUtility.nowDateTime()));
 
         memberRepository.save(targetMember);
         memberInfoRepository.save(targetMemberInfo);
@@ -119,20 +127,21 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDto edit(MemberEditRequestServiceDto requestDto) {
+
         var targetMember = memberRepository.findById(requestDto.getTargetId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 멤버입니다."));
         var targetMemberInfo = memberInfoRepository.findByMember(targetMember)
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "회원 정보가 존재하지 않습니다."));
 
         //중복 체크
-        isExistsEmail(requestDto.getEmail());
-        isExistsPhone(requestDto.getPhoneNumber());
+        if(!requestDto.getEmail().equals(targetMember.getEmail())) isExistsEmail(requestDto.getEmail());
+        if(!requestDto.getPhoneNumber().equals(targetMemberInfo.getPhoneNumber())) isExistsPhone(requestDto.getPhoneNumber());
 
         var targetMajor = majorRepository.findById(requestDto.getMajorId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Major입니다."));
 
         targetMember.update(requestDto.toMemberEntity());
-        targetMemberInfo.update(requestDto.toMemberInfoEntity(targetMember, targetMajor));
+        targetMemberInfo.update(requestDto.toMemberInfoEntity(targetMember, targetMajor,timeUtility.nowDateTime()));
 
         memberRepository.save(targetMember);
         memberInfoRepository.save(targetMemberInfo);
@@ -165,7 +174,7 @@ public class MemberService {
         var member = dto.toMemberEntity(targetPreMember);
         var newMember = memberRepository.saveAndFlush(member);
 
-        var memberInfo = dto.toMemberInfoEntity(targetPreMember,newMember);
+        var memberInfo = dto.toMemberInfoEntity(targetPreMember,newMember,timeUtility.nowDateTime());
         var newMemberInfo = memberInfoRepository.saveAndFlush(memberInfo);
 
         var leaveAbsence = createLeaveAbsence(newMember,targetPreMember);

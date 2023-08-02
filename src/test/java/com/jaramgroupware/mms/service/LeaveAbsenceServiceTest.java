@@ -12,13 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
-
+import static org.mockito.Mockito.verify;
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith(MockitoExtension.class)
 class LeaveAbsenceServiceTest {
 
@@ -66,6 +68,8 @@ class LeaveAbsenceServiceTest {
 
         //then
         assertEquals(expected, result);
+        verify(memberRepository).findMemberById(expectedMember.getId());
+        verify(memberLeaveAbsenceRepository).findByMember(expectedMember);
 
     }
 
@@ -122,5 +126,8 @@ class LeaveAbsenceServiceTest {
 
         //then
         assertEquals(expected, result);
+        verify(memberRepository).findMemberById(expectedMember.getId());
+        verify(memberLeaveAbsenceRepository).findByMember(expectedMember);
+        verify(memberLeaveAbsenceRepository).save(updatedExpectedLeaveAbsence);
     }
 }

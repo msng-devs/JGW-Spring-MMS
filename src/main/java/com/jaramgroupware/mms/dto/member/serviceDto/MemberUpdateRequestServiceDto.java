@@ -43,7 +43,7 @@ public class MemberUpdateRequestServiceDto {
                 .build();
     }
 
-    public MemberInfo toMemberInfoEntity(Member member, Major major, Rank rank){
+    public MemberInfo toMemberInfoEntity(Member member, Major major, Rank rank,LocalDateTime nowDateTime){
         var memberInfo = MemberInfo.builder()
                 .member(member)
                 .phoneNumber(phoneNumber)
@@ -55,7 +55,7 @@ public class MemberUpdateRequestServiceDto {
                 .build();
 
         memberInfo.setModifiedBy(modifiedBy);
-        memberInfo.setModifiedDateTime(TimeUtility.nowDateTime());
+        memberInfo.setModifiedDateTime(nowDateTime);
 
         return memberInfo;
     }

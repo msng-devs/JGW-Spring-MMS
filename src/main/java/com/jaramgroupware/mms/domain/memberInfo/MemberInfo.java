@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
  * @author 황준서(37기) hzser123@gmail.com
  * @author 이현희(38기) heeit13145@gmail.com
  */
+@EqualsAndHashCode
 @Getter
 @Setter
 @ToString
@@ -98,6 +99,6 @@ public class MemberInfo extends BaseEntity {
         if(memberInfo.getMajor()!=null) this.major = memberInfo.getMajor();
         if(memberInfo.getDateOfBirth()!=null) this.dateOfBirth = memberInfo.getDateOfBirth();
         this.modifiedBy = memberInfo.getModifiedBy();
-        this.modifiedDateTime = TimeUtility.nowDateTime();
+        this.modifiedDateTime = memberInfo.getModifiedDateTime();
     }
 }

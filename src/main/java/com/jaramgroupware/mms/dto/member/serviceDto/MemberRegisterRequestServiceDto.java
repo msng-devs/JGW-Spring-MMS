@@ -40,8 +40,9 @@ public class MemberRegisterRequestServiceDto {
                 .build();
     }
 
-    public MemberInfo toMemberInfoEntity(PreMemberInfo preMemberInfo,Member member){
+    public MemberInfo toMemberInfoEntity(PreMemberInfo preMemberInfo,Member member,LocalDateTime nowDateTime){
         var newMemberInfo = MemberInfo.builder()
+                .member(member)
                 .major(preMemberInfo.getMajor())
                 .studentID(preMemberInfo.getStudentId())
                 .rank(preMemberInfo.getRank())
@@ -50,10 +51,10 @@ public class MemberRegisterRequestServiceDto {
                 .dateOfBirth(dateOfBirth)
                 .build();
 
-        newMemberInfo.setCreatedDateTime(TimeUtility.nowDateTime());
+        newMemberInfo.setCreatedDateTime(nowDateTime);
         newMemberInfo.setCreateBy("system");
 
-        newMemberInfo.setModifiedDateTime(TimeUtility.nowDateTime());
+        newMemberInfo.setModifiedDateTime(nowDateTime);
         newMemberInfo.setModifiedBy("system");
 
         return newMemberInfo;

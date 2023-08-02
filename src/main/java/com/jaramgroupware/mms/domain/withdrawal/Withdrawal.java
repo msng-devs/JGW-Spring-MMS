@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+@EqualsAndHashCode
 @Getter
 @Setter
 @ToString
@@ -31,10 +32,5 @@ public class Withdrawal {
     @Column(name = "WITHDRAWAL_CREATE_DATE",nullable = false)
     private LocalDate createDate;
 
-    public Withdrawal(Member member,Integer deleteDay){
-        this.member = member;
-        this.withdrawalDate = TimeUtility.nowDate().plusDays(deleteDay);
-        this.createDate = TimeUtility.nowDate();
 
-    }
 }

@@ -44,7 +44,7 @@ public class RegisterCode {
     @Column(name = "REGISTER_CODE_CREATE_BY", nullable = false)
     private String createBy;
 
-    public boolean isExpired() {
-        return TimeUtility.nowDate().isAfter(this.expiredAt);
+    public boolean isExpired(LocalDate nowDate) {
+        return nowDate.isAfter(this.expiredAt);
     }
 }

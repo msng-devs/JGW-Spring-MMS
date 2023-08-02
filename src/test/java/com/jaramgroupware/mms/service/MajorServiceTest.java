@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -18,7 +19,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ExtendWith(MockitoExtension.class)
 class MajorServiceTest {
 
@@ -44,6 +47,7 @@ class MajorServiceTest {
 
         //then
         assertEquals(expected,result);
+        verify(majorRepository).findById(1L);
     }
 
     @Test
@@ -71,6 +75,6 @@ class MajorServiceTest {
         //then
         assertEquals(2,result.size());
         assertArrayEquals(exceptResult.toArray(), result.toArray());
-
+        verify(majorRepository).findAllWithQueryParams(mockPageable,queryParams);
     }
 }

@@ -29,12 +29,12 @@ public class RegisterCodeAddRequestServiceDto {
     private Long preMemberInfoId;
     private String createdBy;
 
-    public RegisterCode toRegisterCodeEntity(String code,PreMemberInfo preMemberInfo){
+    public RegisterCode toRegisterCodeEntity(String code,PreMemberInfo preMemberInfo,LocalDate nowDate){
         return RegisterCode.builder()
                 .code(code)
                 .preMemberInfo(preMemberInfo)
                 .createBy(createdBy)
-                .expiredAt(TimeUtility.nowDate().plusDays(expireDay))
+                .expiredAt(nowDate)
                 .build();
     }
 
