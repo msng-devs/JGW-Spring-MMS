@@ -31,7 +31,7 @@ public class MemberViewResponseDto {
         uid = memberView.getUid();
         name = memberView.getName();
         email = memberView.getEmail();
-        studentId = memberView.getStudentId().substring(1, 3);
+        studentId = memberView.getStudentId().substring(2, 4);
         year = memberView.getYear();
         rank = new RankResponseDto(memberView.getRank(), memberView.getRankName());
         major = new MajorResponseDto(memberView.getMajor(), memberView.getMajorName());

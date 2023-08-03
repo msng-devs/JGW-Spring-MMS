@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -38,8 +39,8 @@ public class MemberViewService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberViewDatailResponseDto> findAll(Specification<MemberView> specification, Pageable pageable){
-        var memberViews = memberViewRepository.findAll(specification,pageable);
+    public List<MemberViewDatailResponseDto> findAll(MultiValueMap<String,String> param, Pageable pageable){
+        var memberViews = memberViewRepository.findAllWithQueryParams(pageable,param);
         return memberViews.stream().map(MemberViewDatailResponseDto::new).toList();
     }
 
