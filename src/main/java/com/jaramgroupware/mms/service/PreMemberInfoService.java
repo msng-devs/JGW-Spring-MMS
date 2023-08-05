@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 
@@ -42,8 +43,8 @@ public class PreMemberInfoService {
     }
 
     @Transactional(readOnly = true)
-    public List<PreMemberInfoResponseDto> findAll(Specification<PreMemberInfo> specification, Pageable pageable){
-        var preMemberInfos = preMemberInfoRepository.findAll(specification,pageable);
+    public List<PreMemberInfoResponseDto> findAll(MultiValueMap<String,String> params, Pageable pageable){
+        var preMemberInfos = preMemberInfoRepository.findAllWithQueryParams(pageable, params);
         return preMemberInfos.stream().map(PreMemberInfoResponseDto::new).toList();
     }
 
@@ -58,7 +59,7 @@ public class PreMemberInfoService {
     @Transactional
     public PreMemberInfoResponseDto createPreMemberInfo(PreMemberInfoAddRequestServiceDto requestDto) {
 
-        var targetRole = roleRepository.findRoleById(requestDto.getRoleId())
+        var targetRole = roleRepository.findById(requestDto.getRoleId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
         var targetRank = rankRepository.findById(requestDto.getRankId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Rank입니다."));
@@ -82,15 +83,17 @@ public class PreMemberInfoService {
         var targetPreMemberInfo = preMemberInfoRepository.findById(requestDto.getId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 PreMemberInfo입니다."));
 
-        var targetRole = roleRepository.findRoleById(requestDto.getRoleId())
+        var targetRole = roleRepository.findById(requestDto.getRoleId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
         var targetRank = rankRepository.findById(requestDto.getRankId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Rank입니다."));
         var targetMajor = majorRepository.findById(requestDto.getMajorId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Major입니다."));
 
-        memberService.isExistsStudentId(requestDto.getStudentId());
-        isExistsStudentId(requestDto.getStudentId());
+        if(!targetPreMemberInfo.getStudentId().equals(requestDto.getStudentId())){
+            memberService.isExistsStudentId(requestDto.getStudentId());
+            isExistsStudentId(requestDto.getStudentId());
+        }
 
         targetPreMemberInfo.update(requestDto.toEntity(targetRole, targetRank, targetMajor));
 

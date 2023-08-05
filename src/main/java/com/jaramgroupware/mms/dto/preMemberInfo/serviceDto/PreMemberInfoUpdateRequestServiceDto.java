@@ -23,7 +23,6 @@ public class PreMemberInfoUpdateRequestServiceDto {
     private Long rankId;
     private Long majorId;
     private Integer year;
-    private Long expireDay;
     private LocalDate expectedDateReturnSchool;
     public PreMemberInfo toEntity(Role role, Rank rank, Major major){
         return PreMemberInfo.builder()

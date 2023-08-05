@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-
+@EqualsAndHashCode
 @Getter
 @Setter
 @ToString
