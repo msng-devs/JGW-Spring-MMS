@@ -8,6 +8,7 @@ import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.domain.role.RoleRepository;
 import com.jaramgroupware.mms.dto.registerCode.RegisterCodeResponseDto;
 import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequestServiceDto;
+import com.jaramgroupware.mms.utils.code.CodeGenerator;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import com.jaramgroupware.mms.utils.time.TimeUtility;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,8 @@ public class RegisterCodeService {
     private final RegisterCodeRepository registerCodeRepository;
     private final RoleRepository roleRepository;
     private final PreMemberInfoRepository preMemberInfoRepository;
-    private final TimeUtility timeUtility = new TimeUtility();
-
+    private final TimeUtility timeUtility;
+    private final CodeGenerator codeGenerator;
     /**
      * 코드를 검증하고 유저 정보를 반환하는 함수
      * @param registerCode 검증할 코드
@@ -65,8 +66,13 @@ public class RegisterCodeService {
 
         registerCodeRepository.findByPreMemberInfo(targetPreMemberInfo).ifPresent(registerCodeRepository::delete);
 
-        var code = UUID.randomUUID().toString();
-        var registerCode = dto.toRegisterCodeEntity(code,targetPreMemberInfo,timeUtility.nowDate());
+        var code = codeGenerator.generate();
+        var registerCode = RegisterCode.builder()
+                .code(code)
+                .preMemberInfo(targetPreMemberInfo)
+                .createBy(dto.getCreatedBy())
+                .expiredAt(timeUtility.nowDate().plusDays(dto.getExpireDay()))
+                .build();
         var newRegisterCode = registerCodeRepository.save(registerCode);
         return new RegisterCodeResponseDto(newRegisterCode);
     }
