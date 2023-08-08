@@ -2,7 +2,6 @@ package com.jaramgroupware.mms.dto.member.controllerDto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.jaramgroupware.mms.domain.role.Role;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -27,12 +26,12 @@ public class MemberUpdateRequestControllerDto {
     @Size(max = 45, message = "이름은 최대 45자까지 가능합니다.")
     private String name;
 
-    @Pattern(regexp = "(^$|[0-9]{11})")
+    @Pattern(regexp = "(^$|[0-9]{3}-[0-9]{4}-[0-9]{4})")
     private String phoneNumber;
 
     @NotEmpty(message = "학생번호가 비여있습니다!")
     @Size(max = 10, min = 10, message = "학생번호는 10자리여이야 합니다!")
-    private String studentID;
+    private String studentId;
 
     @NotNull(message = "전공 정보가 비여있습니다!")
     private Long majorId;
@@ -56,7 +55,7 @@ public class MemberUpdateRequestControllerDto {
                 .email(email)
                 .name(name)
                 .phoneNumber(phoneNumber)
-                .studentID(studentID)
+                .studentID(studentId)
                 .majorId(majorId)
                 .rankId(rankId)
                 .roleId(roleId)

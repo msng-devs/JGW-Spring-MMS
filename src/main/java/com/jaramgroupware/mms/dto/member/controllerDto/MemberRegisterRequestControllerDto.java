@@ -19,16 +19,16 @@ import java.time.LocalDate;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberRegisterRequestControllerDto {
 
-    @Pattern(regexp = "(^$|[0-9]{11})")
+    @Pattern(regexp = "(^$|[0-9]{3}-[0-9]{4}-[0-9]{4})")
     private String phoneNumber;
 
     private LocalDate dateOfBirth;
 
-    public MemberRegisterRequestServiceDto toServiceDto(String uid, String code,String email) {
+    public MemberRegisterRequestServiceDto toServiceDto(String uid, String code, String email) {
         return MemberRegisterRequestServiceDto.builder()
                 .email(email)
-                .phoneNumber((phoneNumber.isEmpty())?phoneNumber:"")
-                .dateOfBirth((dateOfBirth==null)?null:dateOfBirth)
+                .phoneNumber((phoneNumber == null) ? "" : phoneNumber)
+                .dateOfBirth((dateOfBirth == null) ? null : dateOfBirth)
                 .uid(uid)
                 .code(code)
                 .build();

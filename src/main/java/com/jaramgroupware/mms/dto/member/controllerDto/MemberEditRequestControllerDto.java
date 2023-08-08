@@ -20,14 +20,10 @@ import java.time.LocalDate;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberEditRequestControllerDto {
 
-    @NotEmpty(message = "Email이 비여있습니다!")
-    @Email(message = "email 형식이 잘못되었습니다!")
-    private String email;
-
     @NotEmpty(message = "이름이 비여있습니다!")
     private String name;
 
-    @Pattern(regexp = "(^$|[0-9]{11})")
+    @Pattern(regexp = "(^$|[0-9]{3}-[0-9]{4}-[0-9]{4})")
     private String phoneNumber;
 
     @NotNull(message = "전공 정보가 비여있습니다!")
@@ -37,7 +33,6 @@ public class MemberEditRequestControllerDto {
         return MemberEditRequestServiceDto.builder()
                 .targetId(targetMember)
                 .modifiedBy(modifiedBy)
-                .email(email)
                 .name(name)
                 .phoneNumber(phoneNumber)
                 .majorId(majorId)

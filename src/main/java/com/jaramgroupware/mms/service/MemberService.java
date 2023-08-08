@@ -134,7 +134,6 @@ public class MemberService {
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "회원 정보가 존재하지 않습니다."));
 
         //중복 체크
-        if(!requestDto.getEmail().equals(targetMember.getEmail())) isExistsEmail(requestDto.getEmail());
         if(!requestDto.getPhoneNumber().equals(targetMemberInfo.getPhoneNumber())) isExistsPhone(requestDto.getPhoneNumber());
 
         var targetMajor = majorRepository.findById(requestDto.getMajorId())

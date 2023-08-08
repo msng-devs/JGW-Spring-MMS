@@ -18,14 +18,12 @@ public class MemberEditRequestServiceDto {
 
     private String targetId;
     private String modifiedBy;
-    private String email;
     private String name;
     private String phoneNumber;
     private Long majorId;
 
     public Member toMemberEntity(){
         return Member.builder()
-                .email(email)
                 .name(name)
                 .build();
     }

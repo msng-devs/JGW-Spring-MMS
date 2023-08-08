@@ -25,21 +25,21 @@ public class MemberRegisteredResponseDto {
     private String email;
     private String name;
     private String cellPhoneNumber;
-    private String studentID;
+    private String studentId;
     private MajorResponseDto major;
     private RankResponseDto rank;
     private RoleResponseDto role;
     private Integer year;
     private LocalDate dateOfBirth;
 
-    private MemberLeaveAbsenceResponseDto memberLeaveAbsenceResponseDto;
+    private MemberLeaveAbsenceResponseDto leaveAbsence;
 
     public MemberRegisteredResponseDto(Member member, MemberInfo memberInfo, MemberLeaveAbsence memberLeaveAbsence){
         uid = member.getId();
         email = member.getEmail();
         name = member.getName();
         cellPhoneNumber = memberInfo.getPhoneNumber();
-        studentID = memberInfo.getStudentID();
+        studentId = memberInfo.getStudentID();
         major = new MajorResponseDto(memberInfo.getMajor());
         rank = new RankResponseDto(memberInfo.getRank());
         role = new RoleResponseDto(member.getRole());
@@ -47,8 +47,8 @@ public class MemberRegisteredResponseDto {
         dateOfBirth = memberInfo.getDateOfBirth();
 
         if(memberLeaveAbsence.isStatus())
-            memberLeaveAbsenceResponseDto = new MemberLeaveAbsenceResponseDto(memberLeaveAbsence);
+            leaveAbsence = new MemberLeaveAbsenceResponseDto(memberLeaveAbsence);
         else
-            memberLeaveAbsenceResponseDto = null;
+            leaveAbsence = null;
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface MemberViewQueryDslRepository {
     List<MemberView> findAllWithQueryParams(Pageable pageable, MultiValueMap<String, String> params);
+    Integer countAllWithQueryParams(MultiValueMap<String, String> params);
 }

@@ -171,7 +171,7 @@ class MemberViewServiceTest {
         var params = new LinkedMultiValueMap<String,String>();
 
         doReturn(targetList).when(memberViewRepository).findAllWithQueryParams(pageable,params);
-
+        doReturn(2).when(memberViewRepository).countAllWithQueryParams(params);
         var exceptDto = MemberViewDatailResponseDto.builder()
                 .uid("test")
                 .name("test")
@@ -208,7 +208,7 @@ class MemberViewServiceTest {
         var result = memberViewService.findAll(params,pageable);
 
         //then
-        assertEquals(2,result.size());
-        assertTrue(result.containsAll(exceptList));
+        assertEquals(2,result.getTotalElements());
+        assertTrue(result.getContent().containsAll(exceptList));
     }
 }

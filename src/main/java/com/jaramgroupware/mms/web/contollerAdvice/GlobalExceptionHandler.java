@@ -1,6 +1,7 @@
 package com.jaramgroupware.mms.web.contollerAdvice;
 
 import com.jaramgroupware.mms.dto.general.ExceptionResponseDto;
+import com.jaramgroupware.mms.utils.exception.controller.ControllerException;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import com.jaramgroupware.mms.utils.time.TimeUtility;
 import jakarta.validation.ConstraintViolationException;
@@ -52,7 +53,27 @@ public class GlobalExceptionHandler {
                 );
 
     }
+    @ExceptionHandler(ControllerException.class)
+    protected ResponseEntity<ExceptionResponseDto> handleServiceException(ControllerException exception,WebRequest request){
+        log.info("UID = ({}) Request = ({}) Raise = ({})",
+                request.getHeader("user_uid"),
+                request.getContextPath(),
+                exception.getErrorCode().getErrorCode()
+        );
+        return ResponseEntity
+                .status(exception.getErrorCode().getHttpStatus())
+                .body(
+                        ExceptionResponseDto
+                                .builder()
+                                .code(exception.getErrorCode().getErrorCode())
+                                .message(exception.getMessage())
+                                .status(exception.getErrorCode().getHttpStatus())
+                                .timestamp(timeUtility.nowDateTime())
+                                .path(request.getContextPath())
+                                .build()
+                );
 
+    }
     @ExceptionHandler({ HttpMediaTypeNotSupportedException.class })
     protected ResponseEntity<ExceptionResponseDto> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception, WebRequest request) {
         log.info("UID = ({}) Request = ({}) Raise = ({})",

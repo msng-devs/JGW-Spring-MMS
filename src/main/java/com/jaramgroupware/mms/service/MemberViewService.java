@@ -9,6 +9,8 @@ import com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -39,9 +41,10 @@ public class MemberViewService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberViewDatailResponseDto> findAll(MultiValueMap<String,String> param, Pageable pageable){
+    public Page<MemberViewDatailResponseDto> findAll(MultiValueMap<String,String> param, Pageable pageable){
         var memberViews = memberViewRepository.findAllWithQueryParams(pageable,param);
-        return memberViews.stream().map(MemberViewDatailResponseDto::new).toList();
+        var total = memberViewRepository.countAllWithQueryParams(param);
+        return new PageImpl<>(memberViews.stream().map(MemberViewDatailResponseDto::new).toList(),pageable,total);
     }
 
 }

@@ -2,6 +2,7 @@ package com.jaramgroupware.mms.web;
 
 
 
+import com.jaramgroupware.mms.dto.member.MemberRegisteredResponseDto;
 import com.jaramgroupware.mms.dto.member.MemberResponseDto;
 import com.jaramgroupware.mms.dto.member.StatusResponseDto;
 import com.jaramgroupware.mms.dto.member.controllerDto.MemberEditRequestControllerDto;
@@ -19,6 +20,7 @@ import com.jaramgroupware.mms.utils.exception.controller.ControllerException;
 import com.jaramgroupware.mms.utils.validation.page.PageableSortKeyCheck;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -31,7 +33,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/member")
+@RequestMapping("/mms/api/v1/member")
 public class MemberApiController {
 
     private final MemberService memberService;
@@ -41,7 +43,7 @@ public class MemberApiController {
 
     @OnlyTokenOption
     @PostMapping("/register/{registerCode}")
-    public ResponseEntity<?> registerMember(
+    public ResponseEntity<MemberRegisteredResponseDto> registerMember(
             @PathVariable String registerCode,
             @RequestBody @Valid MemberRegisterRequestControllerDto dto,
             @RequestHeader("user_pk") String uid,
@@ -70,19 +72,19 @@ public class MemberApiController {
 
     }
 
-//    @RbacOption(role = 4)
-//    @GetMapping
-//    public ResponseEntity<List<MemberViewDatailResponseDto>> getMemberAll(
-//            @PageableDefault(page = 0, size = 100, sort = "uid", direction = Sort.Direction.DESC)
-//            @PageableSortKeyCheck(sortKeys =
-//                    {"uid", "name", "email", "role", "status", "cellPhoneNumber", "studentId", "year", "rank", "major", "dateOfBirth", "isLeaveAbsence"}
-//            ) Pageable pageable,
-//            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
-//        var spec = memberViewSpecificationBuilder.toSpec(queryParam);
-//        var results = memberViewService.findAll(spec, pageable);
-//
-//        return ResponseEntity.ok(results);
-//    }
+    @RbacOption(role = 4)
+    @GetMapping
+    public ResponseEntity<Page<MemberViewDatailResponseDto>> getMemberAll(
+            @PageableDefault(page = 0, size = 100, sort = "uid", direction = Sort.Direction.DESC)
+            @PageableSortKeyCheck(sortKeys =
+                    {"uid", "name", "email", "role", "status", "cellPhoneNumber", "studentId", "year", "rank", "major", "dateOfBirth", "isLeaveAbsence"}
+            ) Pageable pageable,
+            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
+
+        var results = memberViewService.findAll(queryParam,pageable);
+
+        return ResponseEntity.ok(results);
+    }
 
 
     @RbacOption(role = 4)

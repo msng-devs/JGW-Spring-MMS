@@ -59,7 +59,15 @@ public class MemberViewQueryDslRepositoryImpl implements MemberViewQueryDslRepos
         var jpaQuery = queryFactory.selectFrom(qMemberView);
         applyQueryParams(jpaQuery, params);
         queryDslRepositoryUtils.applyPageable(jpaQuery, pageable, qMemberViewSortKey);
+        ;
         return jpaQuery.fetch().stream().toList();
+    }
+
+    @Override
+    public Integer countAllWithQueryParams(MultiValueMap<String, String> params) {
+        var jpaQuery = queryFactory.selectFrom(qMemberView);
+        applyQueryParams(jpaQuery, params);
+        return jpaQuery.fetch().size();
     }
 
     private void applyQueryParams(JPAQuery<MemberView> jpqQuery, MultiValueMap<String, String> params) {

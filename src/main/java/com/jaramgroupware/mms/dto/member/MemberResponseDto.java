@@ -23,7 +23,7 @@ public class MemberResponseDto {
     private String email;
     private String name;
     private String cellPhoneNumber;
-    private String studentID;
+    private String studentId;
     private MajorResponseDto major;
     private RankResponseDto rank;
     private RoleResponseDto role;
@@ -35,7 +35,7 @@ public class MemberResponseDto {
         email = member.getEmail();
         name = member.getName();
         cellPhoneNumber = memberInfo.getPhoneNumber();
-        studentID = memberInfo.getStudentID();
+        studentId = memberInfo.getStudentID();
         major = new MajorResponseDto(memberInfo.getMajor());
         rank = new RankResponseDto(memberInfo.getRank());
         role = new RoleResponseDto(member.getRole());

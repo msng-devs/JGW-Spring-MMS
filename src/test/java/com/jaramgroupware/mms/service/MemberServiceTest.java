@@ -223,7 +223,7 @@ class MemberServiceTest {
         doReturn(Optional.of(targetInfo)).when(memberInfoRepository).findByMember(target);
 //        doReturn(true).when(memberRepository).existsByEmail(target.getEmail());
 //        doReturn(true).when(memberInfoRepository).existsByPhoneNumber(targetInfo.getPhoneNumber());
-//        doReturn(true).when(memberInfoRepository).existsByStudentID(targetInfo.getStudentID());
+//        doReturn(true).when(memberInfoRepository).existsByStudentID(targetInfo.getStudentId());
 
         doReturn(Optional.of(new Role(2L,"ROLE_USER"))).when(roleRepository).findById(2L);
         doReturn(Optional.of(new Rank(1L,"테스트 랭크"))).when(rankRepository).findById(1L);
@@ -255,7 +255,7 @@ class MemberServiceTest {
                 .name(target.getName())
                 .rank(new RankResponseDto(updatedTargetInfo.getRank()))
                 .role(new RoleResponseDto(updatedTarget.getRole()))
-                .studentID(targetInfo.getStudentID())
+                .studentId(targetInfo.getStudentID())
                 .uid(target.getId())
                 .year(targetInfo.getYear())
                 .build();
@@ -282,7 +282,6 @@ class MemberServiceTest {
         var request = MemberEditRequestServiceDto.builder()
                 .targetId("ahOZkVnteYjzrI81hYqysTBGwHWU")
                 .name("나수습")
-                .email("ahOZkVnteYjzrI81hYqysTBGwHWU@test.com")
                 .majorId(1L)
                 .phoneNumber("010-1234-5678")
                 .modifiedBy("test")
@@ -338,7 +337,7 @@ class MemberServiceTest {
                 .name(target.getName())
                 .rank(new RankResponseDto(updatedTargetInfo.getRank()))
                 .role(new RoleResponseDto(updatedTarget.getRole()))
-                .studentID(targetInfo.getStudentID())
+                .studentId(targetInfo.getStudentID())
                 .uid(target.getId())
                 .year(targetInfo.getYear())
                 .build();
@@ -528,7 +527,7 @@ class MemberServiceTest {
                 .name(preMemberInfo.getName())
                 .rank(new RankResponseDto(preMemberInfo.getRank()))
                 .role(new RoleResponseDto(preMemberInfo.getRole()))
-                .studentID(preMemberInfo.getStudentId())
+                .studentId(preMemberInfo.getStudentId())
                 .uid(newMember.getId())
                 .year(preMemberInfo.getYear())
                 .cellPhoneNumber(request.getPhoneNumber())
