@@ -32,6 +32,13 @@ public class MajorQueryDslRepositoryImpl implements MajorQueryDslRepository {
         return jpaQuery.fetch().stream().toList();
     }
 
+    @Override
+    public Integer countAllWithQueryParams(MultiValueMap<String, String> params) {
+        var jpaQuery = queryFactory.selectFrom(QMajor.major);
+        applyQueryParams(jpaQuery, params);
+        return jpaQuery.fetch().size();
+    }
+
     private void applyQueryParams(JPAQuery<Major> jpqQuery, MultiValueMap<String, String> params) {
         if (params.containsKey("name")) {
             var value = params.getFirst("name");

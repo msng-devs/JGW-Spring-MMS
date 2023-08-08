@@ -62,7 +62,7 @@ class RankServiceTest {
 
         var rankList = List.of(target, target2);
 
-        doReturn(rankList).when(rankRepository).findAllBy();
+        doReturn(rankList).when(rankRepository).findAllByOrderByIdAsc();
 
         var except = List.of(
                 RankResponseDto.builder()

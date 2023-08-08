@@ -6,6 +6,8 @@ import com.jaramgroupware.mms.domain.major.MajorRepository;
 import com.jaramgroupware.mms.dto.major.MajorResponseDto;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -30,12 +32,17 @@ public class MajorService {
     }
 
     @Transactional(readOnly = true)
-    public List<MajorResponseDto> findAll(MultiValueMap<String,String> queryParam, Pageable pageable){
+    public Page<MajorResponseDto> findAll(MultiValueMap<String,String> queryParam, Pageable pageable){
 
-        return majorRepository.findAllWithQueryParams(pageable,queryParam)
+        var items = majorRepository.findAllWithQueryParams(pageable,queryParam)
                 .stream()
                 .map(MajorResponseDto::new)
                 .toList();
+
+        var total = majorRepository.countAllWithQueryParams(queryParam);
+
+        return new PageImpl<>(items,pageable,total);
+
     }
 
 }

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/role")
+@RequestMapping("/mms/api/v1/role")
 public class RoleApiController {
 
     private final RoleService roleService;

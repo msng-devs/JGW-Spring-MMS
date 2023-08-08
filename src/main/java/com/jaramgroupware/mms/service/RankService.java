@@ -30,7 +30,7 @@ public class RankService {
 
     @Transactional(readOnly = true)
     public List<RankResponseDto> findAll(){
-        return rankRepository.findAllBy()
+        return rankRepository.findAllByOrderByIdAsc()
                 .stream()
                 .map(RankResponseDto::new)
                 .collect(Collectors.toList());

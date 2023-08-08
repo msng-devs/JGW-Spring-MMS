@@ -5,6 +5,7 @@ import com.jaramgroupware.mms.dto.major.MajorResponseDto;
 import com.jaramgroupware.mms.service.MajorService;
 import com.jaramgroupware.mms.utils.validation.page.PageableSortKeyCheck;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/major")
+@RequestMapping("/mms/api/v1/major")
 public class MajorApiController {
 
     private final MajorService majorService;
@@ -31,15 +32,14 @@ public class MajorApiController {
         return ResponseEntity.ok(result);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<MajorResponseDto>> getMajorAll(
-//            @PageableDefault(page = 0,size = 100,sort = "id",direction = Sort.Direction.DESC)
-//            @PageableSortKeyCheck(sortKeys = {"id","name"}) Pageable pageable,
-//            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
-//
-//        var spec = majorSpecificationBuilder.toSpec(queryParam);
-//        var results = majorService.findAll(spec,pageable);
-//
-//        return ResponseEntity.ok(results);
-//    }
+    @GetMapping
+    public ResponseEntity<Page<MajorResponseDto>> getMajorAll(
+            @PageableDefault(page = 0,size = 100,sort = "id",direction = Sort.Direction.DESC)
+            @PageableSortKeyCheck(sortKeys = {"id","name"}) Pageable pageable,
+            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
+
+        var results = majorService.findAll(queryParam,pageable);
+
+        return ResponseEntity.ok(results);
+    }
 }

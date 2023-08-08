@@ -3,6 +3,7 @@ package com.jaramgroupware.mms.web;
 import com.jaramgroupware.mms.dto.rank.RankResponseDto;
 
 import com.jaramgroupware.mms.service.RankService;
+import com.jaramgroupware.mms.utils.aop.routeOption.auth.AuthOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,11 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/rank")
+@RequestMapping("/mms/api/v1/rank")
 public class RankApiController {
 
     private final RankService rankService;
+
 
     @GetMapping("{rankId}")
     public ResponseEntity<RankResponseDto> getRankById(
@@ -29,6 +31,7 @@ public class RankApiController {
 
         return ResponseEntity.ok(result);
     }
+
 
     @GetMapping
     public ResponseEntity<List<RankResponseDto>> getRankAll(){

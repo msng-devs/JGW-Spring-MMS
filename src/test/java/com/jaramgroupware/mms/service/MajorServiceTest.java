@@ -73,8 +73,8 @@ class MajorServiceTest {
         var result = majorService.findAll(queryParams,mockPageable);
 
         //then
-        assertEquals(2,result.size());
-        assertArrayEquals(exceptResult.toArray(), result.toArray());
+        assertEquals(2,result.getContent().size());
+        assertArrayEquals(exceptResult.toArray(), result.getContent().toArray());
         verify(majorRepository).findAllWithQueryParams(mockPageable,queryParams);
     }
 }

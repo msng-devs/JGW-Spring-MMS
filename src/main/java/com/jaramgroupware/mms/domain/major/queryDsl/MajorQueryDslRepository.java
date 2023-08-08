@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface MajorQueryDslRepository{
     List<Major> findAllWithQueryParams(Pageable pageable, MultiValueMap<String, String> params);
+    Integer countAllWithQueryParams(MultiValueMap<String, String> params);
 
 }
