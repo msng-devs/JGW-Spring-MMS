@@ -14,6 +14,8 @@ import com.jaramgroupware.mms.dto.preMemberInfo.serviceDto.PreMemberInfoUpdateRe
 import com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -27,12 +29,12 @@ import java.util.List;
 @Service
 public class PreMemberInfoService {
 
-    private PreMemberInfoRepository preMemberInfoRepository;
-    private MajorRepository majorRepository;
-    private RankRepository rankRepository;
-    private RoleRepository roleRepository;
-    private MemberService memberService;
-    private RegisterCodeRepository registerCodeRepository;
+    private final PreMemberInfoRepository preMemberInfoRepository;
+    private final MajorRepository majorRepository;
+    private final RankRepository rankRepository;
+    private final RoleRepository roleRepository;
+    private final MemberService memberService;
+    private final RegisterCodeRepository registerCodeRepository;
 
     @Transactional(readOnly = true)
     public PreMemberInfoResponseDto findById(Long id) {
@@ -43,9 +45,12 @@ public class PreMemberInfoService {
     }
 
     @Transactional(readOnly = true)
-    public List<PreMemberInfoResponseDto> findAll(MultiValueMap<String,String> params, Pageable pageable){
+    public Page<PreMemberInfoResponseDto> findAll(MultiValueMap<String,String> params, Pageable pageable){
         var preMemberInfos = preMemberInfoRepository.findAllWithQueryParams(pageable, params);
-        return preMemberInfos.stream().map(PreMemberInfoResponseDto::new).toList();
+        var list = preMemberInfos.stream().map(PreMemberInfoResponseDto::new).toList();
+        var totalCount = preMemberInfoRepository.countAllWithQueryParams(params);
+
+        return new PageImpl<>(list, pageable, totalCount);
     }
 
     @Transactional

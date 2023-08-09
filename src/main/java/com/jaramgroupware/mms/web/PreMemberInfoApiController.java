@@ -8,6 +8,7 @@ import com.jaramgroupware.mms.service.PreMemberInfoService;
 import com.jaramgroupware.mms.utils.aop.routeOption.rbac.RbacOption;
 import com.jaramgroupware.mms.utils.validation.page.PageableSortKeyCheck;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -19,8 +20,8 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/preMemberInfo")
-public class PreMemberInfoApiService {
+@RequestMapping("/mms/api/v1/preMemberInfo")
+public class PreMemberInfoApiController {
 
     private final PreMemberInfoService preMemberInfoService;
 
@@ -35,19 +36,19 @@ public class PreMemberInfoApiService {
         return ResponseEntity.ok(result);
     }
 
-//    @RbacOption(role = 4)
-//    @GetMapping
-//    public ResponseEntity<List<PreMemberInfoResponseDto>> getPreMemberInfoAll(
-//            @PageableDefault(page = 0, size = 100, sort = "id", direction = Sort.Direction.DESC)
-//            @PageableSortKeyCheck(sortKeys =
-//                    {"id", "name", "role", "studentId", "year", "rank", "major"}
-//            ) Pageable pageable,
-//            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
-//        var spec = preMemberInfoSpecificationBuilder.toSpec(queryParam);
-//        var results = preMemberInfoService.findAll(spec, pageable);
-//
-//        return ResponseEntity.ok(results);
-//    }
+    @RbacOption(role = 4)
+    @GetMapping
+    public ResponseEntity<Page<PreMemberInfoResponseDto>> getPreMemberInfoAll(
+            @PageableDefault(page = 0, size = 100, sort = "id", direction = Sort.Direction.DESC)
+            @PageableSortKeyCheck(sortKeys =
+                    {"id", "name", "role", "studentId", "year", "rank", "major"}
+            ) Pageable pageable,
+            @RequestParam(required = false) MultiValueMap<String, String> queryParam) {
+
+        var results = preMemberInfoService.findAll(queryParam, pageable);
+
+        return ResponseEntity.ok(results);
+    }
 
     @RbacOption(role = 4)
     @PostMapping

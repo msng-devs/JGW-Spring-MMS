@@ -39,6 +39,14 @@ public class PreMemberInfoQueryDslRepositoryImpl implements PreMemberInfoQueryDs
         return jpaQuery.fetch().stream().toList();
     }
 
+    @Override
+    public Integer countAllWithQueryParams(MultiValueMap<String, String> params) {
+        var jpaQuery = queryFactory.selectFrom(QPreMemberInfo.preMemberInfo);
+        applyQueryParams(jpaQuery, params);
+
+        return jpaQuery.fetch().size();
+    }
+
     private void applyQueryParams(JPAQuery<PreMemberInfo> jpqQuery, MultiValueMap<String, String> params) {
 
         if(params.isEmpty()) return;

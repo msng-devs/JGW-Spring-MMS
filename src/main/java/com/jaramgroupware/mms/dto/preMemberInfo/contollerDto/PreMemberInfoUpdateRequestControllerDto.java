@@ -38,6 +38,7 @@ public class PreMemberInfoUpdateRequestControllerDto {
     @NotNull(message = "전공 정보가 없습니다!")
     private Long majorId;
 
+    @NotNull(message = "기수 정보가 없습니다!")
     @Positive(message = "기수는 양수여야 합니다!")
     private Integer year;
     private LocalDate expectedDateReturnSchool;
