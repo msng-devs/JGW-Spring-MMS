@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ControllerErrorCode {
 
     GATEWAY_AUTH_MODE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "Gateway Auth Error", "MM-CONTROLLER-001"),
-    NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "Not Authorized", "MM-CONTROLLER-002");
+    NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "Not Authorized", "MM-CONTROLLER-002"),
+    STATUS_NOT_VALID(HttpStatus.BAD_REQUEST, "Status Not Valid", "MM-CONTROLLER-003");
 
     private final HttpStatus httpStatus;
     private final String title;

@@ -1,5 +1,6 @@
 package com.jaramgroupware.mms.dto.memberLeaveAbsence.controllerDto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.jaramgroupware.mms.dto.memberLeaveAbsence.serviceDto.MemberLeaveAbsenceUpdateRequestServiceDto;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class MemberLeaveAbsenceUpdateRequestControllerDto {
 
+    @JsonProperty("is_leave_absence")
     @NotNull(message = "휴가/휴학 여부가 비여있습니다!")
     private boolean isLeaveAbsence;
 
