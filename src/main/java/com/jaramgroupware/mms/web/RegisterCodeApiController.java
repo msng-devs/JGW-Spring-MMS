@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1/preMemberInfo")
+@RequestMapping("/mms/api/v1/preMemberInfo")
 public class RegisterCodeApiController {
 
     private final RegisterCodeService registerCodeService;
@@ -28,7 +28,7 @@ public class RegisterCodeApiController {
         return ResponseEntity.ok(result);
     }
 
-    @RbacOption
+    @RbacOption(role = 4)
     @DeleteMapping("{preMemberId}/code")
     public ResponseEntity<String> deleteRegisterCode(@PathVariable Long preMemberId) {
         registerCodeService.deleteRegisterCode(preMemberId);
