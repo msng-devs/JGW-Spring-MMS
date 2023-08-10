@@ -259,7 +259,7 @@ public class MemberService {
             FirebaseAuth.getInstance().deleteUser(userRecord.getUid());
             log.info("[WithdrawalScheduler] delete member : {} {} {}",targetMember.getId(),targetMember.getEmail(),userRecord.getUid());
         } catch (FirebaseAuthException e) {
-            throw new RuntimeException(e);
+            log.error("[WithdrawalScheduler] delete member error : {} {} {}",targetMember.getId(),targetMember.getEmail(),e.getMessage());
         }
 
 

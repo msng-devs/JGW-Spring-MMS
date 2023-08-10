@@ -42,3 +42,4 @@ application-test.properties
 logback-product.xml
 logback-dev.xml
 *.sql
+firebase.json
