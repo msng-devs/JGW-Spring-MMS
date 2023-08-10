@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode.*;
@@ -75,5 +77,13 @@ public class RegisterCodeService {
                 .build();
         var newRegisterCode = registerCodeRepository.save(registerCode);
         return new RegisterCodeResponseDto(newRegisterCode);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer findAllExpiredAndDel(LocalDate nowDate){
+        var targets = registerCodeRepository.findAllExpired(nowDate);
+        if(targets.isEmpty()) return 0;
+        registerCodeRepository.deleteAllByCodeIn(targets.stream().map(RegisterCode::getCode).toList());
+        return targets.size();
     }
 }

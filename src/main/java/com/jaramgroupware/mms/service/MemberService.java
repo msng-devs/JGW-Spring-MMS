@@ -1,5 +1,7 @@
 package com.jaramgroupware.mms.service;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.jaramgroupware.mms.domain.major.MajorRepository;
 import com.jaramgroupware.mms.domain.member.Member;
 import com.jaramgroupware.mms.domain.member.MemberRepository;
@@ -13,10 +15,7 @@ import com.jaramgroupware.mms.domain.rank.RankRepository;
 import com.jaramgroupware.mms.domain.role.RoleRepository;
 import com.jaramgroupware.mms.domain.withdrawal.Withdrawal;
 import com.jaramgroupware.mms.domain.withdrawal.WithdrawalRepository;
-import com.jaramgroupware.mms.dto.member.MemberRegisteredResponseDto;
-import com.jaramgroupware.mms.dto.member.MemberResponseDto;
-import com.jaramgroupware.mms.dto.member.MemberStat;
-import com.jaramgroupware.mms.dto.member.StatusResponseDto;
+import com.jaramgroupware.mms.dto.member.*;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberEditRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberRegisterRequestServiceDto;
 import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDto;
@@ -29,6 +28,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 멤버에 관한 비즈니스 로직이 들어있는 클래스
@@ -235,4 +238,31 @@ public class MemberService {
                 .expectedDateReturnSchool(null)
                 .build();
     }
+
+    @Transactional
+    public List<MemberDeletedResponseDto> processWithdrawal(LocalDate now){
+        var targets = withdrawalRepository.findAllExpired(now);
+        if(targets.isEmpty()) return List.of();
+
+        var targetMember = targets.stream().map(Withdrawal::getMember).toList();
+
+        targetMember.forEach(this::deleteMember);
+
+        return targetMember.stream().map(MemberDeletedResponseDto::new).toList();
+    }
+
+    public void deleteMember(Member targetMember) {
+
+        try{
+            var userRecord = FirebaseAuth.getInstance().getUser(targetMember.getId());
+            memberRepository.delete(targetMember);
+            FirebaseAuth.getInstance().deleteUser(userRecord.getUid());
+            log.info("[WithdrawalScheduler] delete member : {} {} {}",targetMember.getId(),targetMember.getEmail(),userRecord.getUid());
+        } catch (FirebaseAuthException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 }
