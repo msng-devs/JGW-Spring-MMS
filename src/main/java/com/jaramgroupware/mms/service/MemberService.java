@@ -262,7 +262,13 @@ public class MemberService {
             log.error("[WithdrawalScheduler] delete member error : {} {} {}",targetMember.getId(),targetMember.getEmail(),e.getMessage());
         }
 
+    }
 
+    @Transactional(readOnly = true)
+    public List<String> findEmailsByRole(Long roleId){
+        var targetRole = roleRepository.findRoleById(roleId)
+                .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
+        return memberRepository.findAllByRole(targetRole).stream().map(Member::getEmail).toList();
     }
 
 }
