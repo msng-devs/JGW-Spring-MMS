@@ -1,6 +1,7 @@
 package com.jaramgroupware.mms.domain.member;
 
 
+import com.jaramgroupware.mms.domain.role.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,7 +23,7 @@ import java.util.Set;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String>{
     Optional<Member> findMemberById(String id);
-
+    Optional<Member> findAllByRole(Role role);
     boolean existsByEmail(String email);
 
 
