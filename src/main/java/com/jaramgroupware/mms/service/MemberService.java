@@ -27,9 +27,11 @@ import com.jaramgroupware.mms.utils.time.TimeUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,7 @@ public class MemberService {
     private final PreMemberInfoRepository preMemberInfoRepository;
 
     private final MemberLeaveAbsenceRepository memberLeaveAbsenceRepository;
+
     @Transactional
     public String deleteById(String id) {
         var targetMember = memberRepository.findById(id)
@@ -88,7 +91,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void cancelWithdrawal(String id){
+    public void cancelWithdrawal(String id) {
         var targetMember = memberRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 멤버입니다."));
         var targetWithdrawal = withdrawalRepository.findByMember(targetMember)
@@ -99,6 +102,7 @@ public class MemberService {
 
         withdrawalRepository.delete(targetWithdrawal);
     }
+
     @Transactional
     public MemberResponseDto update(MemberUpdateRequestServiceDto requestDto) {
 
@@ -108,9 +112,11 @@ public class MemberService {
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "회원 정보가 존재하지 않습니다."));
 
         //중복 체크
-        if(!requestDto.getEmail().equals(targetMember.getEmail())) isExistsEmail(requestDto.getEmail());
-        if(!requestDto.getPhoneNumber().equals(targetMemberInfo.getPhoneNumber())) isExistsPhone(requestDto.getPhoneNumber());
-        if(!requestDto.getStudentID().equals(targetMemberInfo.getStudentID())) isExistsStudentId(requestDto.getStudentID());
+        if (!requestDto.getEmail().equals(targetMember.getEmail())) isExistsEmail(requestDto.getEmail());
+        if (!requestDto.getPhoneNumber().equals(targetMemberInfo.getPhoneNumber()))
+            isExistsPhone(requestDto.getPhoneNumber());
+        if (!requestDto.getStudentID().equals(targetMemberInfo.getStudentID()))
+            isExistsStudentId(requestDto.getStudentID());
 
         var targetRole = roleRepository.findById(requestDto.getRoleId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
@@ -137,13 +143,14 @@ public class MemberService {
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "회원 정보가 존재하지 않습니다."));
 
         //중복 체크
-        if(!requestDto.getPhoneNumber().equals(targetMemberInfo.getPhoneNumber())) isExistsPhone(requestDto.getPhoneNumber());
+        if (!requestDto.getPhoneNumber().equals(targetMemberInfo.getPhoneNumber()))
+            isExistsPhone(requestDto.getPhoneNumber());
 
         var targetMajor = majorRepository.findById(requestDto.getMajorId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Major입니다."));
 
         targetMember.update(requestDto.toMemberEntity());
-        targetMemberInfo.update(requestDto.toMemberInfoEntity(targetMember, targetMajor,timeUtility.nowDateTime()));
+        targetMemberInfo.update(requestDto.toMemberInfoEntity(targetMember, targetMajor, timeUtility.nowDateTime()));
 
         memberRepository.save(targetMember);
         memberInfoRepository.save(targetMemberInfo);
@@ -168,7 +175,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberRegisteredResponseDto registerMember(MemberRegisterRequestServiceDto dto){
+    public MemberRegisteredResponseDto registerMember(MemberRegisterRequestServiceDto dto) {
         var registerCode = registerCodeService.readRegisterCode(dto.getCode());
         var targetPreMember = preMemberInfoRepository.findById(registerCode.getPreMemberInfoId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.UNKNOWN_ERROR, "해당 코드에 해당하는 사전 회원 정보를 찾을 수 없습니다. 관리자에게 문의하세요."));
@@ -176,13 +183,13 @@ public class MemberService {
         var member = dto.toMemberEntity(targetPreMember);
         var newMember = memberRepository.saveAndFlush(member);
 
-        var memberInfo = dto.toMemberInfoEntity(targetPreMember,newMember,timeUtility.nowDateTime());
+        var memberInfo = dto.toMemberInfoEntity(targetPreMember, newMember, timeUtility.nowDateTime());
         var newMemberInfo = memberInfoRepository.saveAndFlush(memberInfo);
 
-        var leaveAbsence = createLeaveAbsence(newMember,targetPreMember);
+        var leaveAbsence = createLeaveAbsence(newMember, targetPreMember);
         var newLeaveAbsence = memberLeaveAbsenceRepository.saveAndFlush(leaveAbsence);
 
-        return new MemberRegisteredResponseDto(newMember,newMemberInfo,newLeaveAbsence);
+        return new MemberRegisteredResponseDto(newMember, newMemberInfo, newLeaveAbsence);
 
     }
 
@@ -224,8 +231,8 @@ public class MemberService {
             throw new ServiceException(ServiceErrorCode.ALREADY_EXISTS, "이미 존재하는 학번입니다.");
     }
 
-    public MemberLeaveAbsence createLeaveAbsence(Member member, PreMemberInfo preMemberInfo){
-        if(preMemberInfo.getExpectedDateReturnSchool() != null) {
+    public MemberLeaveAbsence createLeaveAbsence(Member member, PreMemberInfo preMemberInfo) {
+        if (preMemberInfo.getExpectedDateReturnSchool() != null) {
             return MemberLeaveAbsence.builder()
                     .member(member)
                     .status(true)
@@ -240,32 +247,46 @@ public class MemberService {
     }
 
     @Transactional
-    public List<MemberDeletedResponseDto> processWithdrawal(LocalDate now){
+    public List<MemberDeletedResponseDto> processWithdrawal(LocalDate now) {
         var targets = withdrawalRepository.findAllExpired(now);
-        if(targets.isEmpty()) return List.of();
+        if (targets.isEmpty()) return List.of();
 
-        var targetMember = targets.stream().map(Withdrawal::getMember).toList();
+        var targetMembers = targets.stream().map(Withdrawal::getMember).toList();
 
-        targetMember.forEach(this::deleteMember);
+        var successCnt = 0;
+        List<MemberDeletedResponseDto> results = new ArrayList<>();
 
-        return targetMember.stream().map(MemberDeletedResponseDto::new).toList();
+        for (var member : targetMembers) {
+            var result = deleteMember(member);
+            if (result) {
+                successCnt++;
+                results.add(new MemberDeletedResponseDto(member, true));
+            } else {
+                results.add(new MemberDeletedResponseDto(member, false));
+            }
+        }
+
+        log.info("[WithdrawalScheduler] withdrawal process : {} / {}", successCnt, targetMembers.size());
+        return results;
     }
 
-    public void deleteMember(Member targetMember) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public boolean deleteMember(Member targetMember) {
 
-        try{
+        try {
             var userRecord = FirebaseAuth.getInstance().getUser(targetMember.getId());
             memberRepository.delete(targetMember);
             FirebaseAuth.getInstance().deleteUser(userRecord.getUid());
-            log.info("[WithdrawalScheduler] delete member : {} {} {}",targetMember.getId(),targetMember.getEmail(),userRecord.getUid());
+            log.info("[WithdrawalScheduler] delete member : {} {} {}", targetMember.getId(), targetMember.getEmail(), userRecord.getUid());
         } catch (FirebaseAuthException e) {
-            log.error("[WithdrawalScheduler] delete member error : {} {} {}",targetMember.getId(),targetMember.getEmail(),e.getMessage());
+            log.error("[WithdrawalScheduler] delete member error : {} {} {}", targetMember.getId(), targetMember.getEmail(), e.getMessage());
+            return false;
         }
-
+        return true;
     }
 
     @Transactional(readOnly = true)
-    public List<String> findEmailsByRole(Long roleId){
+    public List<String> findEmailsByRole(Long roleId) {
         var targetRole = roleRepository.findRoleById(roleId)
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
         return memberRepository.findAllByRole(targetRole)
