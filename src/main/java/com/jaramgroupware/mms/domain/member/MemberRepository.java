@@ -23,7 +23,7 @@ import java.util.Set;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String>{
     Optional<Member> findMemberById(String id);
-    Optional<Member> findAllByRole(Role role);
+    List<Member> findAllByRole(Role role);
     boolean existsByEmail(String email);
 
 
