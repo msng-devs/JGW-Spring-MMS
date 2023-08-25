@@ -18,8 +18,9 @@ public class EmailSender {
     private final JavaMailSender emailSender;
     private final MemberService memberService;
 
-    public void sendEmailToDev(String title,String text) {
+    public void sendEmailToDev(String title, String text) {
         var targets = memberService.findEmailsByRole(5L);
+        if (targets.isEmpty()) return;
         targets.forEach(target -> {
             var message = new SimpleMailMessage();
             message.setFrom(from);
