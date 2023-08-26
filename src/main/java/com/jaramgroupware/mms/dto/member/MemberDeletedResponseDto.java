@@ -13,10 +13,11 @@ public class MemberDeletedResponseDto {
 
     private String uid;
     private String email;
-
-    public MemberDeletedResponseDto(Member member){
+    private boolean isDeleted;
+    public MemberDeletedResponseDto(Member member,boolean isDeleted){
         this.uid = uid;
         this.email = email;
+        this.isDeleted = isDeleted;
     }
 
 }

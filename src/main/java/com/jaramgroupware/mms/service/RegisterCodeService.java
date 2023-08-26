@@ -9,6 +9,7 @@ import com.jaramgroupware.mms.domain.role.RoleRepository;
 import com.jaramgroupware.mms.dto.registerCode.RegisterCodeResponseDto;
 import com.jaramgroupware.mms.dto.registerCode.serviceDto.RegisterCodeAddRequestServiceDto;
 import com.jaramgroupware.mms.utils.code.CodeGenerator;
+import com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
 import com.jaramgroupware.mms.utils.time.TimeUtility;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,10 @@ public class RegisterCodeService {
         var targetPreMemberInfo = preMemberInfoRepository.findById(dto.getPreMemberInfoId())
                 .orElseThrow(() -> new ServiceException(NOT_FOUND,"해당 사전 회원 정보가 존재하지 않습니다."));
 
-        registerCodeRepository.findByPreMemberInfo(targetPreMemberInfo).ifPresent(registerCodeRepository::delete);
+        registerCodeRepository.findByPreMemberInfo(targetPreMemberInfo)
+                .ifPresent(registerCode -> {
+                    throw new ServiceException(ALREADY_EXISTS,"이미 코드가 존재합니다.");
+                });
 
         var code = codeGenerator.generate();
         var registerCode = RegisterCode.builder()
@@ -75,6 +79,7 @@ public class RegisterCodeService {
                 .createBy(dto.getCreatedBy())
                 .expiredAt(timeUtility.nowDate().plusDays(dto.getExpireDay()))
                 .build();
+
         var newRegisterCode = registerCodeRepository.save(registerCode);
         return new RegisterCodeResponseDto(newRegisterCode);
     }
