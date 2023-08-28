@@ -189,6 +189,7 @@ public class MemberService {
         var leaveAbsence = createLeaveAbsence(newMember, targetPreMember);
         var newLeaveAbsence = memberLeaveAbsenceRepository.saveAndFlush(leaveAbsence);
 
+        preMemberInfoRepository.delete(targetPreMember);
         return new MemberRegisteredResponseDto(newMember, newMemberInfo, newLeaveAbsence);
 
     }
