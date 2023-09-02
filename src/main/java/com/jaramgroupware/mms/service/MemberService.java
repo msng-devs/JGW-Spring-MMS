@@ -23,6 +23,8 @@ import com.jaramgroupware.mms.dto.member.serviceDto.MemberUpdateRequestServiceDt
 import com.jaramgroupware.mms.dto.withdrawal.WithdrawalResponseDto;
 import com.jaramgroupware.mms.utils.exception.service.ServiceErrorCode;
 import com.jaramgroupware.mms.utils.exception.service.ServiceException;
+import com.jaramgroupware.mms.utils.mail.MailSendRequest;
+import com.jaramgroupware.mms.utils.mail.MailStormClient;
 import com.jaramgroupware.mms.utils.time.TimeUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +53,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final WithdrawalRepository withdrawalRepository;
-
+    private final MailStormClient mailStormClient;
     private final RoleRepository roleRepository;
     private final RankRepository rankRepository;
     private final MajorRepository majorRepository;
@@ -190,6 +193,8 @@ public class MemberService {
         var newLeaveAbsence = memberLeaveAbsenceRepository.saveAndFlush(leaveAbsence);
 
         preMemberInfoRepository.delete(targetPreMember);
+
+        mailStormClient.sendWelcomeEmail(newMember.getEmail(),"[자람 그룹웨어] 회원가입을 축하드립니다! 🎉🎉🎉", Map.of("name", newMember.getName()));
         return new MemberRegisteredResponseDto(newMember, newMemberInfo, newLeaveAbsence);
 
     }
@@ -287,12 +292,12 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<String> findEmailsByRole(Long roleId) {
+    public List<MemberTinyResponseDto> findEmailsByRole(Long roleId) {
         var targetRole = roleRepository.findRoleById(roleId)
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
         return memberRepository.findAllByRole(targetRole)
                 .stream()
-                .map(Member::getEmail)
+                .map(MemberTinyResponseDto::new)
                 .toList();
     }
 
