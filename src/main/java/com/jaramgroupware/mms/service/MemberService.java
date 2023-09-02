@@ -292,13 +292,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberTinyResponseDto> findEmailsByRole(Long roleId) {
-        var targetRole = roleRepository.findRoleById(roleId)
+    public void sendDevAlert(String subject, String content) {
+        var targetRole = roleRepository.findRoleById(5L)
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
-        return memberRepository.findAllByRole(targetRole)
-                .stream()
-                .map(MemberTinyResponseDto::new)
-                .toList();
+        var targets = memberRepository.findAllByRole(targetRole);
+        targets.forEach(member -> {
+            mailStormClient.sendAlertEmail(member.getEmail(), subject , Map.of("name", member.getName(), "content", content));
+        });
     }
+
 
 }
