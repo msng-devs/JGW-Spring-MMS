@@ -26,7 +26,7 @@ public class MailStormClient {
     private String port;
 
     private final Gson gson = new Gson();
-    private final MemberService memberService;
+
 
     public void sendAlertEmail(String to,String title, Map<String,String> args) {
         var mailReq = MailSendRequest.builder()
@@ -51,10 +51,7 @@ public class MailStormClient {
         push(mailString);
     }
 
-    public void sendEmailToDev(String title, String content) {
-        var targets = memberService.findEmailsByRole(5L);
-        if(targets.size() > 0) targets.forEach(t -> sendAlertEmail(t.getEmail(),title,Map.of("content",content,"name",t.getName())));
-    }
+
 
     private void push(String message) {
         log.info("MailStorm Client Push Message : {}", message);

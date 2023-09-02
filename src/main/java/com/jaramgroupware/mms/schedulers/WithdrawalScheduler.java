@@ -17,7 +17,6 @@ import java.util.List;
 public class WithdrawalScheduler {
     private final MemberService memberService;
     private final TimeUtility timeUtility;
-    private final MailStormClient mailStormClient;
 
     @Scheduled(cron = "0 0 0 * * *")
     public void processWithdrawal() {
@@ -25,11 +24,11 @@ public class WithdrawalScheduler {
         try{
             var result = memberService.processWithdrawal(timeUtility.nowDate());
             log.info("[WithdrawalScheduler] End process withdrawal, target count : {}", result.size());
-            mailStormClient.sendEmailToDev("[MMS Scheduled] WithdrawalScheduler - 완료",
+            memberService.sendDevAlert("[MMS Scheduled] WithdrawalScheduler - 완료",
                     "회원 탈퇴 스케줄을 완료했습니다. <br> ---- 처리결과 ---- <br>"+toPretty(result));
         } catch (Exception e) {
             log.error("[WithdrawalScheduler] Error : {}", e.getMessage());
-            mailStormClient.sendEmailToDev("[MMS Scheduled] WithdrawalScheduler - 실패","회원 탈퇴 스케줄 수행중 오류가 발생했습니다. 오류메시지 : "+e.getMessage());
+            memberService.sendDevAlert("[MMS Scheduled] WithdrawalScheduler - 실패","회원 탈퇴 스케줄 수행중 오류가 발생했습니다. 오류메시지 : "+e.getMessage());
         }
 
     }
