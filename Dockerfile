@@ -7,7 +7,7 @@ COPY src src
 RUN chmod +x ./gradlew
 RUN ./gradlew bootjar
 
-
+ENV TZ=Asia/Seoul
 FROM openjdk:17-jdk-slim
 COPY --from=builder build/libs/*.jar app.jar
 EXPOSE 8080

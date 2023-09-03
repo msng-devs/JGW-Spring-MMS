@@ -1,6 +1,7 @@
 package com.jaramgroupware.mms.utils.mail;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jaramgroupware.mms.service.MemberService;
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +26,9 @@ public class MailStormClient {
     @Value("${mailstorm.port}")
     private String port;
 
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder()
+            .disableHtmlEscaping()
+            .create();
 
 
     public void sendAlertEmail(String to,String title, Map<String,String> args) {
@@ -58,7 +61,7 @@ public class MailStormClient {
         try (var zContext = ZMQ.context(1)) {
             var zSocket = zContext.socket(ZMQ.PUSH);
             zSocket.connect("tcp://" + host + ":" + port);
-            zSocket.send(message);
+            zSocket.send(message.getBytes(), 0);
             zSocket.close();
             zContext.term();
         } catch (Exception e) {
