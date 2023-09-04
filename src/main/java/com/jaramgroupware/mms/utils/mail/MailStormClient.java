@@ -2,7 +2,6 @@ package com.jaramgroupware.mms.utils.mail;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jaramgroupware.mms.service.MemberService;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ public class MailStormClient {
                 .to(to)
                 .subject(title)
                 .template(DEV_ALERT.getName())
-                .args(args)
+                .arg(args)
                 .who("MMS")
                 .build();
         var mailString = gson.toJson(mailReq);
@@ -47,7 +46,7 @@ public class MailStormClient {
                 .to(to)
                 .subject(title)
                 .template(WELCOME.getName())
-                .args(args)
+                .arg(args)
                 .who("MMS")
                 .build();
         var mailString = gson.toJson(mailReq);
@@ -61,7 +60,7 @@ public class MailStormClient {
         try (var zContext = ZMQ.context(1)) {
             var zSocket = zContext.socket(ZMQ.PUSH);
             zSocket.connect("tcp://" + host + ":" + port);
-            zSocket.send(message.getBytes(), 0);
+            zSocket.send(message.getBytes(ZMQ.CHARSET), 0);
             zSocket.close();
             zContext.term();
         } catch (Exception e) {
