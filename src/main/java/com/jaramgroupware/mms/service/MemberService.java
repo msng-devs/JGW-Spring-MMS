@@ -297,7 +297,7 @@ public class MemberService {
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
         var targets = memberRepository.findAllByRole(targetRole);
         targets.forEach(member -> {
-            mailStormClient.sendAlertEmail(member.getEmail(), subject , Map.of("name", member.getName(), "content", content));
+            mailStormClient.sendAlertEmail(member.getEmail(), subject , Map.of("name", member.getName(), "context", content));
         });
     }
 
