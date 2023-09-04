@@ -14,6 +14,6 @@ public class MailSendRequest {
     private String to;
     private String subject;
     private String template;
-    private Map<String,String> args;
+    private Map<String,String> arg;
     private String who;
 }
