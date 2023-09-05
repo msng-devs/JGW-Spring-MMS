@@ -15,8 +15,8 @@ public class MemberDeletedResponseDto {
     private String email;
     private boolean isDeleted;
     public MemberDeletedResponseDto(Member member,boolean isDeleted){
-        this.uid = uid;
-        this.email = email;
+        this.uid = member.getId();
+        this.email = member.getEmail();
         this.isDeleted = isDeleted;
     }
 
