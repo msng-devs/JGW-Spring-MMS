@@ -3,12 +3,14 @@ package com.jaramgroupware.mms.schedulers;
 import com.jaramgroupware.mms.dto.member.MemberDeletedResponseDto;
 import com.jaramgroupware.mms.service.MemberService;
 import com.jaramgroupware.mms.utils.mail.MailStormClient;
+import com.jaramgroupware.mms.utils.others.TableBuilder;
 import com.jaramgroupware.mms.utils.time.TimeUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -17,7 +19,7 @@ import java.util.List;
 public class WithdrawalScheduler {
     private final MemberService memberService;
     private final TimeUtility timeUtility;
-
+    private final List<String> resultRows = List.of("UID","EMAIL","DELETE STATUS");
     @Scheduled(cron = "0 0 0 * * *")
     public void processWithdrawal() {
         log.info("[WithdrawalScheduler] Start process withdrawal");
@@ -34,8 +36,20 @@ public class WithdrawalScheduler {
     }
 
     private String toPretty(List<MemberDeletedResponseDto> data){
-        var sb = new StringBuilder();
-        data.forEach(d -> sb.append("ID : ").append(d.getUid()).append("Email : ").append(d.getEmail()).append("Delete Status: ").append(d.isDeleted()).append("<br>"));
-        return sb.toString();
+        var tableData = toTableData(data);
+
+        return TableBuilder.toPrettyTable(resultRows,tableData);
+    }
+
+    private List<String> toTableData(List<MemberDeletedResponseDto> data){
+
+        List<String> result = new LinkedList<>();
+        data.forEach(d->{
+            String sb = d.getUid() + "," +
+                    d.getEmail() + "," +
+                    d.isDeleted();
+            result.add(sb);
+        });
+        return result;
     }
 }
