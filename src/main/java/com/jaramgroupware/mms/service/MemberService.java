@@ -53,7 +53,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
     private final WithdrawalRepository withdrawalRepository;
-    private final MailStormClient mailStormClient;
     private final RoleRepository roleRepository;
     private final RankRepository rankRepository;
     private final MajorRepository majorRepository;
@@ -179,6 +178,7 @@ public class MemberService {
 
     @Transactional
     public MemberRegisteredResponseDto registerMember(MemberRegisterRequestServiceDto dto) {
+        checkEmailExist(dto.getEmail());
         var registerCode = registerCodeService.readRegisterCode(dto.getCode());
         var targetPreMember = preMemberInfoRepository.findById(registerCode.getPreMemberInfoId())
                 .orElseThrow(() -> new ServiceException(ServiceErrorCode.UNKNOWN_ERROR, "해당 코드에 해당하는 사전 회원 정보를 찾을 수 없습니다. 관리자에게 문의하세요."));
@@ -194,7 +194,6 @@ public class MemberService {
 
         preMemberInfoRepository.delete(targetPreMember);
 
-        mailStormClient.sendWelcomeEmail(newMember.getEmail(),"[자람 그룹웨어] 회원가입을 축하드립니다! 🎉🎉🎉", Map.of("name", newMember.getName()));
         return new MemberRegisteredResponseDto(newMember, newMemberInfo, newLeaveAbsence);
 
     }
@@ -291,14 +290,9 @@ public class MemberService {
         return true;
     }
 
-    @Transactional(readOnly = true)
-    public void sendDevAlert(String subject, String content) {
-        var targetRole = roleRepository.findRoleById(5L)
-                .orElseThrow(() -> new ServiceException(ServiceErrorCode.NOT_FOUND, "존재하지 않는 Role입니다."));
-        var targets = memberRepository.findAllByRole(targetRole);
-        targets.forEach(member -> {
-            mailStormClient.sendAlertEmail(member.getEmail(), subject , Map.of("name", member.getName(), "context", content));
-        });
+    private void checkEmailExist(String email){
+        if(memberRepository.existsByEmail(email))
+            throw new ServiceException(ServiceErrorCode.ALREADY_EXISTS, "이미 존재하는 이메일입니다.");
     }
 
 
