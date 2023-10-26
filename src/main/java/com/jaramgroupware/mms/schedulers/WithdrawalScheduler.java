@@ -33,7 +33,7 @@ public class WithdrawalScheduler {
         try{
             var result = memberService.processWithdrawal(timeUtility.nowDate());
             log.info("[WithdrawalScheduler] End process withdrawal, target count : {}", result.size());
-            mailStormClient.sendAlertEmail(resultTo, "[MMS Scheduled] WithdrawalScheduler - 완료", Map.of("name", "관리자", "context", "회원 탈퇴 스케줄을 완료했습니다. <br> ---- 처리결과 ---- <br>"+toTableData(result)));
+            mailStormClient.sendAlertEmail(resultTo, "[MMS Scheduled] WithdrawalScheduler - 완료", Map.of("name", "관리자", "context", "회원 탈퇴 스케줄을 완료했습니다. <br> ---- 처리결과 ---- <br> "+toTableData(result)));
         } catch (Exception e) {
             log.error("[WithdrawalScheduler] Error : {}", e.getMessage());
             mailStormClient.sendAlertEmail(resultTo, "[MMS Scheduled] WithdrawalScheduler - 실패", Map.of("name", "관리자", "context", "회원 탈퇴 스케줄 수행중 오류가 발생했습니다. 오류메시지 : "+e.getMessage()));
@@ -44,7 +44,7 @@ public class WithdrawalScheduler {
     private String toTableData(List<MemberDeletedResponseDto> data){
 
         StringBuilder htmlTable = new StringBuilder();
-        htmlTable.append("<table border='1'><tr><th>UID</th><th>Email</th><th>Deleted</th></tr>");
+        htmlTable.append("<table border=\"1\"><tr><th>UID</th><th>Email</th><th>Deleted</th></tr>");
 
         for (MemberDeletedResponseDto dto : data) {
             htmlTable.append("<tr>");
