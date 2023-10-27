@@ -44,7 +44,7 @@ public class WithdrawalScheduler {
     private String toTableData(List<MemberDeletedResponseDto> data){
 
         StringBuilder htmlTable = new StringBuilder();
-        htmlTable.append("<table border=\"1\"><tr><th>UID</th><th>Email</th><th>Deleted</th></tr>");
+        htmlTable.append("<table><tr><th>UID</th><th>Email</th><th>Deleted</th></tr>");
 
         for (MemberDeletedResponseDto dto : data) {
             htmlTable.append("<tr>");
